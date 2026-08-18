@@ -1,0 +1,126 @@
+{
+  "n_rows": 1257,
+  "date_start": "2021-08-16",
+  "date_end": "2026-08-14",
+  "columns": [
+    "silver_close",
+    "gold_close",
+    "dxy_close",
+    "gold_ffilled",
+    "dxy_ffilled"
+  ],
+  "duplicate_dates": {
+    "count": 0,
+    "examples": []
+  },
+  "ordering": {
+    "is_monotonic_increasing": true,
+    "n_unordered": 0
+  },
+  "non_positive_prices": {
+    "silver_close": 0,
+    "gold_close": 0,
+    "dxy_close": 0
+  },
+  "remaining_nan": {
+    "silver_close": 0,
+    "gold_close": 0,
+    "dxy_close": 0
+  },
+  "calendar_gap": {
+    "max_gap_days": 4,
+    "gap_from": "2021-09-03",
+    "gap_to": "2021-09-07",
+    "median_gap_days": 1.0,
+    "gap_day_counts": {
+      "1": 983,
+      "2": 13,
+      "3": 225,
+      "4": 35
+    }
+  },
+  "rows_dropped": {
+    "n_union_dates": 1258,
+    "dropped_target_ffilled_D1": 1,
+    "dropped_leading_nan": 0,
+    "n_final": 1257,
+    "n_total_dropped": 1
+  },
+  "ffill_counts": {
+    "gold_ffilled": 0,
+    "dxy_ffilled": 1
+  },
+  "ffill_counts_before_drop": {
+    "gold_ffilled": 1,
+    "dxy_ffilled": 1
+  },
+  "passed": true,
+  "issues": [],
+  "split": {
+    "n_total": 1257,
+    "ratios_config": {
+      "train_ratio": 0.7,
+      "val_ratio": 0.15,
+      "test_ratio": 0.15,
+      "shuffle": false
+    },
+    "splits": {
+      "train": {
+        "n_rows": 879,
+        "ratio_actual": 0.699284,
+        "date_start": "2021-08-16",
+        "date_end": "2025-02-12"
+      },
+      "val": {
+        "n_rows": 188,
+        "ratio_actual": 0.149562,
+        "date_start": "2025-02-13",
+        "date_end": "2025-11-10"
+      },
+      "test": {
+        "n_rows": 190,
+        "ratio_actual": 0.151154,
+        "date_start": "2025-11-11",
+        "date_end": "2026-08-14"
+      }
+    }
+  },
+  "files": {
+    "aligned": "D:\\project-skripsi\\data\\processed\\aligned.csv",
+    "train": "D:\\project-skripsi\\data\\processed\\train.csv",
+    "val": "D:\\project-skripsi\\data\\processed\\val.csv",
+    "test": "D:\\project-skripsi\\data\\processed\\test.csv"
+  },
+  "timeseries_dataframe": {
+    "train": {
+      "num_items": 1,
+      "n_rows": 879,
+      "columns": [
+        "silver_close",
+        "gold_close",
+        "dxy_close"
+      ],
+      "freq": null
+    },
+    "val": {
+      "num_items": 1,
+      "n_rows": 188,
+      "columns": [
+        "silver_close",
+        "gold_close",
+        "dxy_close"
+      ],
+      "freq": null
+    },
+    "test": {
+      "num_items": 1,
+      "n_rows": 190,
+      "columns": [
+        "silver_close",
+        "gold_close",
+        "dxy_close"
+      ],
+      "freq": null
+    }
+  }
+}

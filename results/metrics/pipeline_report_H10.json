@@ -1,0 +1,116 @@
+{
+  "horizon": 10,
+  "schemes": [
+    "zeroshot",
+    "naive"
+  ],
+  "stage_1_data_collection": {
+    "status": "ok",
+    "series": {
+      "silver": 1257,
+      "gold": 1257,
+      "dxy": 1257
+    }
+  },
+  "stage_2_preprocessing": {
+    "status": "ok",
+    "n_rows": 1257,
+    "split": {
+      "train": {
+        "n_rows": 879,
+        "ratio_actual": 0.699284,
+        "date_start": "2021-08-16",
+        "date_end": "2025-02-12"
+      },
+      "val": {
+        "n_rows": 188,
+        "ratio_actual": 0.149562,
+        "date_start": "2025-02-13",
+        "date_end": "2025-11-10"
+      },
+      "test": {
+        "n_rows": 190,
+        "ratio_actual": 0.151154,
+        "date_start": "2025-11-11",
+        "date_end": "2026-08-14"
+      }
+    },
+    "quality_passed": true,
+    "quality_issues": []
+  },
+  "stage_3_mutual_information": {
+    "status": "ok",
+    "variants": {
+      "level": {
+        "gold_close": 1.347691,
+        "dxy_close": 0.775317
+      },
+      "log_return": {
+        "gold_close": 0.41499,
+        "dxy_close": 0.089917
+      }
+    }
+  },
+  "stage_4_forecasting": {
+    "split": "test",
+    "horizon": 10,
+    "stride": 1,
+    "max_context": 1024,
+    "n_windows": 181,
+    "origin_first_date": "2025-11-11",
+    "origin_last_date": "2026-08-03",
+    "quantile_levels": [
+      0.025,
+      0.05,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      0.95,
+      0.975
+    ],
+    "schemes": {
+      "zeroshot": {
+        "mae": 6.030284970109634,
+        "crps": 3.8774473302089763,
+        "wql": 0.026758114363254263,
+        "elapsed_seconds": 48.96053169993684,
+        "seconds_per_window": 0.2705001751377726,
+        "forecast_file": "D:\\project-skripsi\\results\\forecasts\\zeroshot_H10.parquet"
+      },
+      "naive": {
+        "mae": 5.681000023520454,
+        "crps": 3.699668104419406,
+        "wql": 0.025531266788039943,
+        "elapsed_seconds": 0.019505999982357025,
+        "seconds_per_window": 0.00010776795570362998,
+        "forecast_file": "D:\\project-skripsi\\results\\forecasts\\naive_H10.parquet"
+      }
+    }
+  },
+  "stage_5_evaluation": {
+    "final_results": "D:\\project-skripsi\\results\\metrics\\final_results.json",
+    "comparison_table": "D:\\project-skripsi\\results\\metrics\\comparison_table.md"
+  },
+  "stage_6_visualization": {
+    "series_overview": "D:\\project-skripsi\\results\\figures\\01_ikhtisar_deret.png",
+    "forecast_example": "D:\\project-skripsi\\results\\figures\\02_contoh_ramalan.png",
+    "metrics_by_horizon": "D:\\project-skripsi\\results\\figures\\03_metrik_per_horizon.png",
+    "coverage_calibration": "D:\\project-skripsi\\results\\figures\\04_kalibrasi_cakupan.png",
+    "error_distribution": "D:\\project-skripsi\\results\\figures\\05_sebaran_galat.png"
+  },
+  "durations_seconds": {
+    "stage_1_data_collection": 3.891603299882263,
+    "stage_2_preprocessing": 0.09037879994139075,
+    "stage_3_mutual_information": 19.57863450003788,
+    "stage_4_forecasting": 53.55816600006074,
+    "stage_5_evaluation": 0.13036250043660402,
+    "stage_6_visualization": 2.014495600014925
+  },
+  "total_seconds": 79.26498739980161
+}

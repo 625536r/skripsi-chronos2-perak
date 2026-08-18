@@ -1,0 +1,32 @@
+# Virtual environment (reinstall via requirements.txt)
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Model checkpoints (large binary files, not needed for report reproduction)
+results/models/*
+!results/models/.gitkeep
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment / secrets
+.env
+*.env
+
+# Internal working docs (not needed for pipeline execution)
+prompts/
+CLAUDE.md
+
+# Logs (optional to keep, but usually not needed in repo)
+logs/*.log

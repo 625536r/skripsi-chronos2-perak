@@ -1,0 +1,67 @@
+{
+  "downloaded_at": "2026-08-18T01:08:36",
+  "source": "Yahoo Finance (yfinance)",
+  "yfinance_version": "1.6.0",
+  "request": {
+    "start_date": "2021-08-16",
+    "end_date": "2026-08-15",
+    "interval": "1d",
+    "auto_adjust": false,
+    "price_field": "Close"
+  },
+  "validation": {
+    "min_rows": 1150,
+    "max_rows": 1400,
+    "min_price": 0.0
+  },
+  "series": {
+    "silver": {
+      "name": "silver",
+      "role": "target",
+      "requested_ticker": "SI=F",
+      "actual_ticker": "SI=F",
+      "used_fallback": false,
+      "column": "silver_close",
+      "file": "silver_raw.csv",
+      "downloaded_at": "2026-08-18T01:08:35",
+      "n_rows": 1257,
+      "date_start": "2021-08-16",
+      "date_end": "2026-08-14",
+      "price_min": 17.551000595092773,
+      "price_max": 115.08000183105469,
+      "price_mean": 33.700083517895486
+    },
+    "gold": {
+      "name": "gold",
+      "role": "covariate",
+      "requested_ticker": "GC=F",
+      "actual_ticker": "GC=F",
+      "used_fallback": false,
+      "column": "gold_close",
+      "file": "gold_raw.csv",
+      "downloaded_at": "2026-08-18T01:08:36",
+      "n_rows": 1257,
+      "date_start": "2021-08-16",
+      "date_end": "2026-08-14",
+      "price_min": 1623.300048828125,
+      "price_max": 5318.39990234375,
+      "price_mean": 2618.2938694676996
+    },
+    "dxy": {
+      "name": "dxy",
+      "role": "covariate",
+      "requested_ticker": "DX-Y.NYB",
+      "actual_ticker": "DX-Y.NYB",
+      "used_fallback": false,
+      "column": "dxy_close",
+      "file": "dxy_raw.csv",
+      "downloaded_at": "2026-08-18T01:08:36",
+      "n_rows": 1257,
+      "date_start": "2021-08-16",
+      "date_end": "2026-08-14",
+      "price_min": 92.04000091552734,
+      "price_max": 114.11000061035156,
+      "price_mean": 101.96492443828234
+    }
+  }
+}

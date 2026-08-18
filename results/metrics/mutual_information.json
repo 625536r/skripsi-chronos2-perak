@@ -1,0 +1,317 @@
+{
+  "generated_at": "2026-08-18T01:08:56",
+  "decision": "D6 — MI dihitung hanya dari data latih",
+  "settings": {
+    "n_neighbors": 3,
+    "n_repeats": 20,
+    "n_permutations": 1000,
+    "random_state": 42,
+    "lags": [
+      0,
+      1,
+      2,
+      3,
+      5
+    ],
+    "variants": [
+      "level",
+      "log_return"
+    ],
+    "estimator": "sklearn.feature_selection.mutual_info_regression (k-NN)",
+    "unit": "nat"
+  },
+  "data": {
+    "source": "data/processed/train.csv",
+    "n_rows": 879,
+    "date_start": "2021-08-16",
+    "date_end": "2025-02-12",
+    "target": "silver_close",
+    "covariates": [
+      "gold_close",
+      "dxy_close"
+    ]
+  },
+  "results": {
+    "level": {
+      "mode": "level",
+      "mode_label": "Level harga",
+      "target": "silver_close",
+      "n_samples": 879,
+      "pairs": {
+        "gold_close": {
+          "mi_mean": 1.3476914918762728,
+          "mi_std": 0.00028310718112918066,
+          "n_repeats": 20,
+          "pearson": {
+            "coefficient": 0.9324071041810138,
+            "p_value": 0.0
+          },
+          "spearman": {
+            "coefficient": 0.8463505012980149,
+            "p_value": 3.760392568924706e-242
+          },
+          "permutation_test": {
+            "mi_observed": 1.3473537289847664,
+            "n_permutations": 1000,
+            "n_null_ge_observed": 0,
+            "p_value_proportion": 0.0,
+            "p_value": 0.000999000999000999,
+            "null_mean": 0.010137519870975177,
+            "null_std": 0.015400169878124885,
+            "null_q95": 0.043491999447124445,
+            "null_max": 0.07566237246534246
+          }
+        },
+        "dxy_close": {
+          "mi_mean": 0.7753165060854622,
+          "mi_std": 0.000673977466829595,
+          "n_repeats": 20,
+          "pearson": {
+            "coefficient": -0.018677681954249126,
+            "p_value": 0.580253186144601
+          },
+          "spearman": {
+            "coefficient": -0.15333246356878852,
+            "p_value": 4.958128396849318e-06
+          },
+          "permutation_test": {
+            "mi_observed": 0.7747549938272598,
+            "n_permutations": 1000,
+            "n_null_ge_observed": 0,
+            "p_value_proportion": 0.0,
+            "p_value": 0.000999000999000999,
+            "null_mean": 0.010202042674172657,
+            "null_std": 0.015414024270728974,
+            "null_q95": 0.04376026036417078,
+            "null_max": 0.12018864249864203
+          }
+        }
+      }
+    },
+    "log_return": {
+      "mode": "log_return",
+      "mode_label": "Log-return",
+      "target": "silver_close",
+      "n_samples": 878,
+      "pairs": {
+        "gold_close": {
+          "mi_mean": 0.41499047549655044,
+          "mi_std": 1.1390647892519134e-16,
+          "n_repeats": 20,
+          "pearson": {
+            "coefficient": 0.7784854172566218,
+            "p_value": 2.224563392349772e-179
+          },
+          "spearman": {
+            "coefficient": 0.7546162288226129,
+            "p_value": 1.806006606858452e-162
+          },
+          "permutation_test": {
+            "mi_observed": 0.41499047549655055,
+            "n_permutations": 1000,
+            "n_null_ge_observed": 0,
+            "p_value_proportion": 0.0,
+            "p_value": 0.000999000999000999,
+            "null_mean": 0.009667591052718055,
+            "null_std": 0.014689920160460924,
+            "null_q95": 0.04226945086368536,
+            "null_max": 0.08459967762177012
+          }
+        },
+        "dxy_close": {
+          "mi_mean": 0.08991701122457833,
+          "mi_std": 0.00023686409854221412,
+          "n_repeats": 20,
+          "pearson": {
+            "coefficient": -0.4062769100786121,
+            "p_value": 3.192057192671678e-36
+          },
+          "spearman": {
+            "coefficient": -0.3958883025170056,
+            "p_value": 2.53697021216155e-34
+          },
+          "permutation_test": {
+            "mi_observed": 0.0897907814318275,
+            "n_permutations": 1000,
+            "n_null_ge_observed": 0,
+            "p_value_proportion": 0.0,
+            "p_value": 0.000999000999000999,
+            "null_mean": 0.009492536142446698,
+            "null_std": 0.014503277872196602,
+            "null_q95": 0.04295166664150474,
+            "null_max": 0.08175261198614647
+          }
+        }
+      }
+    }
+  },
+  "lagged": {
+    "level": {
+      "mode": "level",
+      "mode_label": "Level harga",
+      "target": "silver_close",
+      "lags": [
+        0,
+        1,
+        2,
+        3,
+        5
+      ],
+      "pairs": {
+        "gold_close": [
+          {
+            "lag": 0,
+            "n_samples": 879,
+            "mi_mean": 1.3476914918762728,
+            "mi_std": 0.00028310718112918066
+          },
+          {
+            "lag": 1,
+            "n_samples": 878,
+            "mi_mean": 1.1653539926570768,
+            "mi_std": 0.0002784912392314434
+          },
+          {
+            "lag": 2,
+            "n_samples": 877,
+            "mi_mean": 1.1262011986888198,
+            "mi_std": 0.0002680804874370323
+          },
+          {
+            "lag": 3,
+            "n_samples": 876,
+            "mi_mean": 1.1074683297203278,
+            "mi_std": 0.0002850630670833611
+          },
+          {
+            "lag": 5,
+            "n_samples": 874,
+            "mi_mean": 1.1336970749949384,
+            "mi_std": 0.00027252193425064827
+          }
+        ],
+        "dxy_close": [
+          {
+            "lag": 0,
+            "n_samples": 879,
+            "mi_mean": 0.7753165060854622,
+            "mi_std": 0.000673977466829595
+          },
+          {
+            "lag": 1,
+            "n_samples": 878,
+            "mi_mean": 0.6932004225532948,
+            "mi_std": 0.00043218750156504026
+          },
+          {
+            "lag": 2,
+            "n_samples": 877,
+            "mi_mean": 0.6337511858921043,
+            "mi_std": 0.0005720632052726941
+          },
+          {
+            "lag": 3,
+            "n_samples": 876,
+            "mi_mean": 0.6606254360058792,
+            "mi_std": 0.0006774119144528619
+          },
+          {
+            "lag": 5,
+            "n_samples": 874,
+            "mi_mean": 0.6761210290835488,
+            "mi_std": 0.0005312298671414853
+          }
+        ]
+      }
+    },
+    "log_return": {
+      "mode": "log_return",
+      "mode_label": "Log-return",
+      "target": "silver_close",
+      "lags": [
+        0,
+        1,
+        2,
+        3,
+        5
+      ],
+      "pairs": {
+        "gold_close": [
+          {
+            "lag": 0,
+            "n_samples": 878,
+            "mi_mean": 0.41499047549655044,
+            "mi_std": 1.1390647892519134e-16
+          },
+          {
+            "lag": 1,
+            "n_samples": 877,
+            "mi_mean": 0.0,
+            "mi_std": 0.0
+          },
+          {
+            "lag": 2,
+            "n_samples": 876,
+            "mi_mean": 0.0,
+            "mi_std": 0.0
+          },
+          {
+            "lag": 3,
+            "n_samples": 875,
+            "mi_mean": 0.0,
+            "mi_std": 0.0
+          },
+          {
+            "lag": 5,
+            "n_samples": 873,
+            "mi_mean": 0.00480352551564911,
+            "mi_std": 0.0
+          }
+        ],
+        "dxy_close": [
+          {
+            "lag": 0,
+            "n_samples": 878,
+            "mi_mean": 0.08991701122457833,
+            "mi_std": 0.00023686409854221412
+          },
+          {
+            "lag": 1,
+            "n_samples": 877,
+            "mi_mean": 0.0,
+            "mi_std": 0.0
+          },
+          {
+            "lag": 2,
+            "n_samples": 876,
+            "mi_mean": 0.0,
+            "mi_std": 0.0
+          },
+          {
+            "lag": 3,
+            "n_samples": 875,
+            "mi_mean": 0.0,
+            "mi_std": 0.0
+          },
+          {
+            "lag": 5,
+            "n_samples": 873,
+            "mi_mean": 0.0,
+            "mi_std": 0.0
+          }
+        ]
+      }
+    }
+  },
+  "figures": {
+    "mi_barplot": "results/figures/mi_barplot.png",
+    "mi_lag_plot": "results/figures/mi_lag_plot.png"
+  },
+  "notes": [
+    "MI dilaporkan sebagai rata-rata +/- simpangan baku dari n_repeats pengulangan karena estimator k-NN bersifat stokastik.",
+    "Nilai p permutasi memakai koreksi tambah-satu: (1 + jumlah MI_null >= MI_observed) / (1 + n_permutations).",
+    "Pada varian level, uji permutasi bersifat anti-konservatif karena harga berautokorelasi kuat sehingga asumsi pengamatan saling bebas dilanggar; varian log-return jauh lebih mendekati asumsi tersebut.",
+    "Lag berarti MI antara target_t dan kovariat_{t-lag}; lag negatif ditolak karena akan mengintip masa depan."
+  ],
+  "interpretation": "Pada level harga MI perak terhadap kovariat mencapai GOLD = 1.348 dan DXY = 0.775 nat, sedangkan pada log-return turun menjadi GOLD = 0.415 dan DXY = 0.090 nat — yakni 3.2 sampai 8.6 kali lebih kecil. Meski begitu kedua kovariat layak dipakai: uji permutasi pada log-return menolak hipotesis kemandirian untuk keduanya (p <= 0.001), dan DXY bahkan menyimpan MI 0.775 nat pada level padahal korelasi Pearson-nya hanya -0.019, pertanda keterkaitannya tidak tertangkap ukuran linear. Di sisi lain MI log-return runtuh menjadi paling besar 0.005 nat begitu lag >= 1 (dari 0.415 nat pada lag 0), sehingga kovariat bersifat sezaman dan bukan penunjuk arah (lead) bagi perak; manfaatnya bagi Chronos-2 karena itu terletak pada pengayaan konteks past-only (keputusan D2), bukan pada kemampuan meramal beberapa hari ke depan dari kovariat saja. MI level jauh lebih besar karena harga perak, emas, dan dolar sama-sama merupakan proses non-stasioner yang berbagi tren jangka panjang: pada level estimator k-NN sesungguhnya mengukur kesamaan lintasan tren, bukan keterkaitan pergerakan harian, sehingga MI level melebih-lebihkan kandungan informasi yang benar-benar dapat dieksploitasi untuk peramalan."
+}

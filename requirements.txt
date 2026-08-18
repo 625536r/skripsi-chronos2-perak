@@ -1,0 +1,46 @@
+# Dependensi project skripsi: Peramalan Probabilistik Harga Perak dengan Chronos-2
+#
+# Versi dikunci ke kombinasi yang sudah diverifikasi berjalan pada
+# Python 3.13.14 (Windows 11, AMD64) per 2026-08-17, sesuai aturan kerja #3
+# (reproducible: semua versi library dicatat).
+#
+# Cara membuat lingkungan kerja:
+#   py -3.13 -m venv .venv
+#   .venv\Scripts\Activate.ps1
+#   python -m pip install --upgrade pip
+#   python -m pip install -r requirements.txt
+#
+# CATATAN: jangan memakai Python 3.14. AutoGluon 1.6.1 beserta rantai
+# dependensinya belum diverifikasi pada versi tersebut.
+
+# --- Model peramalan (Chronos-2 lewat AutoGluon-TimeSeries) ---
+# chronos-forecasting ikut terpasang otomatis sebagai dependensi
+# autogluon.timeseries; dikunci di sini agar versinya tercatat.
+autogluon.timeseries==1.6.1
+chronos-forecasting==2.3.1
+torch==2.13.0
+
+# --- Pengambilan data ---
+yfinance==1.6.0
+
+# --- Pengolahan data & statistik ---
+pandas==2.3.3
+numpy==2.4.6
+scipy==1.15.3
+scikit-learn==1.9.0
+statsmodels==0.14.6
+
+# --- Visualisasi ---
+matplotlib==3.11.1
+seaborn==0.13.2
+
+# --- Konfigurasi ---
+PyYAML==6.0.3
+
+# --- Pengujian ---
+pytest==9.1.1
+
+# --- Notebook ---
+jupyterlab==4.6.3
+ipykernel==7.3.0
+nbstripout==0.9.1

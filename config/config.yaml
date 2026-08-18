@@ -1,0 +1,237 @@
+# =============================================================================
+# Konfigurasi project skripsi:
+# "Implementasi Time Series Foundation Model Chronos-2 untuk Peramalan
+#  Probabilistik Harga Perak dengan Variabel Kovariat Harga Emas dan Dollar Index"
+#
+# SEMUA parameter pipeline diambil dari berkas ini. Tidak boleh ada angka
+# hardcoded di dalam `src/`.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Seed global untuk reproducibility (dipakai python, numpy, dan torch)
+# -----------------------------------------------------------------------------
+seed: 42
+
+# -----------------------------------------------------------------------------
+# DATA — sumber Yahoo Finance via yfinance
+# -----------------------------------------------------------------------------
+data:
+  # Peta ticker -> nama kolom pada dataframe gabungan
+  tickers:
+    silver:
+      ticker: "SI=F"          # Silver Futures  (target)
+      column: "silver_close"
+      role: "target"
+    gold:
+      ticker: "GC=F"          # Gold Futures    (kovariat 1)
+      column: "gold_close"
+      role: "covariate"
+    dxy:
+      ticker: "DX-Y.NYB"      # US Dollar Index (kovariat 2)
+      column: "dxy_close"
+      role: "covariate"
+      # Fallback bila DX-Y.NYB gagal diunduh (WAJIB dicatat di log).
+      # PERINGATAN: per 2026-08-17, "DX=F" sudah TIDAK tersedia di Yahoo Finance
+      # (HTTP 404 "Quote not found"), jadi fallback ini praktis tidak berfungsi.
+      # Ticker utama DX-Y.NYB sendiri masih normal, sehingga belum menjadi
+      # masalah. Kandidat pengganti yang terbukti mengembalikan data: "USDX".
+      fallback_ticker: "DX=F"
+
+  # Rentang 5 tahun. HARDCODE — jangan pernah memakai today()/now()
+  # agar hasil penelitian reproducible.
+  # Catatan: parameter `end` pada yfinance bersifat eksklusif, sehingga
+  # tanggal perdagangan terakhir yang terambil adalah 2026-08-14.
+  start_date: "2021-08-16"
+  end_date: "2026-08-15"
+
+  interval: "1d"              # frekuensi harian
+  auto_adjust: false          # harga yang dipakai: kolom Close mentah
+  price_field: "Close"
+
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  metadata_file: "data/raw/download_metadata.json"
+
+  # Perilaku pengunduhan (retry dengan backoff eksponensial)
+  download:
+    retries: 3
+    backoff_seconds: 2.0      # jeda awal sebelum percobaan ulang
+    backoff_factor: 2.0       # pengali jeda tiap percobaan gagal berikutnya
+    timeout: 30
+
+  # Ambang validasi seri mentah.
+  # 5 tahun kalender ~= 252 hari perdagangan/tahun -> ~1260 baris.
+  # Rentang dilonggarkan karena kalender bursa berjangka dan indeks berbeda.
+  validation:
+    min_rows: 1150
+    max_rows: 1400
+    min_price: 0.0            # semua harga wajib > nilai ini
+
+# -----------------------------------------------------------------------------
+# PREPROCESSING — lihat keputusan D1 pada CLAUDE.md
+# -----------------------------------------------------------------------------
+preprocessing:
+  join_how: "outer"                 # outer join berdasarkan tanggal
+  fill_method: "ffill"              # forward fill setelah join
+  # Baris yang nilai target-nya hasil forward fill WAJIB dibuang,
+  # agar tidak muncul segmen datar buatan.
+  drop_ffilled_target: true
+  # Kolom flag jumlah forward fill pada kovariat (dilaporkan di log)
+  ffill_flag_columns:
+    gold: "gold_ffilled"
+    dxy: "dxy_ffilled"
+
+# -----------------------------------------------------------------------------
+# SPLIT — kronologis, tanpa acak (keputusan D3)
+# -----------------------------------------------------------------------------
+split:
+  train_ratio: 0.70
+  val_ratio: 0.15
+  test_ratio: 0.15
+  shuffle: false
+
+# -----------------------------------------------------------------------------
+# MUTUAL INFORMATION — hanya dihitung pada data latih (keputusan D6)
+# -----------------------------------------------------------------------------
+mutual_information:
+  n_neighbors: 3
+  lags: [0, 1, 2, 3, 5]
+  n_permutations: 1000
+  random_state: 42
+  # Estimator MI berbasis k-NN bersifat stokastik, jadi tiap nilai MI dihitung
+  # ulang sebanyak n_repeats kali dengan random_state berbeda lalu dirata-ratakan.
+  n_repeats: 20
+  # Dua varian wajib: level harga dan log-return
+  variants: ["level", "log_return"]
+  figure_dpi: 200
+
+# -----------------------------------------------------------------------------
+# MODEL — Chronos-2 lewat AutoGluon-TimeSeries
+# -----------------------------------------------------------------------------
+model:
+  model_preset: "chronos2"
+  # Penelitian ini hanya memodelkan satu deret, sehingga item_id tunggal
+  item_id: "SILVER"
+  prediction_length: 10             # H utama = 10 hari perdagangan
+  max_context: 1024                 # batas panjang konteks (expanding window)
+
+  # Level kuantil (keputusan D5)
+  # 0.1/0.9   -> interval 80%
+  # 0.025/0.975 -> interval 95%
+  quantile_levels: [0.025, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.975]
+
+  # KRITIS (keputusan D2): kovariat = PAST-ONLY.
+  # Nilai Emas & DXY di masa depan tidak diketahui saat peramalan dilakukan,
+  # jadi daftar ini WAJIB tetap kosong. Kolom kovariat lain otomatis
+  # diperlakukan sebagai past-only covariates oleh Chronos-2.
+  known_covariates_names: []
+
+  cross_learning: false
+
+  # Kalender bursa tidak reguler (akhir pekan + hari libur), sehingga indeks
+  # tanggal asli berfrekuensi tidak tetap (freq=None) dan ditolak AutoGluon.
+  # Solusinya: tanggal asli dipetakan 1:1 ke indeks sintetis berfrekuensi tetap,
+  # sehingga 1 langkah model = 1 hari perdagangan — persis definisi H pada D4.
+  # Ini aman karena Chronos-2 TIDAK memakai timestamp sebagai fitur; timestamp
+  # hanya dipakai untuk menomori langkah ramalan. Seluruh keluaran tetap
+  # dilaporkan memakai tanggal perdagangan yang asli.
+  synthetic_index:
+    freq: "D"
+    start: "2000-01-03"
+
+  # Ablasi opsional: menjalankan kovariat sebagai known-future (upper bound
+  # teoretis). Bila diaktifkan, seluruh output WAJIB berlabel "oracle / ex-post".
+  oracle_ablation:
+    enabled: false
+    label: "oracle_ex_post"
+
+# -----------------------------------------------------------------------------
+# FINE-TUNING — grid hyperparameter, dipilih memakai data VALIDASI saja
+# -----------------------------------------------------------------------------
+finetune:
+  enabled: true
+  grid:
+    fine_tune_lr: [1.0e-5, 5.0e-5, 1.0e-4]
+    fine_tune_steps: [200, 500, 1000]
+    # DIVERIFIKASI pada autogluon.timeseries 1.6.1 / chronos 2.3.1:
+    # fine_tune_mode hanya menerima "lora" atau "full"
+    # (lihat assert pada chronos/chronos2/pipeline.py). Nilai "linear_probe"
+    # yang sempat tertulis di sini TIDAK didukung dan akan menggagalkan fit.
+    fine_tune_mode: ["lora", "full"]
+  # Metrik pemilihan hyperparameter terbaik pada data validasi
+  selection_metric: "WQL"
+  time_limit: null                  # null = tanpa batas waktu
+
+  # Setelan tetap fine-tuning (BUKAN bagian grid — tidak ikut dicari).
+  # Bawaan Chronos-2 adalah batch 32 x konteks 2048. Nilai itu ditujukan untuk
+  # korpus berisi ratusan deret; penelitian ini hanya punya SATU deret sepanjang
+  # 879 titik latih — lebih pendek daripada satu jendela konteks bawaannya.
+  # Menyetel keduanya sesuai ukuran data sekaligus memangkas biaya fine-tuning
+  # di CPU secara drastis.
+  fine_tune_batch_size: 8
+  fine_tune_context_length: 1024
+
+  # Protokol pemilihan hyperparameter (lihat src.forecasting.tune_finetune_hyperparams):
+  # tiap kandidat di-fine-tune HANYA pada data latih, lalu dinilai dengan
+  # rolling origin pada data VALIDASI. Karena tiap jendela memerlukan satu
+  # panggilan predict (~2-5 detik di CPU), jendela validasi dijarangkan agar
+  # tuning tetap layak dijalankan. Penjarangan ini hanya memengaruhi pemilihan
+  # hyperparameter, BUKAN evaluasi akhir (evaluasi akhir tetap stride = 1).
+  val_stride: 5
+  max_val_windows: 40
+
+# -----------------------------------------------------------------------------
+# BASELINE — naive persistence (penyebut MASE dan pembanding utama)
+# -----------------------------------------------------------------------------
+baseline:
+  # Prediksi titik = nilai terakhir yang diketahui, diulang H langkah.
+  # Versi probabilistiknya memakai model random walk: sigma diestimasi dari
+  # log-return pada `volatility_window` hari terakhir KONTEKS (bukan masa depan),
+  # lalu lebar interval tumbuh sebanding akar horizon (sigma * sqrt(h)).
+  volatility_window: 60
+  # Konteks lebih pendek dari ini dianggap tidak cukup untuk mengestimasi sigma
+  min_volatility_window: 20
+
+# -----------------------------------------------------------------------------
+# EVALUASI — rolling origin / expanding window (keputusan D4)
+# -----------------------------------------------------------------------------
+evaluation:
+  stride: 1
+  horizons_sensitivity: [5, 20]     # H utama diambil dari model.prediction_length
+  coverage_levels: [0.80, 0.95]
+  # Baseline pembanding sekaligus penyebut MASE
+  baseline: "naive_persistence"
+  point_quantile: 0.5               # kuantil median dipakai sebagai prediksi titik
+  # Uji signifikansi Diebold-Mariano dengan koreksi HAC (Newey-West).
+  # lag = null berarti dihitung otomatis sebagai H - 1.
+  diebold_mariano:
+    hac_lag: null
+    alpha: 0.05
+
+# -----------------------------------------------------------------------------
+# VISUALISASI — seluruh gambar disimpan ke results/figures/
+# -----------------------------------------------------------------------------
+visualization:
+  figure_dpi: 300
+  # Banyaknya jendela uji yang digambar pada plot_forecast_example.
+  # Jendela dipilih deterministik (merata sepanjang periode uji) agar gambar
+  # yang dilaporkan tidak dipilih-pilih setelah melihat hasilnya.
+  n_example_windows: 3
+  # Tingkat cakupan nominal yang diuji pada reliability diagram. Tiap nilai
+  # harus dapat dibentuk dari sepasang kuantil pada model.quantile_levels.
+  calibration_levels: [0.20, 0.40, 0.60, 0.80, 0.90, 0.95]
+  # Seri pada plot_series_overview dinormalisasi ke basis ini pada tanggal
+  # pertama, sehingga ketiganya sebanding meski satuan harganya berbeda jauh.
+  normalization_base: 100.0
+
+# -----------------------------------------------------------------------------
+# DIREKTORI OUTPUT
+# -----------------------------------------------------------------------------
+paths:
+  results_dir: "results"
+  metrics_dir: "results/metrics"
+  figures_dir: "results/figures"
+  forecasts_dir: "results/forecasts"
+  models_dir: "results/models"
+  logs_dir: "logs"
+  environment_file: "results/environment.json"
