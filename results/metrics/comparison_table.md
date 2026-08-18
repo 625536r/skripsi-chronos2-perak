@@ -10,7 +10,7 @@ Seluruh skema dievaluasi pada **himpunan jendela yang persis sama** (keputusan D
 |---|---|---|---|---|---|---|---|---|---|---|
 | Naive Persistence | 5.6810 | 8.2954 | 7.511 | 1.0000 | 3.6997 | 0.051063 | 0.7680 | 0.9149 | 19.6722 | 0.000000 |
 | Chronos-2 Zero-Shot | 6.0303 | 9.1035 | 7.977 | 1.0615 | 3.8774 | 0.053516 | 0.6801 | 0.9094 | 14.8809 | 0.000000 |
-| Chronos-2 Fine-Tuned | _belum dijalankan_ | — | — | — | — | — | — | — | — | — |
+| Chronos-2 Fine-Tuned | 6.0315 | 9.0039 | 7.980 | 1.0617 | 3.9114 | 0.053985 | 0.6707 | 0.8939 | 14.7890 | 0.000000 |
 
 Keterangan kolom: MASE = MAE skema / MAE baseline pada jendela yang sama (< 1 berarti mengungguli baseline). nCRPS = CRPS / rata-rata |y|. Cov80 dan Cov95 = cakupan empiris interval 80% dan 95% (target 0,80 dan 0,95). Width80 = lebar rata-rata interval 80% dalam USD — wajib dibaca bersama Cov80, karena cakupan tinggi yang dicapai lewat interval kelewat lebar bukan kalibrasi yang baik. CrossRate = proporsi pelanggaran urutan kuantil.
 
@@ -18,8 +18,8 @@ Keterangan kolom: MASE = MAE skema / MAE baseline pada jendela yang sama (< 1 be
 
 | Perbandingan | Selisih rugi rata-rata | Statistik DM | p-value | Lag HAC | Signifikan (α = 0.05) | Lebih baik |
 |---|---|---|---|---|---|---|
-| Chronos-2 Zero-Shot vs Chronos-2 Fine-Tuned **(uji utama)** | _belum dijalankan_ | — | — | — | — | — |
-| Chronos-2 Fine-Tuned vs Naive Persistence | _belum dijalankan_ | — | — | — | — | — |
+| Chronos-2 Zero-Shot vs Chronos-2 Fine-Tuned **(uji utama)** | -0.001238 | -0.0123 | 0.9902 | 9 | tidak | tidak terbukti berbeda |
 | Chronos-2 Zero-Shot vs Naive Persistence | 0.349285 | 1.2688 | 0.2045 | 9 | tidak | tidak terbukti berbeda |
+| Chronos-2 Fine-Tuned vs Naive Persistence | 0.350523 | 1.5871 | 0.1125 | 9 | tidak | tidak terbukti berbeda |
 
 H0 uji DM: kedua ramalan sama akuratnya. Statistik negatif berarti skema pertama memiliki rugi lebih kecil. Karena jendela rolling origin saling tumpang tindih, ragam diestimasi dengan HAC Newey-West berlag H − 1 = 9. **p-value di atas α berarti perbedaan angka pada tabel 4.x tidak terbukti secara statistik dan tidak boleh dinarasikan sebagai keunggulan.**
