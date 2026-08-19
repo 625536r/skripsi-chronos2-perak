@@ -1,0 +1,3138 @@
+{
+  "protocol": {
+    "horizons_sensitivity_requested": [
+      5,
+      20
+    ],
+    "reference_horizon_main": 10,
+    "stride": 1,
+    "include_finetune": true,
+    "reuse_finetune_params": true,
+    "note": "Disimpan terpisah dari results/metrics/final_results.json (hasil utama) agar tidak tercampur. Tiap horizon memakai daftar origin sendiri -- jumlah jendela berbeda dari H utama, sehingga yang dibandingkan lintas horizon adalah metrik teragregasi, bukan jendela per jendela."
+  },
+  "results": {
+    "5": {
+      "horizon": 5,
+      "n_windows": 186,
+      "test_start": "2025-11-11",
+      "test_end": "2026-08-10",
+      "schemes_evaluated": [
+        "naive",
+        "zeroshot",
+        "finetuned"
+      ],
+      "finetune_selection": {
+        "best_params": {
+          "fine_tune_lr": 0.0001,
+          "fine_tune_steps": 200,
+          "fine_tune_mode": "lora"
+        },
+        "retuned": false,
+        "source": "H=10 (hasil utama, tidak di-tuning ulang)"
+      },
+      "metrics": {
+        "naive": {
+          "n_windows": 186,
+          "horizon": 5,
+          "quantile_levels": [
+            0.025,
+            0.05,
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8,
+            0.9,
+            0.95,
+            0.975
+          ],
+          "point_quantile": 0.5,
+          "coverage_levels": [
+            0.8,
+            0.95
+          ],
+          "target_scale_mean_abs": 72.05138599026587,
+          "overall": {
+            "mae": 4.16350103398805,
+            "mae_std_windows": 4.116436132383546,
+            "rmse": 6.5087360221233155,
+            "rmse_mean_of_windows": 4.7236572416522415,
+            "rmse_std_windows": 4.489887422682697,
+            "mape": 5.526404860654101,
+            "mape_std_windows": 4.942966546059633,
+            "crps": 2.7489940426094557,
+            "crps_std_windows": 2.9957771693550788,
+            "normalized_crps": 0.03815324306156781,
+            "quantile_crossing_rate": 0.0,
+            "coverage": {
+              "0.8": 0.7956989247311828,
+              "0.95": 0.9161290322580645
+            },
+            "interval_width": {
+              "0.8": 14.46351946451867,
+              "0.95": 22.207548050357943
+            },
+            "interval_width_std_windows": {
+              "0.8": 7.180193382832952,
+              "0.95": 11.073128504592248
+            },
+            "mase": 1.0,
+            "mae_naive": 4.16350103398805
+          },
+          "per_horizon": [
+            {
+              "h": 1,
+              "n_windows": 186,
+              "mae": 2.48254273527412,
+              "mae_std_windows": 3.280452945976321,
+              "rmse": 4.10688849703034,
+              "mape": 3.291304901329646,
+              "mape_std_windows": 4.045693177653585,
+              "crps": 1.6424696566381898,
+              "crps_std_windows": 2.5728551028501627,
+              "normalized_crps": 0.02284055421860438,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.8010752688172043,
+                "0.95": 0.9139784946236559
+              },
+              "interval_width": {
+                "0.8": 8.609520074129744,
+                "0.95": 13.182583616128685
+              },
+              "mae_naive": 2.48254273527412,
+              "mase": 1.0
+            },
+            {
+              "h": 2,
+              "n_windows": 186,
+              "mae": 3.411612602972215,
+              "mae_std_windows": 4.3330079243167035,
+              "rmse": 5.505734972944485,
+              "mape": 4.564834055529354,
+              "mape_std_windows": 5.42663677581055,
+              "crps": 2.2499338093577883,
+              "crps_std_windows": 3.3686336157229024,
+              "normalized_crps": 0.03125502036653291,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.8225806451612904,
+                "0.95": 0.946236559139785
+              },
+              "interval_width": {
+                "0.8": 12.186374865363007,
+                "0.95": 18.681228243168878
+              },
+              "mae_naive": 3.411612602972215,
+              "mase": 1.0
+            },
+            {
+              "h": 3,
+              "n_windows": 186,
+              "mae": 4.2226291779548895,
+              "mae_std_windows": 4.882613273372386,
+              "rmse": 6.445334590221608,
+              "mape": 5.620171254151308,
+              "mape_std_windows": 6.010204085436116,
+              "crps": 2.809080339419633,
+              "crps_std_windows": 3.489129022859245,
+              "normalized_crps": 0.03898683010998829,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7903225806451613,
+                "0.95": 0.9032258064516129
+              },
+              "interval_width": {
+                "0.8": 14.93828330868618,
+                "0.95": 22.92665005549574
+              },
+              "mae_naive": 4.2226291779548895,
+              "mase": 1.0
+            },
+            {
+              "h": 4,
+              "n_windows": 186,
+              "mae": 5.01865606410529,
+              "mae_std_windows": 5.465626914112766,
+              "rmse": 7.40941146854193,
+              "mape": 6.635688646010272,
+              "mape_std_windows": 6.635761315757654,
+              "crps": 3.3018245585672075,
+              "crps_std_windows": 3.7887555131949835,
+              "normalized_crps": 0.04578524779133116,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7849462365591398,
+                "0.95": 0.9139784946236559
+              },
+              "interval_width": {
+                "0.8": 17.26436165901358,
+                "0.95": 26.527673807469988
+              },
+              "mae_naive": 5.01865606410529,
+              "mase": 1.0
+            },
+            {
+              "h": 5,
+              "n_windows": 186,
+              "mae": 5.682064589633737,
+              "mae_std_windows": 6.008752908969379,
+              "rmse": 8.258138774507016,
+              "mape": 7.520025446249925,
+              "mape_std_windows": 7.33209662462376,
+              "crps": 3.741661849064462,
+              "crps_std_windows": 4.124308074394155,
+              "normalized_crps": 0.051828685054143814,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7795698924731183,
+                "0.95": 0.9032258064516129
+              },
+              "interval_width": {
+                "0.8": 19.319057415400845,
+                "0.95": 29.719604529526443
+              },
+              "mae_naive": 5.682064589633737,
+              "mase": 1.0
+            }
+          ]
+        },
+        "zeroshot": {
+          "n_windows": 186,
+          "horizon": 5,
+          "quantile_levels": [
+            0.025,
+            0.05,
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8,
+            0.9,
+            0.95,
+            0.975
+          ],
+          "point_quantile": 0.5,
+          "coverage_levels": [
+            0.8,
+            0.95
+          ],
+          "target_scale_mean_abs": 72.05138599026587,
+          "overall": {
+            "mae": 4.48503423711305,
+            "mae_std_windows": 4.664953852134391,
+            "rmse": 7.14758633887784,
+            "rmse_mean_of_windows": 5.033316352022077,
+            "rmse_std_windows": 5.088509236811012,
+            "mape": 5.961547222897565,
+            "mape_std_windows": 5.643318445093296,
+            "crps": 2.858565537410891,
+            "crps_std_windows": 3.443814626720766,
+            "normalized_crps": 0.039673984034076494,
+            "quantile_crossing_rate": 0.0,
+            "coverage": {
+              "0.8": 0.7215053763440861,
+              "0.95": 0.9483870967741935
+            },
+            "interval_width": {
+              "0.8": 11.788085482197424,
+              "0.95": 27.07631756772277
+            },
+            "interval_width_std_windows": {
+              "0.8": 5.675395347594496,
+              "0.95": 13.321145196807617
+            },
+            "mase": 1.0772266418334515,
+            "mae_naive": 4.16350103398805
+          },
+          "per_horizon": [
+            {
+              "h": 1,
+              "n_windows": 186,
+              "mae": 2.85486574070428,
+              "mae_std_windows": 3.5727871040533774,
+              "rmse": 4.5657899743635815,
+              "mape": 3.801441120316347,
+              "mape_std_windows": 4.427954658228201,
+              "crps": 1.7786486600429385,
+              "crps_std_windows": 2.654365916650422,
+              "normalized_crps": 0.024734290214353645,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.8064516129032258,
+                "0.95": 0.9838709677419355
+              },
+              "interval_width": {
+                "0.8": 8.754381569482947,
+                "0.95": 21.391035654211557
+              },
+              "mae_naive": 2.48254273527412,
+              "mase": 1.149976473774196
+            },
+            {
+              "h": 2,
+              "n_windows": 186,
+              "mae": 3.5421585985409316,
+              "mae_std_windows": 4.817056006730723,
+              "rmse": 5.968765640181657,
+              "mape": 4.759313715090072,
+              "mape_std_windows": 6.081819569196888,
+              "crps": 2.3175840322590746,
+              "crps_std_windows": 3.6543206869351854,
+              "normalized_crps": 0.03219478538796868,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7258064516129032,
+                "0.95": 0.967741935483871
+              },
+              "interval_width": {
+                "0.8": 10.268010047174268,
+                "0.95": 24.210812025172736
+              },
+              "mae_naive": 3.411612602972215,
+              "mase": 1.038265187394074
+            },
+            {
+              "h": 3,
+              "n_windows": 186,
+              "mae": 4.520109422745243,
+              "mae_std_windows": 5.452472369565906,
+              "rmse": 7.071139112987238,
+              "mape": 6.000630375152999,
+              "mape_std_windows": 6.724675549663563,
+              "crps": 2.91371054266779,
+              "crps_std_windows": 4.002028872174299,
+              "normalized_crps": 0.040438977953952134,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6989247311827957,
+                "0.95": 0.946236559139785
+              },
+              "interval_width": {
+                "0.8": 12.082789574899982,
+                "0.95": 27.547560927688433
+              },
+              "mae_naive": 4.2226291779548895,
+              "mase": 1.0704490572706244
+            },
+            {
+              "h": 4,
+              "n_windows": 186,
+              "mae": 5.446780071463636,
+              "mae_std_windows": 6.194850482565559,
+              "rmse": 8.236337908328217,
+              "mape": 7.210881667459119,
+              "mape_std_windows": 7.546943319054914,
+              "crps": 3.430195508188606,
+              "crps_std_windows": 4.48322824610345,
+              "normalized_crps": 0.04756532290839756,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6935483870967742,
+                "0.95": 0.9247311827956989
+              },
+              "interval_width": {
+                "0.8": 13.195932121687038,
+                "0.95": 29.64847191431189
+              },
+              "mae_naive": 5.01865606410529,
+              "mase": 1.085306504747436
+            },
+            {
+              "h": 5,
+              "n_windows": 186,
+              "mae": 6.06125735211116,
+              "mae_std_windows": 6.680582838308713,
+              "rmse": 9.007168284526003,
+              "mape": 8.035469236469288,
+              "mape_std_windows": 8.213190800274976,
+              "crps": 3.8526889438960454,
+              "crps_std_windows": 4.7622027216113,
+              "normalized_crps": 0.05336660819167734,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6827956989247311,
+                "0.95": 0.9193548387096774
+              },
+              "interval_width": {
+                "0.8": 14.639314097742881,
+                "0.95": 32.58370731722924
+              },
+              "mae_naive": 5.682064589633737,
+              "mase": 1.0667350320461362
+            }
+          ]
+        },
+        "finetuned": {
+          "n_windows": 186,
+          "horizon": 5,
+          "quantile_levels": [
+            0.025,
+            0.05,
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8,
+            0.9,
+            0.95,
+            0.975
+          ],
+          "point_quantile": 0.5,
+          "coverage_levels": [
+            0.8,
+            0.95
+          ],
+          "target_scale_mean_abs": 72.05138599026587,
+          "overall": {
+            "mae": 4.444667902300434,
+            "mae_std_windows": 4.598255492137836,
+            "rmse": 7.068064094643227,
+            "rmse_mean_of_windows": 5.001094328252986,
+            "rmse_std_windows": 5.008136577047886,
+            "mape": 5.897786988490929,
+            "mape_std_windows": 5.543982892286866,
+            "crps": 2.864481321371124,
+            "crps_std_windows": 3.411802632144358,
+            "normalized_crps": 0.03975608910227091,
+            "quantile_crossing_rate": 0.0,
+            "coverage": {
+              "0.8": 0.7032258064516129,
+              "0.95": 0.9408602150537635
+            },
+            "interval_width": {
+              "0.8": 11.30384146987751,
+              "0.95": 26.220448512415732
+            },
+            "interval_width_std_windows": {
+              "0.8": 5.505623464687695,
+              "0.95": 13.444493062853507
+            },
+            "mase": 1.0675313554667396,
+            "mae_naive": 4.16350103398805
+          },
+          "per_horizon": [
+            {
+              "h": 1,
+              "n_windows": 186,
+              "mae": 2.7952642748432774,
+              "mae_std_windows": 3.525072841784792,
+              "rmse": 4.491417783913316,
+              "mape": 3.7152611096954944,
+              "mape_std_windows": 4.349463109266982,
+              "crps": 1.7531095351731119,
+              "crps_std_windows": 2.6367892294582362,
+              "normalized_crps": 0.024379137372456436,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7849462365591398,
+                "0.95": 0.9838709677419355
+              },
+              "interval_width": {
+                "0.8": 8.226983675392725,
+                "0.95": 20.672850455007246
+              },
+              "mae_naive": 2.48254273527412,
+              "mase": 1.1259682401941118
+            },
+            {
+              "h": 2,
+              "n_windows": 186,
+              "mae": 3.5327231089274087,
+              "mae_std_windows": 4.737310786999782,
+              "rmse": 5.8992872054868055,
+              "mape": 4.733510817352618,
+              "mape_std_windows": 5.955109423577011,
+              "crps": 2.3155471270887,
+              "crps_std_windows": 3.618023376478187,
+              "normalized_crps": 0.032166489661081085,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7150537634408602,
+                "0.95": 0.956989247311828
+              },
+              "interval_width": {
+                "0.8": 9.828204001149823,
+                "0.95": 23.463832834715483
+              },
+              "mae_naive": 3.411612602972215,
+              "mase": 1.0354994895521494
+            },
+            {
+              "h": 3,
+              "n_windows": 186,
+              "mae": 4.460550410773164,
+              "mae_std_windows": 5.3852124912273265,
+              "rmse": 6.981483137777054,
+              "mape": 5.912699996043819,
+              "mape_std_windows": 6.626054781006957,
+              "crps": 2.9126577766992714,
+              "crps_std_windows": 3.9719712818625204,
+              "normalized_crps": 0.04042436676345529,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6881720430107527,
+                "0.95": 0.9408602150537635
+              },
+              "interval_width": {
+                "0.8": 11.644738351145099,
+                "0.95": 26.83796659079931
+              },
+              "mae_naive": 4.2226291779548895,
+              "mase": 1.0563443349608799
+            },
+            {
+              "h": 4,
+              "n_windows": 186,
+              "mae": 5.430968643516622,
+              "mae_std_windows": 6.077692909092825,
+              "rmse": 8.138499752327142,
+              "mape": 7.183290634827822,
+              "mape_std_windows": 7.381304524226871,
+              "crps": 3.4575867481720755,
+              "crps_std_windows": 4.423030899945553,
+              "normalized_crps": 0.047945147665197835,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6612903225806451,
+                "0.95": 0.9193548387096774
+              },
+              "interval_width": {
+                "0.8": 12.716662724812826,
+                "0.95": 28.685459916309643
+              },
+              "mae_naive": 5.01865606410529,
+              "mase": 1.0821559744570457
+            },
+            {
+              "h": 5,
+              "n_windows": 186,
+              "mae": 6.0038330734417,
+              "mae_std_windows": 6.6353325556337195,
+              "rmse": 8.935152039319558,
+              "mape": 7.944172384534889,
+              "mape_std_windows": 8.160788144616504,
+              "crps": 3.8835054197224634,
+              "crps_std_windows": 4.754992647298262,
+              "normalized_crps": 0.05379347130344822,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6666666666666666,
+                "0.95": 0.9032258064516129
+              },
+              "interval_width": {
+                "0.8": 14.102618596887076,
+                "0.95": 31.442132765246974
+              },
+              "mae_naive": 5.682064589633737,
+              "mase": 1.056628797285232
+            }
+          ]
+        }
+      },
+      "diebold_mariano": [
+        {
+          "mean_loss_differential": 0.04036633481261553,
+          "statistic": 0.7811274043164856,
+          "p_value": 0.4347275654819649,
+          "hac_lag": 4,
+          "n_obs": 186,
+          "alpha": 0.05,
+          "significant": false,
+          "better": "b",
+          "scheme_a": "zeroshot",
+          "scheme_b": "finetuned",
+          "primary": true,
+          "loss": "galat absolut",
+          "better_scheme": "finetuned",
+          "label": "Chronos-2 Zero-Shot vs Chronos-2 Fine-Tuned"
+        },
+        {
+          "mean_loss_differential": 0.321533203125,
+          "statistic": 1.8735287756795849,
+          "p_value": 0.060995402962973566,
+          "hac_lag": 4,
+          "n_obs": 186,
+          "alpha": 0.05,
+          "significant": false,
+          "better": "b",
+          "scheme_a": "zeroshot",
+          "scheme_b": "naive",
+          "primary": false,
+          "loss": "galat absolut",
+          "better_scheme": "naive",
+          "label": "Chronos-2 Zero-Shot vs Naive Persistence"
+        },
+        {
+          "mean_loss_differential": 0.28116686831238447,
+          "statistic": 2.0084733094623095,
+          "p_value": 0.04459301953819006,
+          "hac_lag": 4,
+          "n_obs": 186,
+          "alpha": 0.05,
+          "significant": true,
+          "better": "b",
+          "scheme_a": "finetuned",
+          "scheme_b": "naive",
+          "primary": false,
+          "loss": "galat absolut",
+          "better_scheme": "naive",
+          "label": "Chronos-2 Fine-Tuned vs Naive Persistence"
+        }
+      ],
+      "source": "dihitung pada analisis sensitivitas ini"
+    },
+    "20": {
+      "horizon": 20,
+      "n_windows": 171,
+      "test_start": "2025-11-11",
+      "test_end": "2026-07-20",
+      "schemes_evaluated": [
+        "naive",
+        "zeroshot",
+        "finetuned"
+      ],
+      "finetune_selection": {
+        "best_params": {
+          "fine_tune_lr": 0.0001,
+          "fine_tune_steps": 200,
+          "fine_tune_mode": "lora"
+        },
+        "retuned": false,
+        "source": "H=10 (hasil utama, tidak di-tuning ulang)"
+      },
+      "metrics": {
+        "naive": {
+          "n_windows": 171,
+          "horizon": 20,
+          "quantile_levels": [
+            0.025,
+            0.05,
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8,
+            0.9,
+            0.95,
+            0.975
+          ],
+          "point_quantile": 0.5,
+          "coverage_levels": [
+            0.8,
+            0.95
+          ],
+          "target_scale_mean_abs": 73.3880771514268,
+          "overall": {
+            "mae": 7.895059115984287,
+            "mae_std_windows": 5.290613429841655,
+            "rmse": 10.891781551772505,
+            "rmse_mean_of_windows": 9.23687815707914,
+            "rmse_std_windows": 5.7885174498158545,
+            "mape": 10.431751682044974,
+            "mape_std_windows": 6.335023460549968,
+            "crps": 5.25315293452201,
+            "crps_std_windows": 3.292701200240897,
+            "normalized_crps": 0.07158046835976924,
+            "quantile_crossing_rate": 0.0,
+            "coverage": {
+              "0.8": 0.7318713450292398,
+              "0.95": 0.8839181286549708
+            },
+            "interval_width": {
+              "0.8": 27.858763637651183,
+              "0.95": 43.24725751875822
+            },
+            "interval_width_std_windows": {
+              "0.8": 13.507984538997219,
+              "0.95": 21.299601907753644
+            },
+            "mase": 1.0,
+            "mae_naive": 7.895059115984287
+          },
+          "per_horizon": [
+            {
+              "h": 1,
+              "n_windows": 171,
+              "mae": 2.5878301252398574,
+              "mae_std_windows": 3.3951621794503124,
+              "rmse": 4.26105396433641,
+              "mape": 3.3928092878291394,
+              "mape_std_windows": 4.190437631190916,
+              "crps": 1.722687172807891,
+              "crps_std_windows": 2.6677604651298306,
+              "normalized_crps": 0.023603635388186404,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7894736842105263,
+                "0.95": 0.9064327485380117
+              },
+              "interval_width": {
+                "0.8": 8.943185392205205,
+                "0.95": 13.693998824201161
+              },
+              "mae_naive": 2.5878301252398574,
+              "mase": 1.0
+            },
+            {
+              "h": 2,
+              "n_windows": 171,
+              "mae": 3.5599061174002307,
+              "mae_std_windows": 4.4766378137171925,
+              "rmse": 5.709292690365573,
+              "mape": 4.717347078125537,
+              "mape_std_windows": 5.609277329530023,
+              "crps": 2.3586738325354704,
+              "crps_std_windows": 3.4894174492269303,
+              "normalized_crps": 0.032296430177060645,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.8187134502923976,
+                "0.95": 0.9415204678362573
+              },
+              "interval_width": {
+                "0.8": 12.659020975028778,
+                "0.95": 19.40724502338319
+              },
+              "mae_naive": 3.5599061174002307,
+              "mase": 1.0
+            },
+            {
+              "h": 3,
+              "n_windows": 171,
+              "mae": 4.439772087231017,
+              "mae_std_windows": 5.017474836456374,
+              "rmse": 6.688752304022752,
+              "mape": 5.866706665079427,
+              "mape_std_windows": 6.173043628393582,
+              "crps": 2.9560264276372386,
+              "crps_std_windows": 3.5993704461512843,
+              "normalized_crps": 0.04045409241695659,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7777777777777778,
+                "0.95": 0.8947368421052632
+              },
+              "interval_width": {
+                "0.8": 15.518100602600466,
+                "0.95": 23.81923012345824
+              },
+              "mae_naive": 4.439772087231017,
+              "mase": 1.0
+            },
+            {
+              "h": 4,
+              "n_windows": 171,
+              "mae": 5.255479689927129,
+              "mae_std_windows": 5.6160929548868195,
+              "rmse": 7.679591101112685,
+              "mape": 6.891620967715404,
+              "mape_std_windows": 6.815239025060447,
+              "crps": 3.4666303625002266,
+              "crps_std_windows": 3.9042036114500944,
+              "normalized_crps": 0.04742392829002072,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7777777777777778,
+                "0.95": 0.9064327485380117
+              },
+              "interval_width": {
+                "0.8": 17.934970704545158,
+                "0.95": 27.562263957685538
+              },
+              "mae_naive": 5.255479689927129,
+              "mase": 1.0
+            },
+            {
+              "h": 5,
+              "n_windows": 171,
+              "mae": 5.921362648233336,
+              "mae_std_windows": 6.186733347380422,
+              "rmse": 8.550694170583618,
+              "mape": 7.765574367904352,
+              "mape_std_windows": 7.5539169879766,
+              "crps": 3.9218297691071373,
+              "crps_std_windows": 4.247083264965134,
+              "normalized_crps": 0.053616514003709544,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7719298245614035,
+                "0.95": 0.8947368421052632
+              },
+              "interval_width": {
+                "0.8": 20.070044927896962,
+                "0.95": 30.880710982236085
+              },
+              "mae_naive": 5.921362648233336,
+              "mase": 1.0
+            },
+            {
+              "h": 6,
+              "n_windows": 171,
+              "mae": 6.545111204448499,
+              "mae_std_windows": 6.342161176686109,
+              "rmse": 9.100893736242009,
+              "mape": 8.611160090682272,
+              "mape_std_windows": 7.743015430537335,
+              "crps": 4.254107677995333,
+              "crps_std_windows": 4.099775772499989,
+              "normalized_crps": 0.058122721289288186,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7543859649122807,
+                "0.95": 0.8947368421052632
+              },
+              "interval_width": {
+                "0.8": 22.00551619855446,
+                "0.95": 33.89962614569644
+              },
+              "mae_naive": 6.545111204448499,
+              "mase": 1.0
+            },
+            {
+              "h": 7,
+              "n_windows": 171,
+              "mae": 6.979695838794374,
+              "mae_std_windows": 6.449463046874606,
+              "rmse": 9.490441434765005,
+              "mape": 9.185941104860522,
+              "mape_std_windows": 7.783933702943342,
+              "crps": 4.519026846056774,
+              "crps_std_windows": 3.994398297628851,
+              "normalized_crps": 0.06170848630889736,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7309941520467836,
+                "0.95": 0.9005847953216374
+              },
+              "interval_width": {
+                "0.8": 23.790166118827397,
+                "0.95": 36.69314162510159
+              },
+              "mae_naive": 6.979695838794374,
+              "mase": 1.0
+            },
+            {
+              "h": 8,
+              "n_windows": 171,
+              "mae": 7.390356922707363,
+              "mae_std_windows": 6.775864492832787,
+              "rmse": 10.01305257431809,
+              "mape": 9.710047261026354,
+              "mape_std_windows": 8.122703449443108,
+              "crps": 4.785832515913404,
+              "crps_std_windows": 4.1288679837260815,
+              "normalized_crps": 0.06531489615408605,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7076023391812866,
+                "0.95": 0.9298245614035088
+              },
+              "interval_width": {
+                "0.8": 25.455749796201097,
+                "0.95": 39.309458690856864
+              },
+              "mae_naive": 7.390356922707363,
+              "mase": 1.0
+            },
+            {
+              "h": 9,
+              "n_windows": 171,
+              "mae": 7.711923967327988,
+              "mae_std_windows": 6.75921989740029,
+              "rmse": 10.241760060999663,
+              "mape": 10.119693667642682,
+              "mape_std_windows": 8.021965968314742,
+              "crps": 4.980399399321164,
+              "crps_std_windows": 4.079954165189845,
+              "normalized_crps": 0.06792381048548542,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7368421052631579,
+                "0.95": 0.9239766081871345
+              },
+              "interval_width": {
+                "0.8": 27.024304572078407,
+                "0.95": 41.781989644001655
+              },
+              "mae_naive": 7.711923967327988,
+              "mase": 1.0
+            },
+            {
+              "h": 10,
+              "n_windows": 171,
+              "mae": 8.199327680799696,
+              "mae_std_windows": 6.966602910374884,
+              "rmse": 10.746102017122835,
+              "mape": 10.762617203118735,
+              "mape_std_windows": 8.10108114932634,
+              "crps": 5.265468297444158,
+              "crps_std_windows": 4.2461035473744,
+              "normalized_crps": 0.07176746764245383,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7192982456140351,
+                "0.95": 0.9064327485380117
+              },
+              "interval_width": {
+                "0.8": 28.511861362496248,
+                "0.95": 44.13501260234622
+              },
+              "mae_naive": 8.199327680799696,
+              "mase": 1.0
+            },
+            {
+              "h": 11,
+              "n_windows": 171,
+              "mae": 8.614590761954325,
+              "mae_std_windows": 7.257932059765425,
+              "rmse": 11.250808671810477,
+              "mape": 11.296835505644411,
+              "mape_std_windows": 8.362072253198287,
+              "crps": 5.551933754637295,
+              "crps_std_windows": 4.570864820049038,
+              "normalized_crps": 0.07562750621741812,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7309941520467836,
+                "0.95": 0.9005847953216374
+              },
+              "interval_width": {
+                "0.8": 29.930511454942213,
+                "0.95": 46.386818903551294
+              },
+              "mae_naive": 8.614590761954325,
+              "mase": 1.0
+            },
+            {
+              "h": 12,
+              "n_windows": 171,
+              "mae": 9.056812911005744,
+              "mae_std_windows": 7.458320826538864,
+              "rmse": 11.718664949437615,
+              "mape": 11.917468895953547,
+              "mape_std_windows": 8.650571371097156,
+              "crps": 5.837053867813125,
+              "crps_std_windows": 4.688645894182249,
+              "normalized_crps": 0.07945362881609772,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7134502923976608,
+                "0.95": 0.8771929824561403
+              },
+              "interval_width": {
+                "0.8": 31.289640263261614,
+                "0.95": 48.55159092773272
+              },
+              "mae_naive": 9.056812911005744,
+              "mase": 1.0
+            },
+            {
+              "h": 13,
+              "n_windows": 171,
+              "mae": 9.510269187347234,
+              "mae_std_windows": 7.699611654904683,
+              "rmse": 12.222215407970777,
+              "mape": 12.552058580880347,
+              "mape_std_windows": 9.005335918312513,
+              "crps": 6.147866663434418,
+              "crps_std_windows": 4.926359518507218,
+              "normalized_crps": 0.08362326668573869,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7134502923976608,
+                "0.95": 0.8654970760233918
+              },
+              "interval_width": {
+                "0.8": 32.596704936022824,
+                "0.95": 50.640585027461285
+              },
+              "mae_naive": 9.510269187347234,
+              "mase": 1.0
+            },
+            {
+              "h": 14,
+              "n_windows": 171,
+              "mae": 9.79840360050313,
+              "mae_std_windows": 8.011938438851729,
+              "rmse": 12.642170849187936,
+              "mape": 12.94416853013629,
+              "mape_std_windows": 9.354387513208598,
+              "crps": 6.433968806046322,
+              "crps_std_windows": 5.0921098685662445,
+              "normalized_crps": 0.08748008349870327,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7192982456140351,
+                "0.95": 0.8421052631578947
+              },
+              "interval_width": {
+                "0.8": 33.857746392330704,
+                "0.95": 52.66291005168857
+              },
+              "mae_naive": 9.79840360050313,
+              "mase": 1.0
+            },
+            {
+              "h": 15,
+              "n_windows": 171,
+              "mae": 9.990392049153646,
+              "mae_std_windows": 8.233496728645207,
+              "rmse": 12.930659928588245,
+              "mape": 13.232521091258487,
+              "mape_std_windows": 9.695447372343832,
+              "crps": 6.6375184167365635,
+              "crps_std_windows": 5.109709307632292,
+              "normalized_crps": 0.09021241750338814,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6900584795321637,
+                "0.95": 0.8654970760233918
+              },
+              "interval_width": {
+                "0.8": 35.07773886103689,
+                "0.95": 54.62605852594533
+              },
+              "mae_naive": 9.990392049153646,
+              "mase": 1.0
+            },
+            {
+              "h": 16,
+              "n_windows": 171,
+              "mae": 10.112912362081962,
+              "mae_std_windows": 8.32704399499524,
+              "rmse": 13.08453908397645,
+              "mape": 13.432157212856296,
+              "mape_std_windows": 9.792994945357194,
+              "crps": 6.8318436709361565,
+              "crps_std_windows": 5.040545741267857,
+              "normalized_crps": 0.09280100899289576,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7017543859649122,
+                "0.95": 0.8596491228070176
+              },
+              "interval_width": {
+                "0.8": 36.26083581687081,
+                "0.95": 56.536280197720195
+              },
+              "mae_naive": 10.112912362081962,
+              "mase": 1.0
+            },
+            {
+              "h": 17,
+              "n_windows": 171,
+              "mae": 10.390912306936164,
+              "mae_std_windows": 8.451471488844831,
+              "rmse": 13.378367799442312,
+              "mape": 13.801798269413533,
+              "mape_std_windows": 9.95380507347559,
+              "crps": 7.0859111593938,
+              "crps_std_windows": 5.161890790456284,
+              "normalized_crps": 0.0961998285965979,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6842105263157895,
+                "0.95": 0.8538011695906432
+              },
+              "interval_width": {
+                "0.8": 37.410547532869,
+                "0.95": 58.39885157651224
+              },
+              "mae_naive": 10.390912306936164,
+              "mase": 1.0
+            },
+            {
+              "h": 18,
+              "n_windows": 171,
+              "mae": 10.538690109699093,
+              "mae_std_windows": 8.585708551690942,
+              "rmse": 13.577455661903313,
+              "mape": 14.02067004547735,
+              "mape_std_windows": 10.065025878219073,
+              "crps": 7.278985778476891,
+              "crps_std_windows": 5.3838617851348864,
+              "normalized_crps": 0.09875277726540367,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.695906432748538,
+                "0.95": 0.8304093567251462
+              },
+              "interval_width": {
+                "0.8": 38.529872138992175,
+                "0.95": 60.21827478972172
+              },
+              "mae_naive": 10.538690109699093,
+              "mase": 1.0
+            },
+            {
+              "h": 19,
+              "n_windows": 171,
+              "mae": 10.613385875322665,
+              "mae_std_windows": 8.659007257801855,
+              "rmse": 13.681516590444152,
+              "mape": 14.160249694010263,
+              "mape_std_windows": 10.327413994933812,
+              "crps": 7.444536427119917,
+              "crps_std_windows": 5.320736199959258,
+              "normalized_crps": 0.10094710929031231,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.695906432748538,
+                "0.95": 0.8421052631578947
+              },
+              "interval_width": {
+                "0.8": 39.62139424956769,
+                "0.95": 61.99842715362181
+              },
+              "mae_naive": 10.613385875322665,
+              "mase": 1.0
+            },
+            {
+              "h": 20,
+              "n_windows": 171,
+              "mae": 10.684046873572276,
+              "mae_std_windows": 8.704459711056517,
+              "rmse": 13.76493338043007,
+              "mape": 14.253588121284483,
+              "mape_std_windows": 10.371102848783993,
+              "crps": 7.582757844526922,
+              "crps_std_windows": 5.5069573328609644,
+              "normalized_crps": 0.10276263184729592,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7076023391812866,
+                "0.95": 0.8421052631578947
+              },
+              "interval_width": {
+                "0.8": 40.68736045669552,
+                "0.95": 63.74267560224222
+              },
+              "mae_naive": 10.684046873572276,
+              "mase": 1.0
+            }
+          ]
+        },
+        "zeroshot": {
+          "n_windows": 171,
+          "horizon": 20,
+          "quantile_levels": [
+            0.025,
+            0.05,
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8,
+            0.9,
+            0.95,
+            0.975
+          ],
+          "point_quantile": 0.5,
+          "coverage_levels": [
+            0.8,
+            0.95
+          ],
+          "target_scale_mean_abs": 73.3880771514268,
+          "overall": {
+            "mae": 8.299117550097014,
+            "mae_std_windows": 6.453089658784792,
+            "rmse": 11.794071655680842,
+            "rmse_mean_of_windows": 9.61470472400004,
+            "rmse_std_windows": 6.850695996640636,
+            "mape": 10.89878029827351,
+            "mape_std_windows": 7.73863320395387,
+            "crps": 5.502602373162639,
+            "crps_std_windows": 4.515511179700504,
+            "normalized_crps": 0.07497951420376815,
+            "quantile_crossing_rate": 0.0,
+            "coverage": {
+              "0.8": 0.658187134502924,
+              "0.95": 0.8546783625730994
+            },
+            "interval_width": {
+              "0.8": 20.77002039680704,
+              "0.95": 46.96520619866444
+            },
+            "interval_width_std_windows": {
+              "0.8": 8.634232404092547,
+              "0.95": 21.301459741560343
+            },
+            "mase": 1.0511786458057892,
+            "mae_naive": 7.895059115984287
+          },
+          "per_horizon": [
+            {
+              "h": 1,
+              "n_windows": 171,
+              "mae": 2.951687528375994,
+              "mae_std_windows": 3.622004434210799,
+              "rmse": 4.664188737485365,
+              "mape": 3.882792906186449,
+              "mape_std_windows": 4.47207188887046,
+              "crps": 1.8486279842395583,
+              "crps_std_windows": 2.7062606126035202,
+              "normalized_crps": 0.025329230748997116,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.8011695906432749,
+                "0.95": 0.9824561403508771
+              },
+              "interval_width": {
+                "0.8": 8.94445724933468,
+                "0.95": 22.009569736949185
+              },
+              "mae_naive": 2.5878301252398574,
+              "mase": 1.1406032797853807
+            },
+            {
+              "h": 2,
+              "n_windows": 171,
+              "mae": 3.693313844022695,
+              "mae_std_windows": 4.863207666136842,
+              "rmse": 6.095329953986566,
+              "mape": 4.901623702601497,
+              "mape_std_windows": 6.110185966104304,
+              "crps": 2.4219982891966514,
+              "crps_std_windows": 3.709431349626335,
+              "normalized_crps": 0.03316350805143537,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7192982456140351,
+                "0.95": 0.9590643274853801
+              },
+              "interval_width": {
+                "0.8": 10.477971640246654,
+                "0.95": 24.84973751313505
+              },
+              "mae_naive": 3.5599061174002307,
+              "mase": 1.0374750687863339
+            },
+            {
+              "h": 3,
+              "n_windows": 171,
+              "mae": 4.715244538602773,
+              "mae_std_windows": 5.535144150570209,
+              "rmse": 7.25893816504276,
+              "mape": 6.194528375375638,
+              "mape_std_windows": 6.803273018320763,
+              "crps": 3.0714890133835846,
+              "crps_std_windows": 4.088003390934999,
+              "normalized_crps": 0.042034231914632514,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6842105263157895,
+                "0.95": 0.935672514619883
+              },
+              "interval_width": {
+                "0.8": 12.365224514788354,
+                "0.95": 28.336842587119655
+              },
+              "mae_naive": 4.439772087231017,
+              "mase": 1.0620465298576987
+            },
+            {
+              "h": 4,
+              "n_windows": 171,
+              "mae": 5.6926255030938755,
+              "mae_std_windows": 6.275187778884022,
+              "rmse": 8.458941197586478,
+              "mape": 7.453095801363605,
+              "mape_std_windows": 7.621416323169426,
+              "crps": 3.6205205965406773,
+              "crps_std_windows": 4.569214006492334,
+              "normalized_crps": 0.04952916555518021,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6666666666666666,
+                "0.95": 0.9122807017543859
+              },
+              "interval_width": {
+                "0.8": 13.52676342523586,
+                "0.95": 30.504335526137325
+              },
+              "mae_naive": 5.255479689927129,
+              "mase": 1.0831790510016808
+            },
+            {
+              "h": 5,
+              "n_windows": 171,
+              "mae": 6.297819840280633,
+              "mae_std_windows": 6.786421571728988,
+              "rmse": 9.243847790650143,
+              "mape": 8.25429915662836,
+              "mape_std_windows": 8.312157231828749,
+              "crps": 4.049706737382746,
+              "crps_std_windows": 4.858872134028879,
+              "normalized_crps": 0.05536475848752405,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6783625730994152,
+                "0.95": 0.9064327485380117
+              },
+              "interval_width": {
+                "0.8": 15.015914515445107,
+                "0.95": 33.534594909489506
+              },
+              "mae_naive": 5.921362648233336,
+              "mase": 1.0635761081378143
+            },
+            {
+              "h": 6,
+              "n_windows": 171,
+              "mae": 6.899926681964718,
+              "mae_std_windows": 6.932481867333786,
+              "rmse": 9.766639365261689,
+              "mape": 9.058331123240006,
+              "mape_std_windows": 8.486833094646167,
+              "crps": 4.464646988841686,
+              "crps_std_windows": 4.951238522322736,
+              "normalized_crps": 0.0609992628841469,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6374269005847953,
+                "0.95": 0.8771929824561403
+              },
+              "interval_width": {
+                "0.8": 16.052753582335356,
+                "0.95": 35.198144611559414
+              },
+              "mae_naive": 6.545111204448499,
+              "mase": 1.0542107637949776
+            },
+            {
+              "h": 7,
+              "n_windows": 171,
+              "mae": 7.252817053543894,
+              "mae_std_windows": 7.357448109934498,
+              "rmse": 10.315950574202832,
+              "mape": 9.531211222769155,
+              "mape_std_windows": 9.01513773216196,
+              "crps": 4.729824497138815,
+              "crps_std_windows": 4.997714990864402,
+              "normalized_crps": 0.06458698303150356,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.631578947368421,
+                "0.95": 0.8538011695906432
+              },
+              "interval_width": {
+                "0.8": 17.022676122118856,
+                "0.95": 37.94527682923434
+              },
+              "mae_naive": 6.979695838794374,
+              "mase": 1.0391308190296007
+            },
+            {
+              "h": 8,
+              "n_windows": 171,
+              "mae": 7.765596177842882,
+              "mae_std_windows": 7.559772964834609,
+              "rmse": 10.822219724835184,
+              "mape": 10.183078622986008,
+              "mape_std_windows": 9.18619103053096,
+              "crps": 5.052116742050438,
+              "crps_std_windows": 5.217418425989214,
+              "normalized_crps": 0.06894902386745258,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6081871345029239,
+                "0.95": 0.8538011695906432
+              },
+              "interval_width": {
+                "0.8": 18.302679452282643,
+                "0.95": 40.83273293121516
+              },
+              "mae_naive": 7.390356922707363,
+              "mase": 1.0507741722165775
+            },
+            {
+              "h": 9,
+              "n_windows": 171,
+              "mae": 8.054265540942811,
+              "mae_std_windows": 7.66801337532997,
+              "rmse": 11.105213733447153,
+              "mape": 10.542857667202835,
+              "mape_std_windows": 9.29786617534414,
+              "crps": 5.24570858269407,
+              "crps_std_windows": 5.338231505971906,
+              "normalized_crps": 0.07154215697671992,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6257309941520468,
+                "0.95": 0.8538011695906432
+              },
+              "interval_width": {
+                "0.8": 19.433187919750548,
+                "0.95": 43.72822697957357
+              },
+              "mae_naive": 7.711923967327988,
+              "mase": 1.044391201866768
+            },
+            {
+              "h": 10,
+              "n_windows": 171,
+              "mae": 8.589092656185752,
+              "mae_std_windows": 8.076003339923522,
+              "rmse": 11.773399185994958,
+              "mape": 11.244294358603206,
+              "mape_std_windows": 9.681037587389952,
+              "crps": 5.611344263160009,
+              "crps_std_windows": 5.635634848032139,
+              "normalized_crps": 0.07648170021885424,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6374269005847953,
+                "0.95": 0.8245614035087719
+              },
+              "interval_width": {
+                "0.8": 20.08066353602716,
+                "0.95": 45.47259211400796
+              },
+              "mae_naive": 8.199327680799696,
+              "mase": 1.0475362115724154
+            },
+            {
+              "h": 11,
+              "n_windows": 171,
+              "mae": 9.041139970745956,
+              "mae_std_windows": 8.206325781917974,
+              "rmse": 12.19393995057118,
+              "mape": 11.818836840933288,
+              "mape_std_windows": 9.78345937213562,
+              "crps": 5.96029801834182,
+              "crps_std_windows": 5.962371131438265,
+              "normalized_crps": 0.08119017541650386,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6549707602339181,
+                "0.95": 0.8187134502923976
+              },
+              "interval_width": {
+                "0.8": 21.216549722771894,
+                "0.95": 47.730582499364665
+              },
+              "mae_naive": 8.614590761954325,
+              "mase": 1.049514738491752
+            },
+            {
+              "h": 12,
+              "n_windows": 171,
+              "mae": 9.437932890061049,
+              "mae_std_windows": 8.583168946965094,
+              "rmse": 12.740272488489008,
+              "mape": 12.359480655489895,
+              "mape_std_windows": 10.349760488258921,
+              "crps": 6.242777227572477,
+              "crps_std_windows": 6.125386726196305,
+              "normalized_crps": 0.08497631097020587,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.631578947368421,
+                "0.95": 0.8128654970760234
+              },
+              "interval_width": {
+                "0.8": 22.699881592689202,
+                "0.95": 50.987109557927006
+              },
+              "mae_naive": 9.056812911005744,
+              "mase": 1.0420810259414954
+            },
+            {
+              "h": 13,
+              "n_windows": 171,
+              "mae": 9.862543942635519,
+              "mae_std_windows": 8.769147037652912,
+              "rmse": 13.180213095173944,
+              "mape": 12.93651557486151,
+              "mape_std_windows": 10.566960463503436,
+              "crps": 6.5617026731874635,
+              "crps_std_windows": 6.328928804440676,
+              "normalized_crps": 0.08925226303557308,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6491228070175439,
+                "0.95": 0.8011695906432749
+              },
+              "interval_width": {
+                "0.8": 23.807039874338965,
+                "0.95": 53.01418081361648
+              },
+              "mae_naive": 9.510269187347234,
+              "mase": 1.0370415125322596
+            },
+            {
+              "h": 14,
+              "n_windows": 171,
+              "mae": 10.156966761538857,
+              "mae_std_windows": 9.228374795874585,
+              "rmse": 13.705066453875283,
+              "mape": 13.347766670014924,
+              "mape_std_windows": 11.121975197831334,
+              "crps": 6.8430541174507225,
+              "crps_std_windows": 6.607068427029988,
+              "normalized_crps": 0.09304225177749867,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6666666666666666,
+                "0.95": 0.7894736842105263
+              },
+              "interval_width": {
+                "0.8": 24.90605558428848,
+                "0.95": 56.0339026869389
+              },
+              "mae_naive": 9.79840360050313,
+              "mase": 1.0365940387490586
+            },
+            {
+              "h": 15,
+              "n_windows": 171,
+              "mae": 10.417892456054688,
+              "mae_std_windows": 9.572268640322578,
+              "rmse": 14.12887015933287,
+              "mape": 13.71451596050923,
+              "mape_std_windows": 11.570941912461683,
+              "crps": 7.023386188374947,
+              "crps_std_windows": 6.796651834792092,
+              "normalized_crps": 0.09545685711629678,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6549707602339181,
+                "0.95": 0.8070175438596491
+              },
+              "interval_width": {
+                "0.8": 25.306516078480502,
+                "0.95": 55.81981513932435
+              },
+              "mae_naive": 9.990392049153646,
+              "mase": 1.0427911542207453
+            },
+            {
+              "h": 16,
+              "n_windows": 171,
+              "mae": 10.635022972062318,
+              "mae_std_windows": 9.574060363662827,
+              "rmse": 14.290916929316378,
+              "mape": 13.99499249458079,
+              "mape_std_windows": 11.384854003179782,
+              "crps": 7.240870726306965,
+              "crps_std_windows": 6.802368200803916,
+              "normalized_crps": 0.09835706754342795,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6374269005847953,
+                "0.95": 0.8011695906432749
+              },
+              "interval_width": {
+                "0.8": 26.13279947202805,
+                "0.95": 57.93396984345732
+              },
+              "mae_naive": 10.112912362081962,
+              "mase": 1.0516281157481393
+            },
+            {
+              "h": 17,
+              "n_windows": 171,
+              "mae": 10.869960494905884,
+              "mae_std_windows": 9.512282975589377,
+              "rmse": 14.426032896585582,
+              "mape": 14.289335875692124,
+              "mape_std_windows": 11.070182152202229,
+              "crps": 7.33043487924635,
+              "crps_std_windows": 6.559460645268157,
+              "normalized_crps": 0.09951953433499587,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6374269005847953,
+                "0.95": 0.8245614035087719
+              },
+              "interval_width": {
+                "0.8": 28.805478168509858,
+                "0.95": 65.30466530336972
+              },
+              "mae_naive": 10.390912306936164,
+              "mase": 1.046102610994989
+            },
+            {
+              "h": 18,
+              "n_windows": 171,
+              "mae": 11.07898087529411,
+              "mae_std_windows": 9.475351903165418,
+              "rmse": 14.560256463084782,
+              "mape": 14.554951430875624,
+              "mape_std_windows": 10.857358090578234,
+              "crps": 7.472464096766038,
+              "crps_std_windows": 6.63998249740979,
+              "normalized_crps": 0.10137766510735945,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.631578947368421,
+                "0.95": 0.8304093567251462
+              },
+              "interval_width": {
+                "0.8": 29.32686023823699,
+                "0.95": 67.68243602284214
+              },
+              "mae_naive": 10.538690109699093,
+              "mase": 1.0512673548582447
+            },
+            {
+              "h": 19,
+              "n_windows": 171,
+              "mae": 11.145170736034014,
+              "mae_std_windows": 9.506266709742677,
+              "rmse": 14.63063440810383,
+              "mape": 14.685238785739521,
+              "mape_std_windows": 11.069072468742059,
+              "crps": 7.552411844405408,
+              "crps_std_windows": 6.364245100053658,
+              "normalized_crps": 0.10240988828871792,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6491228070175439,
+                "0.95": 0.8187134502923976
+              },
+              "interval_width": {
+                "0.8": 30.352377038252982,
+                "0.95": 70.35803363197728
+              },
+              "mae_naive": 10.613385875322665,
+              "mase": 1.0501051094305174
+            },
+            {
+              "h": 20,
+              "n_windows": 171,
+              "mae": 11.42435053775185,
+              "mae_std_windows": 9.590688805084739,
+              "rmse": 14.898295021829814,
+              "mape": 15.027858739816537,
+              "mape_std_windows": 11.069960234749297,
+              "crps": 7.708663996972321,
+              "crps_std_windows": 6.458292652245538,
+              "normalized_crps": 0.1044689302490568,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6608187134502924,
+                "0.95": 0.8304093567251462
+              },
+              "interval_width": {
+                "0.8": 31.624558208978666,
+                "0.95": 72.02737473604972
+              },
+              "mae_naive": 10.684046873572276,
+              "mase": 1.0692905668554082
+            }
+          ]
+        },
+        "finetuned": {
+          "n_windows": 171,
+          "horizon": 20,
+          "quantile_levels": [
+            0.025,
+            0.05,
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8,
+            0.9,
+            0.95,
+            0.975
+          ],
+          "point_quantile": 0.5,
+          "coverage_levels": [
+            0.8,
+            0.95
+          ],
+          "target_scale_mean_abs": 73.3880771514268,
+          "overall": {
+            "mae": 8.292297326472768,
+            "mae_std_windows": 6.039705614423559,
+            "rmse": 11.551948098666202,
+            "rmse_mean_of_windows": 9.582683009552118,
+            "rmse_std_windows": 6.470279199983165,
+            "mape": 10.920489684788535,
+            "mape_std_windows": 7.184839589147798,
+            "crps": 5.570645808036725,
+            "crps_std_windows": 4.333053534367469,
+            "normalized_crps": 0.07590668708409432,
+            "quantile_crossing_rate": 0.0,
+            "coverage": {
+              "0.8": 0.6412280701754386,
+              "0.95": 0.8254385964912281
+            },
+            "interval_width": {
+              "0.8": 20.343101398847256,
+              "0.95": 42.944525582609124
+            },
+            "interval_width_std_windows": {
+              "0.8": 8.27833423888307,
+              "0.95": 19.30443150760387
+            },
+            "mase": 1.050314786077312,
+            "mae_naive": 7.895059115984287
+          },
+          "per_horizon": [
+            {
+              "h": 1,
+              "n_windows": 171,
+              "mae": 3.0057412086174504,
+              "mae_std_windows": 3.5654799331710016,
+              "rmse": 4.655403784980871,
+              "mape": 3.9654600673340505,
+              "mape_std_windows": 4.3317628893290925,
+              "crps": 1.9239166181687024,
+              "crps_std_windows": 2.6408201733891494,
+              "normalized_crps": 0.026360808328600032,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7426900584795322,
+                "0.95": 0.9532163742690059
+              },
+              "interval_width": {
+                "0.8": 8.900254009759914,
+                "0.95": 19.81644718549405
+              },
+              "mae_naive": 2.5878301252398574,
+              "mase": 1.1614909260471098
+            },
+            {
+              "h": 2,
+              "n_windows": 171,
+              "mae": 3.934328982704564,
+              "mae_std_windows": 4.614718124644226,
+              "rmse": 6.05392699864214,
+              "mape": 5.21548838301249,
+              "mape_std_windows": 5.681781151869051,
+              "crps": 2.552110584823602,
+              "crps_std_windows": 3.5514158151625304,
+              "normalized_crps": 0.03494508658634273,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7076023391812866,
+                "0.95": 0.9298245614035088
+              },
+              "interval_width": {
+                "0.8": 10.373970076354624,
+                "0.95": 22.89643346775345
+              },
+              "mae_naive": 3.5599061174002307,
+              "mase": 1.1051777358605657
+            },
+            {
+              "h": 3,
+              "n_windows": 171,
+              "mae": 4.848143616614983,
+              "mae_std_windows": 5.268804505870795,
+              "rmse": 7.1485982197456055,
+              "mape": 6.37425271586855,
+              "mape_std_windows": 6.381299606976954,
+              "crps": 3.1813947716222604,
+              "crps_std_windows": 3.913200288705264,
+              "normalized_crps": 0.04353832459099498,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.672514619883041,
+                "0.95": 0.8947368421052632
+              },
+              "interval_width": {
+                "0.8": 12.267326288055955,
+                "0.95": 26.31612365008795
+              },
+              "mae_naive": 4.439772087231017,
+              "mase": 1.0919802911862213
+            },
+            {
+              "h": 4,
+              "n_windows": 171,
+              "mae": 5.831289034837868,
+              "mae_std_windows": 5.873452779743881,
+              "rmse": 8.264359618525221,
+              "mape": 7.63623244407073,
+              "mape_std_windows": 7.031414837707538,
+              "crps": 3.762787928819334,
+              "crps_std_windows": 4.2976326361641055,
+              "normalized_crps": 0.05147540009953167,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.631578947368421,
+                "0.95": 0.8713450292397661
+              },
+              "interval_width": {
+                "0.8": 13.451139349686471,
+                "0.95": 27.94399667483324
+              },
+              "mae_naive": 5.255479689927129,
+              "mase": 1.1095636133870632
+            },
+            {
+              "h": 5,
+              "n_windows": 171,
+              "mae": 6.388739156444171,
+              "mae_std_windows": 6.4481964027013685,
+              "rmse": 9.063777988512037,
+              "mape": 8.373952943048575,
+              "mape_std_windows": 7.822644483256511,
+              "crps": 4.181442991592194,
+              "crps_std_windows": 4.6722164412198515,
+              "normalized_crps": 0.05716576442976441,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6491228070175439,
+                "0.95": 0.847953216374269
+              },
+              "interval_width": {
+                "0.8": 14.749819125348365,
+                "0.95": 30.462847213298954
+              },
+              "mae_naive": 5.921362648233336,
+              "mase": 1.0789305664888265
+            },
+            {
+              "h": 6,
+              "n_windows": 171,
+              "mae": 6.950549097786173,
+              "mae_std_windows": 6.642293911015444,
+              "rmse": 9.600634826152943,
+              "mape": 9.123867864997806,
+              "mape_std_windows": 8.031701270997633,
+              "crps": 4.6039413422118205,
+              "crps_std_windows": 4.729326456428054,
+              "normalized_crps": 0.06290240391651472,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6081871345029239,
+                "0.95": 0.8128654970760234
+              },
+              "interval_width": {
+                "0.8": 16.01075822707505,
+                "0.95": 32.61748083014237
+              },
+              "mae_naive": 6.545111204448499,
+              "mase": 1.0619451496961747
+            },
+            {
+              "h": 7,
+              "n_windows": 171,
+              "mae": 7.346455490380003,
+              "mae_std_windows": 6.954713760118245,
+              "rmse": 10.102257059778456,
+              "mape": 9.673563327709466,
+              "mape_std_windows": 8.420426907545547,
+              "crps": 4.852383426026186,
+              "crps_std_windows": 4.782381719348478,
+              "normalized_crps": 0.0662605570647888,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6081871345029239,
+                "0.95": 0.8245614035087719
+              },
+              "interval_width": {
+                "0.8": 16.938938877038787,
+                "0.95": 35.05202182970549
+              },
+              "mae_naive": 6.979695838794374,
+              "mase": 1.0525466524697416
+            },
+            {
+              "h": 8,
+              "n_windows": 171,
+              "mae": 7.772826278418825,
+              "mae_std_windows": 7.2384364918930615,
+              "rmse": 10.606855703277171,
+              "mape": 10.205294672738477,
+              "mape_std_windows": 8.695429560870625,
+              "crps": 5.166536980430339,
+              "crps_std_windows": 4.999127390539713,
+              "normalized_crps": 0.07051057997349251,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.5906432748538012,
+                "0.95": 0.8128654970760234
+              },
+              "interval_width": {
+                "0.8": 18.278214906391344,
+                "0.95": 37.73300806681315
+              },
+              "mae_naive": 7.390356922707363,
+              "mase": 1.0517524876960003
+            },
+            {
+              "h": 9,
+              "n_windows": 171,
+              "mae": 8.11355093348096,
+              "mae_std_windows": 7.274483772783543,
+              "rmse": 10.88293895300215,
+              "mape": 10.650063419433906,
+              "mape_std_windows": 8.691093622018737,
+              "crps": 5.351220532810694,
+              "crps_std_windows": 5.107438566140762,
+              "normalized_crps": 0.07298115275377595,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6140350877192983,
+                "0.95": 0.8187134502923976
+              },
+              "interval_width": {
+                "0.8": 19.302865123191076,
+                "0.95": 40.48612023515311
+              },
+              "mae_naive": 7.711923967327988,
+              "mase": 1.0520786988894715
+            },
+            {
+              "h": 10,
+              "n_windows": 171,
+              "mae": 8.629049892313997,
+              "mae_std_windows": 7.655285184469264,
+              "rmse": 11.520468020406787,
+              "mape": 11.34318351263215,
+              "mape_std_windows": 9.027446359172918,
+              "crps": 5.693522372741287,
+              "crps_std_windows": 5.40710927367888,
+              "normalized_crps": 0.07760177434847251,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6140350877192983,
+                "0.95": 0.7953216374269005
+              },
+              "interval_width": {
+                "0.8": 20.265130940933673,
+                "0.95": 42.039542125679596
+              },
+              "mae_naive": 8.199327680799696,
+              "mase": 1.0524094448036976
+            },
+            {
+              "h": 11,
+              "n_windows": 171,
+              "mae": 9.040506351760953,
+              "mae_std_windows": 7.814443923466765,
+              "rmse": 11.934788667766533,
+              "mape": 11.867055301473966,
+              "mape_std_windows": 9.132040537475085,
+              "crps": 6.027796539378714,
+              "crps_std_windows": 5.797117320208107,
+              "normalized_crps": 0.08210962889793642,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6198830409356725,
+                "0.95": 0.8011695906432749
+              },
+              "interval_width": {
+                "0.8": 21.268469626443427,
+                "0.95": 44.26862203586868
+              },
+              "mae_naive": 8.614590761954325,
+              "mase": 1.0494411866536542
+            },
+            {
+              "h": 12,
+              "n_windows": 171,
+              "mae": 9.44915869640328,
+              "mae_std_windows": 8.17317914031992,
+              "rmse": 12.47785274161807,
+              "mape": 12.436786237594884,
+              "mape_std_windows": 9.664917481603204,
+              "crps": 6.314107241611249,
+              "crps_std_windows": 5.991039976215875,
+              "normalized_crps": 0.085947250863383,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6257309941520468,
+                "0.95": 0.7894736842105263
+              },
+              "interval_width": {
+                "0.8": 22.63305541367559,
+                "0.95": 47.42218588667306
+              },
+              "mae_naive": 9.056812911005744,
+              "mase": 1.0433205134358867
+            },
+            {
+              "h": 13,
+              "n_windows": 171,
+              "mae": 9.8360964457194,
+              "mae_std_windows": 8.411409083997652,
+              "rmse": 12.926207596786849,
+              "mape": 12.960242132806183,
+              "mape_std_windows": 9.917665081708696,
+              "crps": 6.618100924369617,
+              "crps_std_windows": 6.251688563184692,
+              "normalized_crps": 0.09001939190439925,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6491228070175439,
+                "0.95": 0.7777777777777778
+              },
+              "interval_width": {
+                "0.8": 23.76399962665045,
+                "0.95": 49.31457831845646
+              },
+              "mae_naive": 9.510269187347234,
+              "mase": 1.034260571594089
+            },
+            {
+              "h": 14,
+              "n_windows": 171,
+              "mae": 10.136684083102041,
+              "mae_std_windows": 8.854171825790868,
+              "rmse": 13.442107895829091,
+              "mape": 13.386020747798616,
+              "mape_std_windows": 10.504125239574106,
+              "crps": 6.884623302729132,
+              "crps_std_windows": 6.561521860433059,
+              "normalized_crps": 0.09360745125370859,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.631578947368421,
+                "0.95": 0.7719298245614035
+              },
+              "interval_width": {
+                "0.8": 24.554189960858974,
+                "0.95": 51.79728834810313
+              },
+              "mae_naive": 9.79840360050313,
+              "mase": 1.034524040485691
+            },
+            {
+              "h": 15,
+              "n_windows": 171,
+              "mae": 10.337128600181892,
+              "mae_std_windows": 9.190823467694278,
+              "rmse": 13.814249160728107,
+              "mape": 13.6753349415809,
+              "mape_std_windows": 10.957035038011025,
+              "crps": 7.04421327155933,
+              "crps_std_windows": 6.695003453609317,
+              "normalized_crps": 0.09573992398039312,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6491228070175439,
+                "0.95": 0.7777777777777778
+              },
+              "interval_width": {
+                "0.8": 24.736610524138513,
+                "0.95": 51.56193118625217
+              },
+              "mae_naive": 9.990392049153646,
+              "mase": 1.0347070014191906
+            },
+            {
+              "h": 16,
+              "n_windows": 171,
+              "mae": 10.54176988657455,
+              "mae_std_windows": 9.213971732116086,
+              "rmse": 13.983193917301492,
+              "mape": 13.951350051212534,
+              "mape_std_windows": 10.829225301006389,
+              "crps": 7.2571012424017685,
+              "crps_std_windows": 6.748329032496388,
+              "normalized_crps": 0.09857753632793495,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6374269005847953,
+                "0.95": 0.7719298245614035
+              },
+              "interval_width": {
+                "0.8": 25.558891854090998,
+                "0.95": 53.21187225698728
+              },
+              "mae_naive": 10.112912362081962,
+              "mase": 1.0424069258328168
+            },
+            {
+              "h": 17,
+              "n_windows": 171,
+              "mae": 10.677591915019075,
+              "mae_std_windows": 9.236354610577393,
+              "rmse": 14.100437059384028,
+              "mape": 14.050821190468064,
+              "mape_std_windows": 10.610455336268508,
+              "crps": 7.337143509247472,
+              "crps_std_windows": 6.722880740404934,
+              "normalized_crps": 0.0996106121147914,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6491228070175439,
+                "0.95": 0.8128654970760234
+              },
+              "interval_width": {
+                "0.8": 27.221749935930934,
+                "0.95": 57.90678022061175
+              },
+              "mae_naive": 10.390912306936164,
+              "mase": 1.0275894550559863
+            },
+            {
+              "h": 18,
+              "n_windows": 171,
+              "mae": 10.862895050941155,
+              "mae_std_windows": 9.205332450269315,
+              "rmse": 14.221290015223653,
+              "mape": 14.293156206053755,
+              "mape_std_windows": 10.4117711568403,
+              "crps": 7.451080087600825,
+              "crps_std_windows": 6.837731424554098,
+              "normalized_crps": 0.10108755184729817,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.631578947368421,
+                "0.95": 0.8187134502923976
+              },
+              "interval_width": {
+                "0.8": 27.812363429376255,
+                "0.95": 60.743708270335055
+              },
+              "mae_naive": 10.538690109699093,
+              "mase": 1.0307633052938605
+            },
+            {
+              "h": 19,
+              "n_windows": 171,
+              "mae": 10.985802834494072,
+              "mae_std_windows": 9.254837277594024,
+              "rmse": 14.347089878717792,
+              "mape": 14.51635780348751,
+              "mape_std_windows": 10.663320847735072,
+              "crps": 7.541394784887041,
+              "crps_std_windows": 6.633039256468703,
+              "normalized_crps": 0.10226049815245544,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6432748538011696,
+                "0.95": 0.8128654970760234
+              },
+              "interval_width": {
+                "0.8": 28.902512332849334,
+                "0.95": 63.328964969568084
+              },
+              "mae_naive": 10.613385875322665,
+              "mase": 1.0350893638982182
+            },
+            {
+              "h": 20,
+              "n_windows": 171,
+              "mae": 11.157638973659939,
+              "mae_std_windows": 9.381872380638168,
+              "rmse": 14.560140890226766,
+              "mape": 14.711309732448049,
+              "mape_std_windows": 10.759836222636705,
+              "crps": 7.66809770770294,
+              "crps_std_windows": 6.747235278585369,
+              "normalized_crps": 0.10391917002526051,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6491228070175439,
+                "0.95": 0.8128654970760234
+              },
+              "interval_width": {
+                "0.8": 29.871768349095394,
+                "0.95": 63.97055888036538
+              },
+              "mae_naive": 10.684046873572276,
+              "mase": 1.044327033163728
+            }
+          ]
+        }
+      },
+      "diebold_mariano": [
+        {
+          "mean_loss_differential": 0.0068202236242461646,
+          "statistic": 0.026397884554336105,
+          "p_value": 0.9789399814443607,
+          "hac_lag": 19,
+          "n_obs": 171,
+          "alpha": 0.05,
+          "significant": false,
+          "better": "b",
+          "scheme_a": "zeroshot",
+          "scheme_b": "finetuned",
+          "primary": true,
+          "loss": "galat absolut",
+          "better_scheme": "finetuned",
+          "label": "Chronos-2 Zero-Shot vs Chronos-2 Fine-Tuned"
+        },
+        {
+          "mean_loss_differential": 0.40405843411272746,
+          "statistic": 1.0950285558030917,
+          "p_value": 0.27350412632711096,
+          "hac_lag": 19,
+          "n_obs": 171,
+          "alpha": 0.05,
+          "significant": false,
+          "better": "b",
+          "scheme_a": "zeroshot",
+          "scheme_b": "naive",
+          "primary": false,
+          "loss": "galat absolut",
+          "better_scheme": "naive",
+          "label": "Chronos-2 Zero-Shot vs Naive Persistence"
+        },
+        {
+          "mean_loss_differential": 0.39723821048848135,
+          "statistic": 1.4090398943556115,
+          "p_value": 0.15882337196393181,
+          "hac_lag": 19,
+          "n_obs": 171,
+          "alpha": 0.05,
+          "significant": false,
+          "better": "b",
+          "scheme_a": "finetuned",
+          "scheme_b": "naive",
+          "primary": false,
+          "loss": "galat absolut",
+          "better_scheme": "naive",
+          "label": "Chronos-2 Fine-Tuned vs Naive Persistence"
+        }
+      ],
+      "source": "dihitung pada analisis sensitivitas ini"
+    },
+    "10": {
+      "horizon": 10,
+      "n_windows": 181,
+      "test_start": "2025-11-11",
+      "test_end": "2026-08-03",
+      "schemes_evaluated": [
+        "zeroshot",
+        "finetuned",
+        "naive"
+      ],
+      "finetune_selection": {
+        "best_params": {
+          "fine_tune_lr": 0.0001,
+          "fine_tune_steps": 200,
+          "fine_tune_mode": "lora"
+        },
+        "best_val_score": 0.009882083650660452,
+        "selection_metric": "WQL",
+        "selection_split": "val",
+        "n_candidates": 18,
+        "n_failed": 0
+      },
+      "metrics": {
+        "zeroshot": {
+          "n_windows": 181,
+          "horizon": 10,
+          "quantile_levels": [
+            0.025,
+            0.05,
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8,
+            0.9,
+            0.95,
+            0.975
+          ],
+          "point_quantile": 0.5,
+          "coverage_levels": [
+            0.8,
+            0.95
+          ],
+          "target_scale_mean_abs": 72.45367288536788,
+          "overall": {
+            "mae": 6.030284970109634,
+            "mae_std_windows": 5.6599740426426886,
+            "rmse": 9.103505068068724,
+            "rmse_mean_of_windows": 6.858986967299384,
+            "rmse_std_windows": 6.0022618503015615,
+            "mape": 7.9774939994678284,
+            "mape_std_windows": 6.8257274846827904,
+            "crps": 3.8774473302089763,
+            "crps_std_windows": 4.083497012792612,
+            "normalized_crps": 0.053516228726508526,
+            "quantile_crossing_rate": 0.0,
+            "coverage": {
+              "0.8": 0.6801104972375691,
+              "0.95": 0.9093922651933701
+            },
+            "interval_width": {
+              "0.8": 14.880928539044291,
+              "0.95": 33.58455470596229
+            },
+            "interval_width_std_windows": {
+              "0.8": 6.686510607832896,
+              "0.95": 15.711719479457994
+            },
+            "mase": 1.0614830038977419,
+            "mae_naive": 5.681000023520454
+          },
+          "per_horizon": [
+            {
+              "h": 1,
+              "n_windows": 181,
+              "mae": 2.8776032252864945,
+              "mae_std_windows": 3.616565156323052,
+              "rmse": 4.613879190082152,
+              "mape": 3.8167184587079888,
+              "mape_std_windows": 4.482219374397213,
+              "crps": 1.7954277170702493,
+              "crps_std_windows": 2.688240441303766,
+              "normalized_crps": 0.024876800919444633,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.8121546961325967,
+                "0.95": 0.9834254143646409
+              },
+              "interval_width": {
+                "0.8": 8.874357360502634,
+                "0.95": 21.662412127078568
+              },
+              "mae_naive": 2.5027289838422067,
+              "mase": 1.149786190939771
+            },
+            {
+              "h": 2,
+              "n_windows": 181,
+              "mae": 3.5593390701884062,
+              "mae_std_windows": 4.877775960702001,
+              "rmse": 6.02744900993968,
+              "mape": 4.763630512612008,
+              "mape_std_windows": 6.156603288567859,
+              "crps": 2.3353399127582466,
+              "crps_std_windows": 3.700615934486932,
+              "normalized_crps": 0.032334269203722184,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7292817679558011,
+                "0.95": 0.9668508287292817
+              },
+              "interval_width": {
+                "0.8": 10.383376211092617,
+                "0.95": 24.47868589538237
+              },
+              "mae_naive": 3.438717921135834,
+              "mase": 1.0350773607544785
+            },
+            {
+              "h": 3,
+              "n_windows": 181,
+              "mae": 4.542362487118547,
+              "mae_std_windows": 5.525862738346193,
+              "rmse": 7.141394361852332,
+              "mape": 6.005965927830734,
+              "mape_std_windows": 6.81694050709533,
+              "crps": 2.9405197245690653,
+              "crps_std_windows": 4.053822164677037,
+              "normalized_crps": 0.04068608387332616,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7016574585635359,
+                "0.95": 0.9447513812154696
+              },
+              "interval_width": {
+                "0.8": 12.212424726117382,
+                "0.95": 27.84072631498727
+              },
+              "mae_naive": 4.253044339174724,
+              "mase": 1.0680261301954739
+            },
+            {
+              "h": 4,
+              "n_windows": 181,
+              "mae": 5.472080251788566,
+              "mae_std_windows": 6.2756085976615985,
+              "rmse": 8.313202659815488,
+              "mape": 7.216515799579149,
+              "mape_std_windows": 7.645306836207427,
+              "crps": 3.4571575274226314,
+              "crps_std_windows": 4.540308642701127,
+              "normalized_crps": 0.04780390113749545,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7016574585635359,
+                "0.95": 0.9226519337016574
+              },
+              "interval_width": {
+                "0.8": 13.334098310101757,
+                "0.95": 29.954272970968848
+              },
+              "mae_naive": 5.0520885319999564,
+              "mase": 1.0831322961045475
+            },
+            {
+              "h": 5,
+              "n_windows": 181,
+              "mae": 6.088615017042634,
+              "mae_std_windows": 6.766765147209613,
+              "rmse": 9.088859382336183,
+              "mape": 8.042105991619515,
+              "mape_std_windows": 8.318877557493318,
+              "crps": 3.884050704041694,
+              "crps_std_windows": 4.820913281304721,
+              "normalized_crps": 0.05365454461963741,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6850828729281768,
+                "0.95": 0.9171270718232044
+              },
+              "interval_width": {
+                "0.8": 14.787748832070367,
+                "0.95": 32.90729897852102
+              },
+              "mae_naive": 5.724674098399463,
+              "mase": 1.063574085159699
+            },
+            {
+              "h": 6,
+              "n_windows": 181,
+              "mae": 6.693102251758892,
+              "mae_std_windows": 6.924037587516491,
+              "rmse": 9.616394319050622,
+              "mape": 8.85586799557967,
+              "mape_std_windows": 8.527893769121293,
+              "crps": 4.29360007631794,
+              "crps_std_windows": 4.947050014414207,
+              "normalized_crps": 0.059246608454019085,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6574585635359116,
+                "0.95": 0.9005524861878453
+              },
+              "interval_width": {
+                "0.8": 15.784835857581038,
+                "0.95": 34.53351848033252
+              },
+              "mae_naive": 6.326381346138802,
+              "mase": 1.0579669301541412
+            },
+            {
+              "h": 7,
+              "n_windows": 181,
+              "mae": 7.077862502461639,
+              "mae_std_windows": 7.353711503714621,
+              "rmse": 10.191881186766503,
+              "mape": 9.380362989924762,
+              "mape_std_windows": 9.052856542148493,
+              "crps": 4.5720489489794085,
+              "crps_std_windows": 5.009240208741921,
+              "normalized_crps": 0.06302007924810035,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6353591160220995,
+                "0.95": 0.8729281767955801
+              },
+              "interval_width": {
+                "0.8": 16.719041666273252,
+                "0.95": 37.18386872433826
+              },
+              "mae_naive": 6.769480626227447,
+              "mase": 1.0455547320778802
+            },
+            {
+              "h": 8,
+              "n_windows": 181,
+              "mae": 7.605379178379122,
+              "mae_std_windows": 7.551608084915824,
+              "rmse": 10.702967439286397,
+              "mape": 10.058187409744658,
+              "mape_std_windows": 9.223412270033037,
+              "crps": 4.9049743205701555,
+              "crps_std_windows": 5.207733439949613,
+              "normalized_crps": 0.06753311199012797,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6243093922651933,
+                "0.95": 0.8729281767955801
+              },
+              "interval_width": {
+                "0.8": 17.97114033988826,
+                "0.95": 40.0060203299338
+              },
+              "mae_naive": 7.211188047630352,
+              "mase": 1.054663826285643
+            },
+            {
+              "h": 9,
+              "n_windows": 181,
+              "mae": 7.915716287180864,
+              "mae_std_windows": 7.660235282991318,
+              "rmse": 11.000617002215098,
+              "mape": 10.449193289891348,
+              "mape_std_windows": 9.334402867542988,
+              "crps": 5.113387726420197,
+              "crps_std_windows": 5.35653938451026,
+              "normalized_crps": 0.07032436761357502,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6243093922651933,
+                "0.95": 0.861878453038674
+              },
+              "interval_width": {
+                "0.8": 19.03858077328508,
+                "0.95": 42.76298990829215
+              },
+              "mae_naive": 7.521629839312306,
+              "mase": 1.052393757242458
+            },
+            {
+              "h": 10,
+              "n_windows": 181,
+              "mae": 8.470789429891175,
+              "mae_std_windows": 8.06799798463613,
+              "rmse": 11.682775246849982,
+              "mape": 11.186391619188457,
+              "mape_std_windows": 9.725644315558531,
+              "crps": 5.477966643940173,
+              "crps_std_windows": 5.644503741848989,
+              "normalized_crps": 0.07525199158920513,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6298342541436464,
+                "0.95": 0.850828729281768
+              },
+              "interval_width": {
+                "0.8": 19.703681313530517,
+                "0.95": 44.515753329788126
+              },
+              "mae_naive": 8.010066501343449,
+              "mase": 1.0575179904524454
+            }
+          ]
+        },
+        "finetuned": {
+          "n_windows": 181,
+          "horizon": 10,
+          "quantile_levels": [
+            0.025,
+            0.05,
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8,
+            0.9,
+            0.95,
+            0.975
+          ],
+          "point_quantile": 0.5,
+          "coverage_levels": [
+            0.8,
+            0.95
+          ],
+          "target_scale_mean_abs": 72.45367288536788,
+          "overall": {
+            "mae": 6.031523376802054,
+            "mae_std_windows": 5.52171412892787,
+            "rmse": 9.003892302775748,
+            "rmse_mean_of_windows": 6.851761349872342,
+            "rmse_std_windows": 5.8577314455117815,
+            "mape": 7.9800006718969385,
+            "mape_std_windows": 6.6425237598992295,
+            "crps": 3.9113918740466667,
+            "crps_std_windows": 3.9857738104218847,
+            "normalized_crps": 0.05398472870015921,
+            "quantile_crossing_rate": 0.0,
+            "coverage": {
+              "0.8": 0.6707182320441989,
+              "0.95": 0.8939226519337017
+            },
+            "interval_width": {
+              "0.8": 14.789020310712782,
+              "0.95": 33.206413136266214
+            },
+            "interval_width_std_windows": {
+              "0.8": 6.582677639027571,
+              "0.95": 15.979887661309563
+            },
+            "mase": 1.0617009948654048,
+            "mae_naive": 5.681000023520454
+          },
+          "per_horizon": [
+            {
+              "h": 1,
+              "n_windows": 181,
+              "mae": 2.8896256336191084,
+              "mae_std_windows": 3.5190691456563727,
+              "rmse": 4.545917388886284,
+              "mape": 3.8310792863133853,
+              "mape_std_windows": 4.321490229688252,
+              "crps": 1.8109886404508437,
+              "crps_std_windows": 2.617131965479535,
+              "normalized_crps": 0.02509240747903003,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7734806629834254,
+                "0.95": 0.9723756906077348
+              },
+              "interval_width": {
+                "0.8": 8.411056012738475,
+                "0.95": 20.615031542698983
+              },
+              "mae_naive": 2.5027289838422067,
+              "mase": 1.1545899105635222
+            },
+            {
+              "h": 2,
+              "n_windows": 181,
+              "mae": 3.6441907303109353,
+              "mae_std_windows": 4.70502701186098,
+              "rmse": 5.9409679220964,
+              "mape": 4.8630613405052046,
+              "mape_std_windows": 5.8812817581802594,
+              "crps": 2.3755436575063174,
+              "crps_std_windows": 3.588153699833356,
+              "normalized_crps": 0.03289091566815334,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7237569060773481,
+                "0.95": 0.9447513812154696
+              },
+              "interval_width": {
+                "0.8": 9.959838719657771,
+                "0.95": 23.7052518096418
+              },
+              "mae_naive": 3.438717921135834,
+              "mase": 1.0597527374700255
+            },
+            {
+              "h": 3,
+              "n_windows": 181,
+              "mae": 4.523124210083682,
+              "mae_std_windows": 5.386255266238128,
+              "rmse": 7.022115957783918,
+              "mape": 5.971019930852254,
+              "mape_std_windows": 6.607776896443624,
+              "crps": 2.965208850411522,
+              "crps_std_windows": 3.9534189228624266,
+              "normalized_crps": 0.041027691459356724,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6961325966850829,
+                "0.95": 0.9392265193370166
+              },
+              "interval_width": {
+                "0.8": 11.86114839163933,
+                "0.95": 27.45949491216333
+              },
+              "mae_naive": 4.253044339174724,
+              "mase": 1.0635027169647062
+            },
+            {
+              "h": 4,
+              "n_windows": 181,
+              "mae": 5.4739191466273525,
+              "mae_std_windows": 6.106658430886684,
+              "rmse": 8.188347749062608,
+              "mape": 7.211554509825586,
+              "mape_std_windows": 7.412370208072842,
+              "crps": 3.5050478283111666,
+              "crps_std_windows": 4.387837282705198,
+              "normalized_crps": 0.04846610504083543,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6629834254143646,
+                "0.95": 0.9116022099447514
+              },
+              "interval_width": {
+                "0.8": 13.058583085708197,
+                "0.95": 29.59911255810142
+              },
+              "mae_naive": 5.0520885319999564,
+              "mase": 1.083496283162007
+            },
+            {
+              "h": 5,
+              "n_windows": 181,
+              "mae": 6.045916225370123,
+              "mae_std_windows": 6.662967777869524,
+              "rmse": 8.98348293251049,
+              "mape": 7.97328789780708,
+              "mape_std_windows": 8.19566131603563,
+              "crps": 3.9207467785603027,
+              "crps_std_windows": 4.741067489562776,
+              "normalized_crps": 0.054161466726904285,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6850828729281768,
+                "0.95": 0.9060773480662984
+              },
+              "interval_width": {
+                "0.8": 14.645577530834556,
+                "0.95": 32.63198119105555
+              },
+              "mae_naive": 5.724674098399463,
+              "mase": 1.0561153563415033
+            },
+            {
+              "h": 6,
+              "n_windows": 181,
+              "mae": 6.657310844126327,
+              "mae_std_windows": 6.813125369704152,
+              "rmse": 9.512203120095107,
+              "mape": 8.79470632971724,
+              "mape_std_windows": 8.3996461840611,
+              "crps": 4.319815801854748,
+              "crps_std_windows": 4.817037956465657,
+              "normalized_crps": 0.05960835449431384,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6464088397790055,
+                "0.95": 0.8729281767955801
+              },
+              "interval_width": {
+                "0.8": 15.832414764067087,
+                "0.95": 34.54757511286446
+              },
+              "mae_naive": 6.326381346138802,
+              "mase": 1.0523094451442612
+            },
+            {
+              "h": 7,
+              "n_windows": 181,
+              "mae": 7.095750545269876,
+              "mae_std_windows": 7.20050361346447,
+              "rmse": 10.095072024534883,
+              "mape": 9.412701887801088,
+              "mape_std_windows": 8.86304998096913,
+              "crps": 4.608933997569671,
+              "crps_std_windows": 4.914904232845454,
+              "normalized_crps": 0.06352849433970764,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6464088397790055,
+                "0.95": 0.8674033149171271
+              },
+              "interval_width": {
+                "0.8": 16.74568791679256,
+                "0.95": 37.200560322124
+              },
+              "mae_naive": 6.769480626227447,
+              "mase": 1.0481971863215531
+            },
+            {
+              "h": 8,
+              "n_windows": 181,
+              "mae": 7.5975166025741325,
+              "mae_std_windows": 7.422335165903688,
+              "rmse": 10.607023491439387,
+              "mape": 10.060288419822532,
+              "mape_std_windows": 9.069590601541092,
+              "crps": 4.945397336646135,
+              "crps_std_windows": 5.130194569166722,
+              "normalized_crps": 0.06808966782370073,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6187845303867403,
+                "0.95": 0.8397790055248618
+              },
+              "interval_width": {
+                "0.8": 18.12148915074807,
+                "0.95": 39.735322583446184
+              },
+              "mae_naive": 7.211188047630352,
+              "mase": 1.0535734961274141
+            },
+            {
+              "h": 9,
+              "n_windows": 181,
+              "mae": 7.928765607802249,
+              "mae_std_windows": 7.529051654933605,
+              "rmse": 10.91965004690052,
+              "mape": 10.488285233903412,
+              "mape_std_windows": 9.173478399126285,
+              "crps": 5.156682420901628,
+              "crps_std_windows": 5.285101175440707,
+              "normalized_crps": 0.07091979909135993,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6298342541436464,
+                "0.95": 0.850828729281768
+              },
+              "interval_width": {
+                "0.8": 19.26981412771657,
+                "0.95": 42.2285925301399
+              },
+              "mae_naive": 7.521629839312306,
+              "mase": 1.054128663226954
+            },
+            {
+              "h": 10,
+              "n_windows": 181,
+              "mae": 8.45911422223676,
+              "mae_std_windows": 7.8946640178794665,
+              "rmse": 11.55586398266358,
+              "mape": 11.194021882421591,
+              "mape_std_windows": 9.475396658279603,
+              "crps": 5.505553428254328,
+              "crps_std_windows": 5.5499275251735725,
+              "normalized_crps": 0.0756309571061782,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.6243093922651933,
+                "0.95": 0.8342541436464088
+              },
+              "interval_width": {
+                "0.8": 19.984593407225212,
+                "0.95": 44.34120880042651
+              },
+              "mae_naive": 8.010066501343449,
+              "mase": 1.0560604235705155
+            }
+          ]
+        },
+        "naive": {
+          "n_windows": 181,
+          "horizon": 10,
+          "quantile_levels": [
+            0.025,
+            0.05,
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8,
+            0.9,
+            0.95,
+            0.975
+          ],
+          "point_quantile": 0.5,
+          "coverage_levels": [
+            0.8,
+            0.95
+          ],
+          "target_scale_mean_abs": 72.45367288536788,
+          "overall": {
+            "mae": 5.681000023520454,
+            "mae_std_windows": 4.823752317925707,
+            "rmse": 8.295402626377125,
+            "rmse_mean_of_windows": 6.509422893057139,
+            "rmse_std_windows": 5.156356604706312,
+            "mape": 7.510612666533496,
+            "mape_std_windows": 5.737674751118461,
+            "crps": 3.699668104419406,
+            "crps_std_windows": 3.2293040893176754,
+            "normalized_crps": 0.051062533576079885,
+            "quantile_crossing_rate": 0.0,
+            "coverage": {
+              "0.8": 0.7679558011049724,
+              "0.95": 0.9149171270718232
+            },
+            "interval_width": {
+              "0.8": 19.672190299086058,
+              "0.95": 30.313396196689215
+            },
+            "interval_width_std_windows": {
+              "0.8": 9.701844709819836,
+              "0.95": 15.072874709380644
+            },
+            "mase": 1.0,
+            "mae_naive": 5.681000023520454
+          },
+          "per_horizon": [
+            {
+              "h": 1,
+              "n_windows": 181,
+              "mae": 2.5027289838422067,
+              "mae_std_windows": 3.3219863356062276,
+              "rmse": 4.151900221857992,
+              "mape": 3.3045680212297137,
+              "mape_std_windows": 4.097547447987665,
+              "crps": 1.6626662606106162,
+              "crps_std_windows": 2.6051087123874805,
+              "normalized_crps": 0.023037305911808754,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.8011049723756906,
+                "0.95": 0.9116022099447514
+              },
+              "interval_width": {
+                "0.8": 8.7141437907065,
+                "0.95": 13.342947605821706
+              },
+              "mae_naive": 2.5027289838422067,
+              "mase": 1.0
+            },
+            {
+              "h": 2,
+              "n_windows": 181,
+              "mae": 3.438717921135834,
+              "mae_std_windows": 4.383914441699011,
+              "rmse": 5.562131433009537,
+              "mape": 4.584935022989741,
+              "mape_std_windows": 5.4885794567502595,
+              "crps": 2.2750547833919366,
+              "crps_std_windows": 3.409580788708551,
+              "normalized_crps": 0.031499583173109524,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.8287292817679558,
+                "0.95": 0.9447513812154696
+              },
+              "interval_width": {
+                "0.8": 12.334580845367313,
+                "0.95": 18.908897527138006
+              },
+              "mae_naive": 3.438717921135834,
+              "mase": 1.0
+            },
+            {
+              "h": 3,
+              "n_windows": 181,
+              "mae": 4.253044339174724,
+              "mae_std_windows": 4.94572998977852,
+              "rmse": 6.512564149927011,
+              "mape": 5.6402689017288505,
+              "mape_std_windows": 6.090031947593744,
+              "crps": 2.843477689672216,
+              "crps_std_windows": 3.530760757547921,
+              "normalized_crps": 0.03934337552892623,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7845303867403315,
+                "0.95": 0.9005524861878453
+              },
+              "interval_width": {
+                "0.8": 15.120098990412554,
+                "0.95": 23.206567120557583
+              },
+              "mae_naive": 4.253044339174724,
+              "mase": 1.0
+            },
+            {
+              "h": 4,
+              "n_windows": 181,
+              "mae": 5.0520885319999564,
+              "mae_std_windows": 5.531462146959,
+              "rmse": 7.480082045908718,
+              "mape": 6.656133292760975,
+              "mape_std_windows": 6.714373781144354,
+              "crps": 3.337441039090524,
+              "crps_std_windows": 3.832850146287264,
+              "normalized_crps": 0.04614851947572236,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7900552486187845,
+                "0.95": 0.9116022099447514
+              },
+              "interval_width": {
+                "0.8": 17.47465236821737,
+                "0.95": 26.852143979905197
+              },
+              "mae_naive": 5.0520885319999564,
+              "mase": 1.0
+            },
+            {
+              "h": 5,
+              "n_windows": 181,
+              "mae": 5.724674098399463,
+              "mae_std_windows": 6.077678986600846,
+              "rmse": 8.337025671317946,
+              "mape": 7.5519813682557375,
+              "mape_std_windows": 7.4144385176130525,
+              "crps": 3.7835605977473343,
+              "crps_std_windows": 4.1695060629483836,
+              "normalized_crps": 0.05226636735243741,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7790055248618785,
+                "0.95": 0.9005524861878453
+              },
+              "interval_width": {
+                "0.8": 19.554559019240042,
+                "0.95": 30.083773190502704
+              },
+              "mae_naive": 5.724674098399463,
+              "mase": 1.0
+            },
+            {
+              "h": 6,
+              "n_windows": 181,
+              "mae": 6.326381346138802,
+              "mae_std_windows": 6.253005483920037,
+              "rmse": 8.882969998296183,
+              "mape": 8.364857978213454,
+              "mape_std_windows": 7.638751875006221,
+              "crps": 4.11201147839469,
+              "crps_std_windows": 4.033731532935581,
+              "normalized_crps": 0.05674090033737044,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7624309392265194,
+                "0.95": 0.9005524861878453
+              },
+              "interval_width": {
+                "0.8": 21.439914923702368,
+                "0.95": 33.02333237901259
+              },
+              "mae_naive": 6.326381346138802,
+              "mase": 1.0
+            },
+            {
+              "h": 7,
+              "n_windows": 181,
+              "mae": 6.769480626227447,
+              "mae_std_windows": 6.354157055767814,
+              "rmse": 9.27243828864579,
+              "mape": 8.958024325345026,
+              "mape_std_windows": 7.674590544455014,
+              "crps": 4.3763822368064975,
+              "crps_std_windows": 3.932646405499024,
+              "normalized_crps": 0.06032305394391925,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7403314917127072,
+                "0.95": 0.9060773480662984
+              },
+              "interval_width": {
+                "0.8": 23.17825805453308,
+                "0.95": 35.743073380739254
+              },
+              "mae_naive": 6.769480626227447,
+              "mase": 1.0
+            },
+            {
+              "h": 8,
+              "n_windows": 181,
+              "mae": 7.211188047630352,
+              "mae_std_windows": 6.648768919744748,
+              "rmse": 9.79607719723823,
+              "mape": 9.537069706079434,
+              "mape_std_windows": 7.96658783262609,
+              "crps": 4.64738079288582,
+              "crps_std_windows": 4.060691160010527,
+              "normalized_crps": 0.06398648943594176,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.712707182320442,
+                "0.95": 0.9337016574585635
+              },
+              "interval_width": {
+                "0.8": 24.800534545806613,
+                "0.95": 38.28997687655943
+              },
+              "mae_naive": 7.211188047630352,
+              "mase": 1.0
+            },
+            {
+              "h": 9,
+              "n_windows": 181,
+              "mae": 7.521629839312306,
+              "mae_std_windows": 6.648203523176669,
+              "rmse": 10.026431783504513,
+              "mape": 9.929386846807736,
+              "mape_std_windows": 7.898314050511746,
+              "crps": 4.840063747730396,
+              "crps_std_windows": 4.015016724922569,
+              "normalized_crps": 0.06656534580975747,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7458563535911602,
+                "0.95": 0.9281767955801105
+              },
+              "interval_width": {
+                "0.8": 26.32822073226272,
+                "0.95": 40.69661045771052
+              },
+              "mae_naive": 7.521629839312306,
+              "mase": 1.0
+            },
+            {
+              "h": 10,
+              "n_windows": 181,
+              "mae": 8.010066501343449,
+              "mae_std_windows": 6.8417887136307405,
+              "rmse": 10.522006413757705,
+              "mape": 10.578901201924293,
+              "mape_std_windows": 7.960534371839952,
+              "crps": 5.118642417864034,
+              "crps_std_windows": 4.177649420363563,
+              "normalized_crps": 0.07031587835668095,
+              "quantile_crossing_rate": 0.0,
+              "coverage": {
+                "0.8": 0.7348066298342542,
+                "0.95": 0.9116022099447514
+              },
+              "interval_width": {
+                "0.8": 27.77693972061198,
+                "0.95": 42.98663944894513
+              },
+              "mae_naive": 8.010066501343449,
+              "mase": 1.0
+            }
+          ]
+        }
+      },
+      "diebold_mariano": [
+        {
+          "mean_loss_differential": -0.0012384066924205604,
+          "statistic": -0.012299785282837105,
+          "p_value": 0.9901864386625678,
+          "hac_lag": 9,
+          "n_obs": 181,
+          "alpha": 0.05,
+          "significant": false,
+          "better": "a",
+          "scheme_a": "zeroshot",
+          "scheme_b": "finetuned",
+          "primary": true,
+          "loss": "galat absolut",
+          "better_scheme": "zeroshot",
+          "label": "Chronos-2 Zero-Shot vs Chronos-2 Fine-Tuned"
+        },
+        {
+          "mean_loss_differential": 0.34928494658918013,
+          "statistic": 1.2687531374931897,
+          "p_value": 0.20452912387146993,
+          "hac_lag": 9,
+          "n_obs": 181,
+          "alpha": 0.05,
+          "significant": false,
+          "better": "b",
+          "scheme_a": "zeroshot",
+          "scheme_b": "naive",
+          "primary": false,
+          "loss": "galat absolut",
+          "better_scheme": "naive",
+          "label": "Chronos-2 Zero-Shot vs Naive Persistence"
+        },
+        {
+          "mean_loss_differential": 0.3505233532816007,
+          "statistic": 1.587142040044397,
+          "p_value": 0.1124804782884421,
+          "hac_lag": 9,
+          "n_obs": 181,
+          "alpha": 0.05,
+          "significant": false,
+          "better": "b",
+          "scheme_a": "finetuned",
+          "scheme_b": "naive",
+          "primary": false,
+          "loss": "galat absolut",
+          "better_scheme": "naive",
+          "label": "Chronos-2 Fine-Tuned vs Naive Persistence"
+        }
+      ],
+      "source": "results/metrics/final_results.json (hasil utama, dimuat apa adanya, TIDAK dihitung ulang)"
+    }
+  }
+}

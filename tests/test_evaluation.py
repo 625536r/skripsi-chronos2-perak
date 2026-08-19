@@ -56,7 +56,7 @@ from src.evaluation import (  # noqa: E402
     rmse,
 )
 
-# Level kuantil sesuai keputusan D5
+# Level kuantil sesuai spesifikasi penelitian
 QUANTILE_LEVELS = [0.025, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.975]
 
 # Konfigurasi minimal, agar uji tidak bergantung pada isi config/config.yaml
@@ -409,7 +409,7 @@ class TestDieboldMariano:
         assert not result["significant"]
 
     def test_hac_lag_is_horizon_minus_one(self) -> None:
-        """Lag HAC wajib h - 1 sesuai keputusan pada CLAUDE.md."""
+        """Lag HAC wajib h - 1 sesuai rancangan uji Diebold-Mariano."""
         rng = np.random.default_rng(2)
         a = rng.uniform(size=(30, 5))
         b = rng.uniform(size=(30, 5))
@@ -725,6 +725,6 @@ class TestValidation:
             find_quantile_index(QUANTILE_LEVELS, 0.33)
 
     def test_interval_indices_match_decision_d5(self) -> None:
-        """Interval 80% memakai 0.1/0.9 dan 95% memakai 0.025/0.975 (D5)."""
+        """Interval 80% memakai 0.1/0.9 dan 95% memakai 0.025/0.975."""
         assert interval_indices(QUANTILE_LEVELS, 0.80) == (2, 10)
         assert interval_indices(QUANTILE_LEVELS, 0.95) == (0, 12)

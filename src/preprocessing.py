@@ -1,15 +1,15 @@
 ﻿"""Penyelarasan tanggal, validasi kualitas data, dan pembagian data kronologis.
 
-Modul ini menerapkan dua keputusan metodologis pada CLAUDE.md:
+Modul ini menerapkan dua keputusan metodologis penelitian:
 
-D1 -- Penyelarasan tanggal
+Penyelarasan tanggal
     Outer join pada indeks tanggal -> forward fill -> buang baris yang nilai
     targetnya (``silver_close``) merupakan hasil forward fill. Alasannya, bila
     target ikut di-forward-fill akan muncul segmen datar buatan yang secara
     artifisial menaikkan akurasi model. Kovariat boleh di-forward-fill karena
     itu adalah informasi terakhir yang tersedia dan tidak melihat masa depan.
 
-D3 -- Pembagian data
+Pembagian data
     Kronologis tanpa acak: 70% latih / 15% validasi / 15% uji.
 
 Cara menjalankan mandiri:
@@ -120,7 +120,7 @@ def align_series(
     config: dict[str, Any] | None = None,
     logger: logging.Logger | None = None,
 ) -> pd.DataFrame:
-    """Menyelaraskan seluruh seri pada satu indeks tanggal sesuai keputusan D1.
+    """Menyelaraskan seluruh seri pada satu indeks tanggal.
 
     Urutan langkah:
         1. Outer join seluruh seri pada indeks tanggal (union tanggal).
@@ -180,7 +180,7 @@ def align_series(
     if preprocessing_config["fill_method"] != "ffill":
         raise PreprocessingError(
             f"fill_method '{preprocessing_config['fill_method']}' tidak didukung; "
-            f"keputusan D1 mensyaratkan 'ffill'."
+            f"penyelarasan tanggal mensyaratkan 'ffill'."
         )
     filled = joined.ffill()
 
@@ -201,7 +201,7 @@ def align_series(
         filled = filled.loc[~target_was_missing]
     else:
         logger.warning(
-            "drop_ffilled_target=False -- menyimpang dari keputusan D1, "
+            "drop_ffilled_target=False -- menyimpang dari aturan penyelarasan tanggal, "
             "hasil evaluasi berpotensi bias optimistis."
         )
         n_dropped_target_ffilled = 0
@@ -225,7 +225,7 @@ def align_series(
 
     # Hitungan forward fill yang benar-benar bertahan di data akhir. Ini bisa
     # lebih kecil daripada hitungan sebelum pembuangan, karena sebuah tanggal
-    # yang kovariatnya di-ffill bisa saja ikut terbuang oleh aturan D1 (target
+    # yang kovariatnya di-ffill bisa saja ikut terbuang oleh aturan penyelarasan (target
     # pada tanggal itu ternyata juga hasil forward fill).
     ffill_counts_final = {
         flag_column: int(aligned[flag_column].sum())
@@ -247,17 +247,17 @@ def align_series(
     }
 
     logger.info(
-        "D1: %d baris dibuang karena target hasil forward fill.",
+        "Dibuang: %d baris karena target merupakan hasil forward fill.",
         n_dropped_target_ffilled,
     )
     logger.info(
-        "D1: %d baris dibuang karena masih memuat NaN di awal periode.",
+        "Dibuang: %d baris karena masih memuat NaN di awal periode.",
         n_dropped_leading_nan,
     )
     for flag_column, count in ffill_counts_final.items():
         logger.info(
             "Kovariat '%s' hasil forward fill: %d baris bertahan "
-            "(%d sebelum pembuangan D1).",
+            "(%d sebelum pembuangan).",
             flag_column,
             count,
             ffill_counts_before_drop[flag_column],
@@ -365,7 +365,7 @@ def validate_data(
         "calendar_gap": gap_report,
         "rows_dropped": {
             "n_union_dates": stats.get("n_union_dates"),
-            "dropped_target_ffilled_D1": stats.get("n_dropped_target_ffilled"),
+            "dropped_target_ffilled": stats.get("n_dropped_target_ffilled"),
             "dropped_leading_nan": stats.get("n_dropped_leading_nan"),
             "n_final": stats.get("n_final"),
             "n_total_dropped": stats.get("n_total_dropped"),
@@ -383,7 +383,7 @@ def chronological_split(
     config: dict[str, Any] | None = None,
     logger: logging.Logger | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Membagi data secara kronologis menjadi latih/validasi/uji (keputusan D3).
+    """Membagi data secara kronologis menjadi latih/validasi/uji.
 
     Pembagian murni berurutan tanpa pengacakan. Sisa pembulatan dialokasikan ke
     bagian uji agar tidak ada baris yang hilang.
@@ -411,7 +411,7 @@ def chronological_split(
 
     if config["split"].get("shuffle", False):
         raise PreprocessingError(
-            "split.shuffle=True melanggar keputusan D3 (pembagian wajib kronologis)."
+            "split.shuffle=True tidak diizinkan: pembagian wajib kronologis."
         )
 
     train_ratio = float(ratios["train_ratio"])
@@ -465,7 +465,7 @@ def chronological_split(
     assert len(train) + len(val) + len(test) == n_total, "Jumlah baris split tidak utuh."
 
     logger.info(
-        "Split D3 -> latih %d (%s s/d %s) | validasi %d (%s s/d %s) | uji %d (%s s/d %s)",
+        "Split kronologis -> latih %d (%s s/d %s) | validasi %d (%s s/d %s) | uji %d (%s s/d %s)",
         len(train),
         train.index[0].date(),
         train.index[-1].date(),
@@ -498,7 +498,7 @@ def to_timeseries_dataframe(
     kovariat ``gold_close`` dan ``dxy_close``. Kolom flag ``*_ffilled`` sengaja
     TIDAK disertakan karena sifatnya metadata pelaporan, bukan variabel model.
 
-    Catatan penting terkait keputusan D2: penentuan mana kolom target dan mana
+    Catatan penting terkait kovariat past-only: penentuan mana kolom target dan mana
     kovariat TIDAK dilakukan di sini, melainkan saat pembuatan
     ``TimeSeriesPredictor(target=..., known_covariates_names=[])``. Seluruh kolom
     selain target otomatis diperlakukan sebagai past-only covariates -- persis
@@ -623,8 +623,8 @@ def _build_split_report(
 def main() -> dict[str, Any]:
     """Titik masuk untuk eksekusi mandiri modul.
 
-    Menjalankan seluruh tahap: memuat seri mentah, menyelaraskan (D1),
-    memvalidasi, membagi kronologis (D3), menyimpan hasil, dan mencetak
+    Menjalankan seluruh tahap: memuat seri mentah, menyelaraskan tanggal,
+    memvalidasi, membagi kronologis, menyimpan hasil, dan mencetak
     ringkasan.
 
     Returns:
@@ -636,7 +636,7 @@ def main() -> dict[str, Any]:
     )
 
     logger.info("=" * 78)
-    logger.info("PREPROCESSING: penyelarasan D1 + pembagian D3")
+    logger.info("PREPROCESSING: penyelarasan tanggal + pembagian kronologis")
     logger.info("=" * 78)
 
     raw_series = load_raw_series(config=config, logger=logger)
@@ -699,10 +699,10 @@ def _print_summary(report: dict[str, Any], logger: logging.Logger) -> None:
     logger.info("RINGKASAN PREPROCESSING")
     logger.info("=" * 78)
 
-    logger.info("Baris dibuang karena aturan D1:")
+    logger.info("Baris dibuang karena aturan penyelarasan tanggal:")
     logger.info("  Union tanggal awal (outer join)      : %d", dropped["n_union_dates"])
     logger.info(
-        "  Dibuang: target hasil forward fill   : %d", dropped["dropped_target_ffilled_D1"]
+        "  Dibuang: target hasil forward fill   : %d", dropped["dropped_target_ffilled"]
     )
     logger.info(
         "  Dibuang: NaN tersisa di awal periode : %d", dropped["dropped_leading_nan"]
@@ -711,11 +711,11 @@ def _print_summary(report: dict[str, Any], logger: logging.Logger) -> None:
     logger.info("  Baris akhir                          : %d", dropped["n_final"])
 
     logger.info("-" * 78)
-    logger.info("Kovariat yang diisi forward fill (sesuai D1, kovariat boleh di-ffill):")
+    logger.info("Kovariat yang diisi forward fill (kovariat boleh di-ffill):")
     before = report.get("ffill_counts_before_drop", {})
     for flag_column, count in report["ffill_counts"].items():
         logger.info(
-            "  %-16s %d baris bertahan di data akhir (%d sebelum pembuangan D1)",
+            "  %-16s %d baris bertahan di data akhir (%d sebelum pembuangan)",
             flag_column,
             count,
             before.get(flag_column, count),

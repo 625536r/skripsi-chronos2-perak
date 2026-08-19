@@ -12,7 +12,7 @@ Konvensi bentuk array (dipakai seluruh fungsi publik):
 * ``y_pred_quantiles``  : ``(n_windows, H, n_quantiles)``
 * ``quantile_levels``   : daftar ``n_quantiles`` level, menaik, dalam (0, 1)
 
-``n_windows`` adalah banyaknya jendela *rolling origin* (keputusan D4) dan
+``n_windows`` adalah banyaknya jendela *rolling origin* dan
 ``H`` panjang horizon. Karena jendela saling tumpang tindih, uji signifikansi
 Diebold-Mariano wajib memakai koreksi HAC — lihat :func:`diebold_mariano`.
 
@@ -180,7 +180,7 @@ def interval_indices(quantile_levels: Any, coverage_level: float) -> tuple[int, 
 
     Interval ``coverage_level`` dibentuk dari kuantil ``(1 - c) / 2`` dan
     ``1 - (1 - c) / 2``. Contoh: interval 80% memakai kuantil 0.1 dan 0.9,
-    interval 95% memakai 0.025 dan 0.975 (keputusan D5).
+    interval 95% memakai 0.025 dan 0.975.
 
     Args:
         quantile_levels: Daftar level kuantil.
@@ -302,7 +302,7 @@ def mase(y_true: Any, y_pred: Any, y_naive: Any) -> float:
     """Menghitung MASE relatif terhadap baseline naive persistence.
 
     Didefinisikan sebagai ``MAE(model) / MAE(naive)`` dengan naive dievaluasi
-    pada **himpunan jendela yang persis sama** (keputusan D4). Tafsirannya
+    pada **himpunan jendela yang persis sama**. Tafsirannya
     langsung: nilai < 1 berarti model mengalahkan baseline, nilai > 1 berarti
     kalah, dan tepat 1 berarti setara.
 
@@ -340,7 +340,7 @@ def mase(y_true: Any, y_pred: Any, y_naive: Any) -> float:
 def quantile_loss_elementwise(y_true: Any, y_pred_q: Any, tau: float) -> np.ndarray:
     """Menghitung *pinball loss* per elemen untuk satu level kuantil.
 
-    Rumus (sesuai CLAUDE.md)::
+    Rumus::
 
         QL_tau(y, yhat) = max(tau * (y - yhat), (tau - 1) * (y - yhat))
 
@@ -389,7 +389,7 @@ def crps_elementwise(
 ) -> np.ndarray:
     """Menghitung aproksimasi CRPS per elemen dari kumpulan kuantil.
 
-    Rumus (sesuai CLAUDE.md)::
+    Rumus::
 
         CRPS ~= (2 / K) * sum_k QL_{tau_k}
 
@@ -586,7 +586,7 @@ def diebold_mariano(
 
     Karena jendela *rolling origin* saling tumpang tindih, ``d_t`` pasti
     berautokorelasi. Ragamnya karena itu diestimasi dengan HAC Newey-West
-    memakai bobot Bartlett dan lag ``h - 1`` (keputusan pada CLAUDE.md)::
+    memakai bobot Bartlett dan lag ``h - 1``::
 
         var_hac = (1/n) * [gamma_0 + 2 * sum_{k=1..L} (1 - k/(L+1)) * gamma_k]
 
@@ -892,7 +892,7 @@ def aggregate_metrics(
 def main() -> dict[str, Any]:
     """Titik masuk eksekusi mandiri: mengevaluasi baseline pada periode validasi.
 
-    Menjalankan protokol *rolling origin* (keputusan D4) memakai baseline naive
+    Menjalankan protokol *rolling origin* memakai baseline naive
     persistence pada data **validasi**, lalu melaporkan seluruh metrik. Data uji
     tidak disentuh sama sekali. Tujuannya menguji modul evaluasi ini pada data
     sungguhan sebelum modul model dibangun, sekaligus menghasilkan angka
@@ -930,7 +930,7 @@ def main() -> dict[str, Any]:
         )
         frames[name] = frame.sort_index()
         logger.info("Memuat %s.csv: %d baris", name, len(frame))
-    logger.info("Data UJI tidak dibaca sama sekali (aturan no. 2).")
+    logger.info("Data UJI tidak dibaca sama sekali (mencegah kebocoran data).")
 
     series = pd.concat([frames["train"][target_column], frames["val"][target_column]])
     n_train = len(frames["train"])

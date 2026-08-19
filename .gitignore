@@ -25,8 +25,7 @@ Thumbs.db
 *.env
 
 # Internal working docs (not needed for pipeline execution)
-prompts/
-CLAUDE.md
+PANDUAN_PROJECT.md
 
 # Logs (optional to keep, but usually not needed in repo)
 logs/*.log

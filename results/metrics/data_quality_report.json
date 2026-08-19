@@ -41,7 +41,7 @@
   },
   "rows_dropped": {
     "n_union_dates": 1258,
-    "dropped_target_ffilled_D1": 1,
+    "dropped_target_ffilled": 1,
     "dropped_leading_nan": 0,
     "n_final": 1257,
     "n_total_dropped": 1

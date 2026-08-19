@@ -1,29 +1,29 @@
 """Peramalan Chronos-2: skema zero-shot dan skema fine-tuned.
 
 Modul ini membungkus AutoGluon-TimeSeries dan menjalankan protokol *rolling
-origin* (keputusan D4). Seluruh keputusan metodologis pada CLAUDE.md yang
-menyentuh model diterapkan di sini:
+origin*. Seluruh keputusan metodologis penelitian yang menyentuh model
+diterapkan di sini:
 
-D2 -- Kovariat PAST-ONLY
+Kovariat PAST-ONLY
     ``TimeSeriesPredictor`` selalu dibentuk dengan ``known_covariates_names=[]``.
     Emas dan Dollar Index karenanya otomatis diperlakukan sebagai *past-only
     covariates*: model hanya boleh melihat nilainya sampai titik origin, tidak
     pernah nilai masa depannya. Nilainya juga tidak pernah diteruskan lewat
     argumen ``known_covariates`` pada ``predict()``.
 
-D3 -- Peran data validasi
+Peran data validasi
     Data latih dipakai untuk fine-tuning bobot; data validasi HANYA dipakai
     memilih hyperparameter fine-tuning; data uji hanya disentuh sekali pada
     pelaporan akhir.
 
-D4 -- Rolling origin (expanding window)
+Rolling origin (expanding window)
     Periode evaluasi tidak diramalkan sekaligus. Untuk tiap origin, konteksnya
     adalah seluruh riwayat sampai origin (dibatasi ``max_context``), lalu model
     meramalkan H langkah ke depan. Zero-shot, fine-tuned, dan baseline WAJIB
     memakai daftar origin yang identik -- dijamin oleh
     :func:`build_origins`, yang dipanggil satu kali dan dipakai bersama.
 
-D5 -- Level kuantil diambil apa adanya dari ``model.quantile_levels``.
+Level kuantil diambil apa adanya dari ``model.quantile_levels``.
 
 Catatan penting soal indeks waktu
 ---------------------------------
@@ -32,7 +32,7 @@ tanggal asli berfrekuensi tidak tetap dan ditolak AutoGluon. Karena Chronos-2
 TIDAK memakai timestamp sebagai fitur -- timestamp hanya dipakai untuk menomori
 langkah ramalan -- tanggal asli dipetakan 1:1 ke indeks sintetis berfrekuensi
 tetap (``model.synthetic_index`` pada config). Dampaknya: satu langkah model
-sama dengan satu hari perdagangan, persis definisi H pada keputusan D4.
+sama dengan satu hari perdagangan, persis definisi H pada protokol evaluasi.
 Seluruh keluaran yang disimpan ke disk tetap memakai tanggal perdagangan asli.
 
 Cara menjalankan mandiri (uji asap zero-shot pada periode VALIDASI):
@@ -85,7 +85,9 @@ class ForecastingError(RuntimeError):
 # =============================================================================
 
 
-def model_columns(config: dict[str, Any]) -> list[str]:
+def model_columns(
+    config: dict[str, Any], covariate_columns: list[str] | None = None
+) -> list[str]:
     """Menyusun daftar kolom yang diberikan ke model: target lalu kovariat.
 
     Kolom flag ``*_ffilled`` sengaja tidak disertakan karena sifatnya metadata
@@ -93,11 +95,19 @@ def model_columns(config: dict[str, Any]) -> list[str]:
 
     Args:
         config: Konfigurasi project.
+        covariate_columns: Daftar kolom kovariat yang dipakai. Bila ``None``
+            (bawaan), diambil dari seluruh kovariat pada config -- perilaku
+            normal seluruh skema utama. Parameter ini ada khusus untuk ablasi
+            kovariat pada analisis sensitivitas (:mod:`src.sensitivity`), yang
+            perlu membatasi kovariat yang dilihat model tanpa mengubah config.
 
     Returns:
         Daftar nama kolom, dimulai dari kolom target.
     """
-    return [get_target_column(config), *get_covariate_columns(config)]
+    covariates = (
+        get_covariate_columns(config) if covariate_columns is None else list(covariate_columns)
+    )
+    return [get_target_column(config), *covariates]
 
 
 def synthetic_timestamps(n_rows: int, config: dict[str, Any]) -> pd.DatetimeIndex:
@@ -124,6 +134,7 @@ def to_model_tsdf(
     df: pd.DataFrame,
     config: dict[str, Any],
     end_position: int | None = None,
+    covariate_columns: list[str] | None = None,
 ) -> TimeSeriesDataFrame:
     """Mengubah potongan dataframe harga menjadi ``TimeSeriesDataFrame`` siap pakai.
 
@@ -142,6 +153,9 @@ def to_model_tsdf(
         config: Konfigurasi project.
         end_position: Posisi (0-based, eksklusif) baris terakhir potongan pada
             deret penuh. Bila ``None``, potongan dianggap dimulai dari posisi 0.
+        covariate_columns: Diteruskan ke :func:`model_columns` -- lihat
+            dokumentasinya. Dipakai untuk ablasi kovariat pada analisis
+            sensitivitas.
 
     Returns:
         ``TimeSeriesDataFrame`` berisi satu item dengan frekuensi tetap.
@@ -149,7 +163,7 @@ def to_model_tsdf(
     Raises:
         ForecastingError: Bila ada kolom model yang hilang atau potongan kosong.
     """
-    columns = model_columns(config)
+    columns = model_columns(config, covariate_columns=covariate_columns)
     missing = [column for column in columns if column not in df.columns]
     if missing:
         raise ForecastingError(
@@ -246,37 +260,56 @@ def _build_predictor(
     horizon: int,
     path: str,
     logger: logging.Logger,
+    known_covariates_names: list[str] | None = None,
 ) -> TimeSeriesPredictor:
     """Membentuk ``TimeSeriesPredictor`` kosong dengan setelan sesuai config.
 
-    Titik penegakan keputusan D2 ada di sini: ``known_covariates_names`` diambil
-    dari config dan wajib kosong.
+    Titik penegakan aturan kovariat past-only ada di sini: pada jalur normal (``known_covariates_names``
+    argumen ``None``),``known_covariates_names`` diambil dari config dan wajib kosong.
 
     Args:
         config: Konfigurasi project.
         horizon: Panjang horizon H.
         path: Direktori penyimpanan artefak predictor.
         logger: Logger yang dipakai.
+        known_covariates_names: Override eksplisit, HANYA dipakai skenario
+            oracle/ex-post (:func:`build_oracle_predictor`, dipanggil dari
+            :mod:`src.sensitivity`). Bila ``None`` (bawaan), nilai diambil dari
+            config dan penegakan past-only di atas berlaku apa adanya. Nilai non-``None``
+            (termasuk list kosong secara eksplisit) MELEWATI penegakan itu dan
+            memicu log peringatan tegas -- dipakai HANYA agar analisis
+            sensitivitas dapat menjalankan skenario upper-bound teoretis.
 
     Returns:
         Objek ``TimeSeriesPredictor`` yang belum di-fit.
 
     Raises:
-        ForecastingError: Bila ``known_covariates_names`` tidak kosong.
+        ForecastingError: Bila ``known_covariates_names`` dari config tidak kosong.
     """
     model_config = config["model"]
-    known_covariates = model_config["known_covariates_names"]
 
-    if known_covariates:
-        raise ForecastingError(
-            "known_covariates_names WAJIB kosong (keputusan D2): nilai Emas dan "
-            "Dollar Index di masa depan tidak diketahui saat peramalan dilakukan. "
-            f"Diterima: {known_covariates}. Bila ini memang skenario ablasi, "
-            "jalankan terpisah dan beri label 'oracle / ex-post'."
+    if known_covariates_names is None:
+        known_covariates = model_config["known_covariates_names"]
+        if known_covariates:
+            raise ForecastingError(
+                "known_covariates_names WAJIB kosong: nilai Emas dan "
+                "Dollar Index di masa depan tidak diketahui saat peramalan dilakukan. "
+                f"Diterima: {known_covariates}. Bila ini memang skenario ablasi, "
+                "jalankan terpisah dan beri label 'oracle / ex-post'."
+            )
+    else:
+        known_covariates = list(known_covariates_names)
+        logger.warning(
+            "SKENARIO ORACLE / EX-POST -- TIDAK REALISTIS: known_covariates_names=%s "
+            "dipakai secara eksplisit (BUKAN dari config, yang tetap wajib kosong). "
+            "Nilai masa depan kovariat ini sesungguhnya TIDAK diketahui saat peramalan "
+            "dilakukan; hasil skema ini hanya batas atas teoretis dan WAJIB dilabeli "
+            "'EX-POST / TIDAK REALISTIS' pada seluruh output.",
+            known_covariates,
         )
 
     logger.info(
-        "Membentuk TimeSeriesPredictor: target=%s, H=%d, known_covariates=%s (D2), "
+        "Membentuk TimeSeriesPredictor: target=%s, H=%d, known_covariates=%s, "
         "eval_metric=%s",
         get_target_column(config),
         horizon,
@@ -316,7 +349,7 @@ def build_zeroshot_predictor(
 
     Data latih tetap diberikan karena dari situlah AutoGluon menyimpulkan
     frekuensi, kolom target, dan kolom mana yang menjadi *past covariates*
-    (keputusan D2). Isinya tidak dipakai untuk melatih apa pun.
+    (kovariat past-only). Isinya tidak dipakai untuk melatih apa pun.
 
     Args:
         config: Konfigurasi project. Bila ``None``, dimuat dari lokasi bawaan.
@@ -380,6 +413,102 @@ def build_zeroshot_predictor(
     return predictor
 
 
+def build_oracle_predictor(
+    config: dict[str, Any] | None = None,
+    train_tsdf: TimeSeriesDataFrame | None = None,
+    horizon: int | None = None,
+    path: str | None = None,
+    logger: logging.Logger | None = None,
+    known_covariates_columns: list[str] | None = None,
+) -> TimeSeriesPredictor:
+    """Membentuk predictor Chronos-2 skenario **ORACLE / EX-POST -- TIDAK REALISTIS**.
+
+    Dipakai HANYA oleh analisis sensitivitas (:mod:`src.sensitivity`, ablasi
+    opsional) sebagai batas atas teoretis: kovariat Emas/DXY
+    diperlakukan sebagai *known-future* dan diberi nilai AKTUALnya pada horizon
+    ramalan lewat argumen ``known_covariates`` pada :func:`rolling_forecast`.
+    Ini BUKAN skenario yang dapat dipakai untuk peramalan sungguhan -- nilai
+    tersebut sesungguhnya tidak diketahui saat peramalan dilakukan. Seluruh
+    pemanggil WAJIB melabeli hasil skema ini "EX-POST / TIDAK REALISTIS" di
+    setiap output yang dilaporkan.
+
+    Selain known_covariates_names, konstruksi predictor ini identik dengan
+    :func:`build_zeroshot_predictor` (tanpa fine-tuning) supaya perbandingannya
+    terhadap skema zero-shot realistis hanya berbeda pada satu variabel: akses
+    ke nilai kovariat masa depan.
+
+    Args:
+        config: Konfigurasi project. Bila ``None``, dimuat dari lokasi bawaan.
+        train_tsdf: Data latih dalam bentuk ``TimeSeriesDataFrame``. Bila
+            ``None``, dimuat dari ``data/processed/train.csv`` dengan seluruh
+            kovariat pada config.
+        horizon: Panjang horizon H. Bila ``None``, diambil dari
+            ``model.prediction_length``.
+        path: Direktori artefak predictor. Bila ``None``, dibentuk di bawah
+            ``paths.models_dir``.
+        logger: Logger yang dipakai. Bila ``None``, dibuat logger baru.
+        known_covariates_columns: Kolom kovariat yang diperlakukan sebagai
+            known-future. Bila ``None``, diambil dari seluruh kovariat pada
+            config (:func:`src.preprocessing.get_covariate_columns`).
+
+    Returns:
+        ``TimeSeriesPredictor`` yang siap dipakai untuk :func:`rolling_forecast`
+        dengan argumen ``known_covariates_columns`` yang SAMA.
+    """
+    if config is None:
+        config = load_config()
+    if logger is None:
+        logger = setup_logger("forecasting")
+    if horizon is None:
+        horizon = config["model"]["prediction_length"]
+    if known_covariates_columns is None:
+        known_covariates_columns = get_covariate_columns(config)
+    if train_tsdf is None:
+        train_frame = load_processed_frames(("train",), config=config, logger=logger)[
+            "train"
+        ]
+        train_tsdf = to_model_tsdf(train_frame, config)
+    if path is None:
+        path = str(
+            resolve_path(config["paths"]["models_dir"])
+            / f"chronos2_oracle_expost_H{horizon}"
+        )
+
+    predictor = _build_predictor(
+        config, horizon, path, logger, known_covariates_names=list(known_covariates_columns)
+    )
+
+    hyperparameters = {
+        CHRONOS2_KEY: [
+            {
+                "ag_args": {"name_suffix": "OracleExPost"},
+                "cross_learning": config["model"]["cross_learning"],
+                "context_length": config["model"]["max_context"],
+            }
+        ]
+    }
+
+    logger.info("Skema ORACLE/EX-POST: hyperparameters=%s", hyperparameters)
+    started_at = time.perf_counter()
+
+    predictor.fit(
+        train_data=train_tsdf,
+        hyperparameters=hyperparameters,
+        enable_ensemble=False,
+        skip_model_selection=True,
+        random_seed=config["seed"],
+    )
+
+    logger.info(
+        "Predictor oracle/ex-post siap dalam %.2f detik (tanpa bobot dilatih; "
+        "TIDAK REALISTIS, hanya batas atas teoretis). Model: %s",
+        time.perf_counter() - started_at,
+        predictor.model_names(),
+    )
+
+    return predictor
+
+
 def build_finetuned_predictor(
     train_tsdf: TimeSeriesDataFrame,
     best_params: dict[str, Any],
@@ -390,7 +519,7 @@ def build_finetuned_predictor(
 ) -> TimeSeriesPredictor:
     """Membentuk predictor Chronos-2 **fine-tuned** memakai hyperparameter terpilih.
 
-    Fine-tuning dilakukan HANYA pada ``train_tsdf`` (keputusan D3). Data validasi
+    Fine-tuning dilakukan HANYA pada ``train_tsdf``. Data validasi
     sudah habis perannya pada :func:`tune_finetune_hyperparams` dan tidak boleh
     ikut melatih bobot; data uji tidak disentuh sama sekali di sini.
 
@@ -483,7 +612,7 @@ def build_finetuned_predictor(
 
 
 # =============================================================================
-# Rolling origin (keputusan D4)
+# Rolling origin (expanding window)
 # =============================================================================
 
 
@@ -498,7 +627,7 @@ def build_origins(
 
     Fungsi ini menjadi satu-satunya sumber daftar origin, sehingga seluruh skema
     (zero-shot, fine-tuned, baseline) dijamin dievaluasi pada jendela yang persis
-    sama — syarat mutlak keputusan D4 dan prasyarat uji Diebold-Mariano.
+    sama — syarat mutlak protokol rolling origin dan prasyarat uji Diebold-Mariano.
 
     Args:
         n_total: Banyaknya baris pada deret penuh.
@@ -542,8 +671,10 @@ def rolling_forecast(
     config: dict[str, Any] | None = None,
     origins: list[int] | None = None,
     logger: logging.Logger | None = None,
+    covariate_columns: list[str] | None = None,
+    known_covariates_columns: list[str] | None = None,
 ) -> dict[str, Any]:
-    """Menjalankan peramalan rolling origin dengan konteks *expanding* (D4).
+    """Menjalankan peramalan rolling origin dengan konteks *expanding*.
 
     Untuk setiap origin:
 
@@ -551,7 +682,7 @@ def rolling_forecast(
        ``max_context`` baris terakhir (expanding window yang dibatasi);
     2. ``predictor.predict(context_tsdf)`` dipanggil — tanpa argumen
        ``known_covariates``, sehingga nilai Emas dan DXY di masa depan tidak
-       pernah bocor ke model (keputusan D2);
+       pernah bocor ke model;
     3. kuantil ramalan dan nilai aktual H langkah ke depan dikumpulkan.
 
     Konteks selalu berhenti tepat sebelum origin, sehingga tidak mungkin ada
@@ -569,6 +700,19 @@ def rolling_forecast(
             :func:`build_origins`. Argumen inilah yang dipakai untuk memaksa
             zero-shot dan fine-tuned memakai jendela yang identik.
         logger: Logger yang dipakai. Bila ``None``, dibuat logger baru.
+        covariate_columns: Diteruskan ke :func:`to_model_tsdf` untuk konteks
+            tiap jendela. Bila ``None`` (bawaan), seluruh kovariat pada config
+            dipakai -- perilaku normal seluruh skema utama. Dipakai ablasi
+            kovariat pada analisis sensitivitas (:mod:`src.sensitivity`).
+        known_covariates_columns: HANYA dipakai skenario oracle/ex-post
+            (:mod:`src.sensitivity`). Bila diisi, nilai AKTUAL kolom-kolom ini
+            pada H langkah ke depan diteruskan ke ``predictor.predict()`` lewat
+            argumen ``known_covariates`` -- artinya model "mengintip" masa
+            depan. Ini BUKAN skenario realistis
+            dan predictor yang diberikan WAJIB sudah dibentuk dengan
+            ``known_covariates_names`` yang sama (lihat
+            :func:`build_oracle_predictor`). Bila ``None`` (bawaan), tidak ada
+            known_covariates yang diteruskan sama sekali.
 
     Returns:
         Dictionary berisi:
@@ -625,6 +769,16 @@ def rolling_forecast(
         predictor.model_names(),
     )
 
+    if known_covariates_columns:
+        logger.warning(
+            "SKENARIO ORACLE / EX-POST -- TIDAK REALISTIS: known_covariates_columns=%s "
+            "akan diteruskan sebagai known-future ke predict() pada seluruh %d jendela. "
+            "Hasil rolling forecast ini HANYA batas atas teoretis, WAJIB dilabeli "
+            "'EX-POST / TIDAK REALISTIS' di seluruh output.",
+            known_covariates_columns,
+            len(origins),
+        )
+
     # Menahan bobot model di memori: tanpa ini AutoGluon memuat ulang model dari
     # disk pada setiap panggilan predict, dan overhead itu berkali lipat karena
     # jumlah jendela banyak.
@@ -635,11 +789,25 @@ def rolling_forecast(
         for window_index, origin in enumerate(origins):
             context_start = max(0, origin - max_context)
             context_frame = full_df.iloc[context_start:origin]
-            context_tsdf = to_model_tsdf(context_frame, config, end_position=origin)
+            context_tsdf = to_model_tsdf(
+                context_frame, config, end_position=origin, covariate_columns=covariate_columns
+            )
 
-            # known_covariates sengaja TIDAK diteruskan (keputusan D2)
+            known_covariates_tsdf = None
+            if known_covariates_columns:
+                # EX-POST: nilai AKTUAL kovariat pada H langkah ke depan -- lihat
+                # peringatan di atas dan docstring argumen known_covariates_columns.
+                future_frame = full_df.iloc[origin : origin + H]
+                known_covariates_tsdf = to_model_tsdf(
+                    future_frame,
+                    config,
+                    end_position=origin + H,
+                    covariate_columns=known_covariates_columns,
+                )[list(known_covariates_columns)]
+
+            # known_covariates sengaja TIDAK diteruskan pada jalur normal (past-only)
             prediction = predictor.predict(
-                context_tsdf, random_seed=config["seed"]
+                context_tsdf, known_covariates=known_covariates_tsdf, random_seed=config["seed"]
             )
 
             if len(prediction) != H:
@@ -767,7 +935,7 @@ def weighted_quantile_loss(
 
         WQL = sum_t mean_k QL_{tau_k}(y_t, q_t) / sum_t |y_t|
 
-    Sementara aproksimasi CRPS pada CLAUDE.md adalah ``2 * mean_k QL``, dan
+    Sementara aproksimasi CRPS yang dipakai penelitian ini adalah ``2 * mean_k QL``, dan
     CRPS ternormalisasi membaginya dengan ``mean|y|``. Karena penyebut keduanya
     sebanding, berlaku hubungan eksak::
 
@@ -797,7 +965,7 @@ def tune_finetune_hyperparams(
 ) -> dict[str, Any]:
     """Memilih hyperparameter fine-tuning terbaik memakai DATA VALIDASI saja.
 
-    **Inilah alasan keberadaan split validasi (keputusan D3).** Bobot model
+    **Inilah alasan keberadaan split validasi.** Bobot model
     hanya boleh belajar dari data latih, tetapi keputusan "kombinasi
     hyperparameter mana yang dipakai" juga merupakan keputusan model. Bila
     keputusan itu diambil dari data uji, angka yang dilaporkan pada bab hasil
@@ -807,7 +975,7 @@ def tune_finetune_hyperparams(
 
     * setiap kandidat di-fine-tune HANYA pada ``train_tsdf``;
     * setiap kandidat dinilai HANYA pada periode ``val_tsdf``, memakai protokol
-      rolling origin yang sama dengan evaluasi akhir (keputusan D4);
+      rolling origin yang sama dengan evaluasi akhir;
     * data uji tidak dibaca sama sekali oleh fungsi ini.
 
     Metrik pemilihan adalah ``finetune.selection_metric`` pada config (WQL,
@@ -898,7 +1066,7 @@ def tune_finetune_hyperparams(
         horizon,
         finetune_config["val_stride"],
     )
-    logger.info("Data uji TIDAK dibaca sama sekali pada tahap ini (aturan no. 2).")
+    logger.info("Data uji TIDAK dibaca sama sekali pada tahap ini (mencegah kebocoran).")
     logger.info("=" * 78)
 
     results: list[dict[str, Any]] = []
@@ -1222,7 +1390,7 @@ def run_all_schemes(
 
     Daftar origin dibentuk sekali saja lewat :func:`build_origins` lalu dipakai
     ulang oleh setiap skema, sehingga perbandingan antar skema — termasuk uji
-    Diebold-Mariano — berpijak pada himpunan jendela yang identik (keputusan D4).
+    Diebold-Mariano — berpijak pada himpunan jendela yang identik.
 
     Seluruh ramalan mentah disimpan ke
     ``results/forecasts/{scheme}_H{H}.parquet`` agar tahap evaluasi dapat
@@ -1233,7 +1401,7 @@ def run_all_schemes(
         schemes: Skema yang dijalankan. Berguna untuk uji asap: cukup
             ``("zeroshot",)``.
         split: Bagian data yang dievaluasi. ``"test"`` untuk pelaporan akhir
-            (hanya boleh dijalankan sekali, lihat aturan no. 2), ``"val"``
+            (hanya boleh dijalankan sekali agar data uji tidak bocor), ``"val"``
             untuk uji asap yang tidak menyentuh data uji.
         horizon: Panjang horizon H. Bila ``None``, diambil dari config.
         logger: Logger yang dipakai. Bila ``None``, dibuat logger baru.
@@ -1288,11 +1456,11 @@ def run_all_schemes(
     else:
         eval_start_idx = len(frames["train"]) + len(frames["val"])
         logger.warning(
-            "Data UJI dibaca. Sesuai aturan no. 2, tahap ini hanya boleh "
+            "Data UJI dibaca. Untuk mencegah kebocoran data, tahap ini hanya boleh "
             "dijalankan satu kali untuk pelaporan akhir."
         )
 
-    # --- Daftar origin bersama: dibentuk SEKALI untuk seluruh skema (D4) ---
+    # --- Daftar origin bersama: dibentuk SEKALI untuk seluruh skema ---
     origins = build_origins(len(full_df), eval_start_idx, horizon, stride)
     dates = pd.DatetimeIndex(full_df.index)
     logger.info(
@@ -1383,7 +1551,7 @@ def run_all_schemes(
 
         assert forecast["origins"] == list(origins), (
             f"Skema '{scheme}' memakai daftar origin yang berbeda — "
-            f"melanggar keputusan D4."
+            f"melanggar protokol rolling origin."
         )
 
         path = save_forecast(forecast, scheme, horizon, split, config, logger)
@@ -1441,7 +1609,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         Namespace berisi ``schemes``, ``split``, dan ``horizon``.
     """
     parser = argparse.ArgumentParser(
-        description="Peramalan Chronos-2 dengan protokol rolling origin (D4)."
+        description="Peramalan Chronos-2 dengan protokol rolling origin."
     )
     parser.add_argument(
         "--schemes",
@@ -1456,7 +1624,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default="val",
         help=(
             "Bagian data yang dievaluasi. Bawaan 'val' agar eksekusi mandiri "
-            "tidak menyentuh data uji (aturan no. 2)."
+            "tidak menyentuh data uji."
         ),
     )
     parser.add_argument(

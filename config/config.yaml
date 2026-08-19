@@ -68,7 +68,7 @@ data:
     min_price: 0.0            # semua harga wajib > nilai ini
 
 # -----------------------------------------------------------------------------
-# PREPROCESSING — lihat keputusan D1 pada CLAUDE.md
+# PREPROCESSING — penyelarasan tanggal antar-bursa
 # -----------------------------------------------------------------------------
 preprocessing:
   join_how: "outer"                 # outer join berdasarkan tanggal
@@ -82,7 +82,7 @@ preprocessing:
     dxy: "dxy_ffilled"
 
 # -----------------------------------------------------------------------------
-# SPLIT — kronologis, tanpa acak (keputusan D3)
+# SPLIT — kronologis, tanpa acak
 # -----------------------------------------------------------------------------
 split:
   train_ratio: 0.70
@@ -91,7 +91,7 @@ split:
   shuffle: false
 
 # -----------------------------------------------------------------------------
-# MUTUAL INFORMATION — hanya dihitung pada data latih (keputusan D6)
+# MUTUAL INFORMATION — hanya dihitung pada data latih
 # -----------------------------------------------------------------------------
 mutual_information:
   n_neighbors: 3
@@ -115,12 +115,12 @@ model:
   prediction_length: 10             # H utama = 10 hari perdagangan
   max_context: 1024                 # batas panjang konteks (expanding window)
 
-  # Level kuantil (keputusan D5)
+  # Level kuantil
   # 0.1/0.9   -> interval 80%
   # 0.025/0.975 -> interval 95%
   quantile_levels: [0.025, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.975]
 
-  # KRITIS (keputusan D2): kovariat = PAST-ONLY.
+  # KRITIS: kovariat = PAST-ONLY.
   # Nilai Emas & DXY di masa depan tidak diketahui saat peramalan dilakukan,
   # jadi daftar ini WAJIB tetap kosong. Kolom kovariat lain otomatis
   # diperlakukan sebagai past-only covariates oleh Chronos-2.
@@ -131,7 +131,7 @@ model:
   # Kalender bursa tidak reguler (akhir pekan + hari libur), sehingga indeks
   # tanggal asli berfrekuensi tidak tetap (freq=None) dan ditolak AutoGluon.
   # Solusinya: tanggal asli dipetakan 1:1 ke indeks sintetis berfrekuensi tetap,
-  # sehingga 1 langkah model = 1 hari perdagangan — persis definisi H pada D4.
+  # sehingga 1 langkah model = 1 hari perdagangan — persis definisi H pada evaluasi.
   # Ini aman karena Chronos-2 TIDAK memakai timestamp sebagai fitur; timestamp
   # hanya dipakai untuk menomori langkah ramalan. Seluruh keluaran tetap
   # dilaporkan memakai tanggal perdagangan yang asli.
@@ -193,7 +193,7 @@ baseline:
   min_volatility_window: 20
 
 # -----------------------------------------------------------------------------
-# EVALUASI — rolling origin / expanding window (keputusan D4)
+# EVALUASI — rolling origin / expanding window
 # -----------------------------------------------------------------------------
 evaluation:
   stride: 1

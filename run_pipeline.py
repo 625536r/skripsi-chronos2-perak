@@ -3,9 +3,9 @@
 Tahapan:
 
 1. Pengumpulan data      -- unduh SI=F, GC=F, DX-Y.NYB dari Yahoo Finance
-2. Preprocessing & split -- penyelarasan D1, pembagian kronologis D3
-3. Mutual information    -- MI level dan MI log-return dari data latih (D6)
-4. Peramalan             -- zero-shot, fine-tuned, dan baseline pada jendela sama (D4)
+2. Preprocessing & split -- penyelarasan tanggal, pembagian kronologis
+3. Mutual information    -- MI level dan MI log-return dari data latih
+4. Peramalan             -- zero-shot, fine-tuned, dan baseline pada jendela sama
 5. Evaluasi              -- metrik lengkap, uji Diebold-Mariano, tabel BAB IV
 6. Visualisasi           -- seluruh gambar laporan ke results/figures/
 
@@ -61,7 +61,7 @@ SCHEME_DISPLAY: dict[str, str] = {
 TABLE_ORDER: tuple[str, ...] = (SCHEME_NAIVE, SCHEME_ZEROSHOT, SCHEME_FINETUNED)
 
 # Pasangan skema yang diuji signifikansi bedanya.
-# Pasangan pertama adalah uji utama sesuai CLAUDE.md; dua sisanya pelengkap.
+# Pasangan pertama adalah uji utama penelitian; dua sisanya pelengkap.
 DM_PAIRS: tuple[tuple[str, str, bool], ...] = (
     (SCHEME_ZEROSHOT, SCHEME_FINETUNED, True),
     (SCHEME_ZEROSHOT, SCHEME_NAIVE, False),
@@ -162,7 +162,7 @@ def stage_data_collection(
 
 
 def stage_preprocessing(config: dict[str, Any], logger: logging.Logger) -> dict[str, Any]:
-    """Tahap 2 — penyelarasan tanggal (D1) dan pembagian kronologis (D3).
+    """Tahap 2 — penyelarasan tanggal dan pembagian data kronologis.
 
     Args:
         config: Konfigurasi project.
@@ -196,7 +196,7 @@ def stage_preprocessing(config: dict[str, Any], logger: logging.Logger) -> dict[
 def stage_mutual_information(
     config: dict[str, Any], logger: logging.Logger
 ) -> dict[str, Any]:
-    """Tahap 3 — mutual information pada data latih saja (keputusan D6).
+    """Tahap 3 — mutual information pada data latih saja.
 
     Args:
         config: Konfigurasi project.
@@ -245,7 +245,7 @@ def stage_forecasting(
         Keluaran :func:`src.forecasting.run_all_schemes`.
     """
     logger.warning(
-        "Tahap ini membaca DATA UJI. Sesuai aturan no. 2, hasilnya hanya boleh "
+        "Tahap ini membaca DATA UJI. Untuk mencegah kebocoran data, hasilnya hanya boleh "
         "dilaporkan apa adanya — jangan mengulang tahap ini demi angka yang lebih baik."
     )
 
@@ -299,12 +299,12 @@ def collect_forecasts(
             f"Jalankan tahap 4 terlebih dahulu."
         )
 
-    # Seluruh skema WAJIB berpijak pada jendela yang identik (keputusan D4)
+    # Seluruh skema WAJIB berpijak pada jendela yang identik
     origin_sets = {scheme: tuple(f["origins"]) for scheme, f in forecasts.items()}
     unique_origins = set(origin_sets.values())
     if len(unique_origins) > 1:
         raise PipelineError(
-            f"Skema tidak memakai daftar origin yang sama — melanggar keputusan D4. "
+            f"Skema tidak memakai daftar origin yang sama — protokol rolling origin dilanggar. "
             f"Jumlah origin per skema: "
             f"{ {scheme: len(origins) for scheme, origins in origin_sets.items()} }"
         )
@@ -349,7 +349,7 @@ def compute_dm_tests(
 
     Rugi yang diuji adalah galat absolut, konsisten dengan MAE dan MASE yang
     dilaporkan. Koreksi HAC Newey-West dengan lag ``H - 1`` wajib dipakai karena
-    jendela rolling origin saling tumpang tindih (lihat CLAUDE.md).
+    jendela rolling origin saling tumpang tindih.
 
     Args:
         forecasts: Dictionary ``{skema: array ramalan}``.
@@ -412,7 +412,7 @@ def build_comparison_table(
 ) -> str:
     """Menyusun tabel perbandingan markdown yang siap disalin ke BAB IV.
 
-    Baris = skema, kolom = seluruh metrik yang disyaratkan CLAUDE.md, disusul
+    Baris = skema, kolom = seluruh metrik yang disyaratkan penelitian, disusul
     tabel kedua berisi hasil uji Diebold-Mariano. Angka sengaja tidak diberi
     penanda "terbaik" secara otomatis: perbedaan yang tidak signifikan secara
     statistik tidak layak ditampilkan seolah-olah menang.
@@ -438,9 +438,9 @@ def build_comparison_table(
         f"{protocol['n_windows']} jendela pada periode uji "
         f"({protocol['test_start']} s.d. {protocol['test_end']}).",
         "",
-        "Seluruh skema dievaluasi pada **himpunan jendela yang persis sama** "
-        "(keputusan D4). Kovariat Emas dan Dollar Index diperlakukan sebagai "
-        "*past-only* (keputusan D2).",
+        "Seluruh skema dievaluasi pada **himpunan jendela rolling origin yang persis "
+        "sama**. Kovariat Emas dan Dollar Index diperlakukan sebagai *past-only*: "
+        "nilai masa depannya tidak pernah diberikan ke model.",
         "",
         "## Tabel 4.x — Perbandingan akurasi dan kalibrasi",
         "",

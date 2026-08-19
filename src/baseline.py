@@ -4,7 +4,7 @@ Baseline ini menjalankan dua peran dalam penelitian:
 
 1. **Pembanding akurasi** — model Chronos-2 (zero-shot maupun fine-tuned) harus
    mengalahkannya agar dapat dikatakan bermanfaat.
-2. **Penyebut MASE** — sesuai spesifikasi metrik pada CLAUDE.md.
+2. **Penyebut MASE** — sesuai spesifikasi metrik penelitian ini.
 
 Dua varian disediakan:
 
@@ -102,7 +102,7 @@ def estimate_random_walk_sigma(
 
     Hanya ``volatility_window`` log-return terakhir yang dipakai, agar estimasi
     volatilitas mencerminkan rezim pasar terkini dan tetap konsisten dengan
-    protokol *rolling origin* (keputusan D4): setiap origin memakai informasi
+    protokol *rolling origin*: setiap origin memakai informasi
     yang tersedia sampai origin tersebut saja.
 
     Args:

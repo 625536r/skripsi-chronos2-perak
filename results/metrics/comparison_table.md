@@ -2,7 +2,7 @@
 
 Protokol: rolling origin (expanding window), H = 10 hari perdagangan, stride = 1, 181 jendela pada periode uji (2025-11-11 s.d. 2026-08-03).
 
-Seluruh skema dievaluasi pada **himpunan jendela yang persis sama** (keputusan D4). Kovariat Emas dan Dollar Index diperlakukan sebagai *past-only* (keputusan D2).
+Seluruh skema dievaluasi pada **himpunan jendela rolling origin yang persis sama**. Kovariat Emas dan Dollar Index diperlakukan sebagai *past-only*: nilai masa depannya tidak pernah diberikan ke model.
 
 ## Tabel 4.x — Perbandingan akurasi dan kalibrasi
 

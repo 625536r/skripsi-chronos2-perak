@@ -1,10 +1,10 @@
 """Analisis Mutual Information (MI) antara harga Perak dan kovariatnya.
 
-Modul ini mengimplementasikan keputusan metodologis D6 pada CLAUDE.md:
+Modul ini mengimplementasikan analisis kelayakan kovariat:
 
 * MI dihitung **hanya** dari data latih (``data/processed/train.csv``). Data
   validasi maupun data uji tidak pernah disentuh di sini, sehingga pemilihan
-  kovariat tidak menimbulkan kebocoran informasi (aturan kerja no. 2).
+  kovariat tidak menimbulkan kebocoran informasi.
 * Dua varian wajib dilaporkan:
     - ``level``       : harga apa adanya.
     - ``log_return``  : ``log(P_t / P_{t-1})``, baris pertama dibuang.
@@ -283,7 +283,7 @@ def permutation_null_distribution(
 
     Ini adalah mesin di balik :func:`permutation_test`. Fungsi terpisah agar
     notebook dapat menggambar histogram distribusi nol tanpa perlu menulis
-    ulang loop permutasinya (aturan kerja no. 8).
+    ulang loop permutasinya.
 
     Args:
         x: Vektor prediktor.
@@ -573,7 +573,7 @@ def compute_mi_lagged(
     Analisis ini menunjukkan apakah kovariat memiliki efek *lead* terhadap
     perak: bila MI pada lag > 0 tetap tinggi, nilai kovariat di masa lalu masih
     membawa informasi tentang perak hari ini — persis situasi yang dihadapi
-    model saat kovariat diperlakukan sebagai *past-only* (keputusan D2).
+    model saat kovariat diperlakukan sebagai *past-only*.
 
     Args:
         df: Dataframe data latih.
@@ -966,8 +966,7 @@ def build_markdown_tables(
             )
 
     lines.append("")
-    lines.append("*MI dalam satuan nat; seluruh angka dihitung hanya dari data latih "
-                 "(keputusan D6).*")
+    lines.append("*MI dalam satuan nat; seluruh angka dihitung hanya dari data latih.*")
 
     return "\n".join(lines)
 
@@ -1058,7 +1057,7 @@ def build_interpretation(
         f"{ratio_text}. "
         f"Meski begitu {verdict}, dan {contrast_text}. "
         f"Di sisi lain {lag_text}; manfaatnya bagi Chronos-2 karena itu terletak pada "
-        f"pengayaan konteks past-only (keputusan D2), bukan pada kemampuan meramal "
+        f"pengayaan konteks past-only, bukan pada kemampuan meramal "
         f"beberapa hari ke depan dari kovariat saja. "
         f"MI level jauh lebih besar karena harga perak, emas, dan dolar sama-sama "
         f"merupakan proses non-stasioner yang berbagi tren jangka panjang: pada level "
@@ -1134,7 +1133,7 @@ def load_train_data(
         frame.index[-1].date(),
         path,
     )
-    logger.info("Data validasi dan data uji TIDAK dibaca (keputusan D6 / aturan no. 2).")
+    logger.info("Data validasi dan data uji TIDAK dibaca (mencegah kebocoran data).")
 
     return frame
 
@@ -1159,7 +1158,7 @@ def main() -> dict[str, Any]:
     covariate_columns = get_covariate_columns(config)
 
     logger.info("=" * 78)
-    logger.info("MUTUAL INFORMATION (keputusan D6) — hanya memakai data latih")
+    logger.info("MUTUAL INFORMATION — hanya memakai data latih")
     logger.info("=" * 78)
     logger.info(
         "Parameter: n_neighbors=%d, n_repeats=%d, n_permutations=%d, random_state=%d",
@@ -1215,7 +1214,7 @@ def main() -> dict[str, Any]:
 
     report: dict[str, Any] = {
         "generated_at": datetime.now().isoformat(timespec="seconds"),
-        "decision": "D6 — MI dihitung hanya dari data latih",
+        "decision": "MI dihitung hanya dari data latih (mencegah kebocoran data)",
         "settings": {
             "n_neighbors": int(settings["n_neighbors"]),
             "n_repeats": int(settings["n_repeats"]),

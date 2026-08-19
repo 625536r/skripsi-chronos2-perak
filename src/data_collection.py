@@ -192,7 +192,7 @@ def download_ticker(
         backoff_seconds: Jeda awal sebelum percobaan ulang.
         backoff_factor: Pengali jeda antar percobaan.
         timeout: Batas waktu permintaan HTTP dalam detik.
-        auto_adjust: Penyesuaian harga otomatis (WAJIB False sesuai CLAUDE.md).
+        auto_adjust: Penyesuaian harga otomatis (WAJIB False sesuai spesifikasi data).
         price_field: Nama kolom harga yang diambil.
         logger: Logger yang dipakai. Bila ``None``, dibuat logger baru.
 

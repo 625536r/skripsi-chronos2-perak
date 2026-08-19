@@ -8,6 +8,10 @@ Penelitian ini membandingkan dua skema penggunaan Chronos-2 — **zero-shot** da
 **fine-tuned** — untuk meramalkan harga Perak (`SI=F`), dengan Emas (`GC=F`) dan
 Dollar Index (`DX-Y.NYB`) sebagai kovariat *past-only*.
 
+> Berkas ini menjelaskan **cara menjalankan** dan **ringkasan hasil**.
+> Untuk memahami **konsep, keputusan metodologis, dan tafsir hasilnya**, baca
+> [`PANDUAN_PROJECT.md`](PANDUAN_PROJECT.md).
+
 ---
 
 ## Cara menjalankan
@@ -43,6 +47,8 @@ python -m src.baseline
 python -m src.evaluation
 python -m src.forecasting --schemes zeroshot --split val   # uji asap, tidak menyentuh data uji
 python -m src.visualization --split test                   # gambar ulang tanpa jalankan model
+python -m src.sensitivity --reuse-finetune-params          # horizon lain, ablasi kovariat, oracle
+python -m src.sensitivity --summary-only                   # susun ulang ringkasan sensitivitas saja
 ```
 
 ### Fine-tuning: jalankan di GPU (Colab)
@@ -80,7 +86,7 @@ Protokol: rolling origin (expanding window), H = 10 hari perdagangan, stride = 1
 **181 jendela** pada periode uji 2025-11-11 s.d. 2026-08-03.
 Data: 1257 hari perdagangan (latih 879 / validasi 188 / uji 190).
 
-### Mutual information (data latih saja, keputusan D6)
+### Mutual information (data latih saja)
 
 | Varian | Emas | DXY |
 |---|---|---|
@@ -102,23 +108,52 @@ meramal dari kovariat saja.
 |---|---|---|---|---|---|---|---|---|
 | Naive Persistence | 5,681 | 8,295 | 7,51% | 1,000 | 3,700 | 0,768 | 0,915 | 19,67 |
 | Chronos-2 Zero-Shot | 6,030 | 9,104 | 7,98% | 1,062 | 3,877 | 0,680 | 0,909 | 14,88 |
-| Chronos-2 Fine-Tuned | _belum dijalankan_ | | | | | | | |
+| Chronos-2 Fine-Tuned | 6,032 | 9,004 | 7,98% | 1,062 | 3,911 | 0,671 | 0,894 | 14,79 |
 
-Uji Diebold-Mariano zero-shot vs naive (rugi = galat absolut, HAC Newey-West
-lag 9): statistik 1,269, **p = 0,205 — tidak signifikan**.
+Uji Diebold-Mariano (rugi = galat absolut, HAC Newey-West lag 9):
 
-**Temuan sementara.** Chronos-2 zero-shot **tidak terbukti berbeda** dari naive
-persistence pada periode uji. Angka MAE-nya 6,1% lebih tinggi, tetapi selisih
-itu tidak melewati ambang signifikansi, sehingga kesimpulan yang sah adalah
-"tidak terdeteksi perbedaan", bukan "Chronos-2 lebih buruk". Hasil ini wajar
-untuk harga logam mulia harian yang mendekati *martingale*. Pola per horizon
-konsisten: kedua skema memburuk hampir sebanding akar horizon (MAE h=1 sebesar
-2,50 vs 2,88; h=10 sebesar 8,01 vs 8,47).
+| Perbandingan | Statistik DM | p-value | Signifikan (α = 0,05) |
+|---|---|---|---|
+| Zero-Shot vs Fine-Tuned **(uji utama)** | −0,012 | 0,9902 | tidak |
+| Zero-Shot vs Naive | 1,269 | 0,2045 | tidak |
+| Fine-Tuned vs Naive | 1,587 | 0,1125 | tidak |
 
-Dari sisi kalibrasi, Chronos-2 menghasilkan interval **lebih sempit** daripada
-baseline (Width80 14,88 vs 19,67) tetapi dengan cakupan yang meleset lebih jauh
-(0,680 vs 0,768 terhadap target 0,80) — model terlalu percaya diri pada periode
-uji yang bergejolak ini. *Quantile crossing rate* nol pada kedua skema.
+**Temuan 1 — fine-tuning tidak mengubah apa pun.** Selisih MAE zero-shot dan
+fine-tuned hanya 0,0012 USD dengan p = 0,9902: praktis tidak ada perbedaan sama
+sekali. Bukti pendukungnya ada di dalam proses tuning itu sendiri
+(`finetune_tuning.json`): dari 18 kandidat, yang menang adalah **LoRA dengan
+langkah paling sedikit** (lr 1e-4, 200 langkah, WQL 0,009882), sedangkan yang
+paling buruk adalah **full fine-tuning dengan langkah terbanyak** (lr 1e-4,
+1.000 langkah, WQL 0,025073 — 2,5 kali lebih jelek). Pola itu persis tanda
+*overfitting*: makin banyak model diubah pada data sekecil ini, makin rusak
+hasilnya. Lihat catatan "fine-tuning pada satu deret waktu" di bawah.
+
+**Temuan 2 — Chronos-2 tidak terbukti berbeda dari naive persistence.** MAE
+zero-shot 6,2% lebih tinggi, tetapi p = 0,205, sehingga kesimpulan yang sah
+adalah "tidak terdeteksi perbedaan", bukan "Chronos-2 lebih buruk". Hasil ini
+wajar untuk harga logam mulia harian yang mendekati *martingale*. Pola per
+horizon konsisten: seluruh skema memburuk hampir sebanding akar horizon (MAE
+h=1 sebesar 2,50 / 2,88 / 2,89; h=10 sebesar 8,01 / 8,47 / 8,46).
+
+**Temuan 3 — interval Chronos-2 terlalu percaya diri.** Kedua skema Chronos-2
+menghasilkan interval **lebih sempit** daripada baseline (Width80 14,88 dan
+14,79 vs 19,67) tetapi dengan cakupan yang meleset lebih jauh (0,680 dan 0,671
+vs 0,768 terhadap target 0,80). Yang lebih tajam terlihat per horizon: cakupan
+80% zero-shot nyaris tepat sasaran pada h=1 (0,812) lalu runtuh pada h=10
+(0,630), sedangkan baseline lebih stabil (0,801 → 0,735). Model **tidak
+melebarkan ketidakpastiannya secepat yang seharusnya** seiring horizon
+memanjang. *Quantile crossing rate* nol pada ketiga skema.
+
+### Analisis sensitivitas
+
+Dilaporkan **terpisah** di `results/metrics/sensitivity_summary.md` agar tidak
+tercampur dengan hasil utama.
+
+| Analisis | Hasil ringkas |
+|---|---|
+| **Horizon** H ∈ {5, 10, 20} | Kesimpulan bertahan. MASE zero-shot 1,077 / 1,062 / 1,051; uji DM zero-shot vs fine-tuned tidak signifikan di ketiga horizon (p = 0,435 / 0,990 / 0,979). |
+| **Ablasi kovariat** | Hanya Perak 6,199 → +Emas 6,224 → +Emas+DXY 6,030 (MAE). Uji DM utama **p = 0,332 — kovariat tidak terbukti membantu**, konsisten dengan MI log-return yang runtuh pada lag ≥ 1. |
+| **Oracle / ex-post** (TIDAK REALISTIS) | Bila nilai aktual kovariat pada horizon ramalan diberikan ke model, MAE turun 6,030 → 5,015 (p = 0,0006). Ini **bukan** potensi perbaikan yang dapat dicapai — ia mengukur seberapa besar keuntungan tak sah yang muncul bila pemisahan *past-only* dilanggar. |
 
 ---
 
@@ -128,12 +163,13 @@ Dokumentasi AutoGluon menyarankan fine-tuning dilakukan ketika tersedia
 **lebih dari 100 seri waktu**. Penelitian ini hanya memiliki **1 seri waktu**
 (879 titik data latih).
 
-Karena itu, **fine-tuning berpotensi TIDAK meningkatkan akurasi** dibanding
-zero-shot — bahkan mungkin menurunkannya karena model sebesar Chronos-2 sangat
-mudah *overfit* pada data sekecil ini.
+Dugaan awalnya, **fine-tuning berpotensi tidak meningkatkan akurasi** dibanding
+zero-shot karena model sebesar Chronos-2 sangat mudah *overfit* pada data
+sekecil ini. **Hasilnya memang demikian** (p = 0,9902), dan tanda *overfitting*
+terlihat langsung pada peringkat kandidat tuning.
 
-**Ini bukan bug.** Bila hasilnya memang demikian, itu adalah **temuan penelitian
-yang sah** dan **wajib dilaporkan apa adanya**, bukan disembunyikan, bukan
+**Ini bukan bug.** Ini adalah **temuan penelitian yang sah** dan **wajib
+dilaporkan apa adanya**, bukan disembunyikan, bukan
 diakali dengan memilih ulang hyperparameter memakai data uji, dan bukan alasan
 untuk mengubah protokol evaluasi setelah melihat hasil. Justru inilah kontribusi
 empiris yang dapat ditawarkan skripsi ini: bukti terukur tentang kapan
@@ -144,14 +180,19 @@ tidak, pada kasus deret tunggal harga komoditas.
 
 ## Catatan keterbatasan
 
-1. **Skema fine-tuned belum dijalankan.** Fine-tuning terukur ±12 detik per
-   langkah gradien di CPU mesin ini (Chronos-2 120M parameter, tanpa CUDA),
+1. **Fine-tuning dijalankan di mesin berbeda.** Di CPU mesin lokal, fine-tuning
+   terukur ±12 detik per langkah gradien (Chronos-2 120M parameter, tanpa CUDA),
    bahkan setelah `fine_tune_batch_size` dan `fine_tune_context_length`
    diturunkan agar sepadan dengan ukuran data. Grid pada config (3 lr × 3 steps
-   × 2 mode = 18 kandidat, 10.200 langkah) berarti **lebih dari 30 jam**. Tahap
-   ini dipindahkan ke GPU — lihat "Fine-tuning: jalankan di GPU" di atas.
-   Seluruh baris Fine-Tuned pada tabel dan seluruh angka uji Diebold-Mariano
-   utama (zero-shot vs fine-tuned) **masih kosong** sampai langkah itu selesai.
+   × 2 mode = 18 kandidat, 10.200 langkah) berarti lebih dari 30 jam, sehingga
+   tahap ini dipindahkan ke Colab dengan GPU **Tesla T4** dan selesai dalam
+   **27,4 menit** — lihat "Fine-tuning: jalankan di GPU" di atas. Versi library
+   di kedua mesin identik kecuali build torch (`2.13.0+cpu` vs `2.13.0+cu130`)
+   dan dicatat terpisah di `results/environment.json` dan
+   `results/environment_colab.json`. Konsekuensinya, angka Fine-Tuned tidak
+   dihasilkan pada mesin yang sama dengan angka Zero-Shot dan Naive; keduanya
+   tetap berpijak pada daftar origin yang identik karena daftar itu
+   deterministik.
 
 2. **Periode uji jatuh pada rezim pasar ekstrem.** Harga perak naik sekitar
    lima kali lipat dari basis 2021 dan memuncak tajam di dalam jendela uji. MAE
@@ -173,11 +214,19 @@ tidak, pada kasus deret tunggal harga komoditas.
    sebagai fitur, tetapi tidak otomatis berlaku untuk model lain.
 
 5. **Satu aset, satu horizon utama.** Seluruh kesimpulan berlaku untuk perak
-   pada H = 10 hari perdagangan. Sensitivitas H ∈ {5, 20} disediakan lewat
-   `--horizon` tetapi dilaporkan terpisah.
+   pada H = 10 hari perdagangan. Sensitivitas H ∈ {5, 20} sudah dijalankan dan
+   mendukung kesimpulan yang sama, tetapi dilaporkan terpisah.
 
-6. **Ablasi oracle belum dijalankan.** Skenario `known_covariates` sebagai
-   batas atas teoretis (`model.oracle_ablation.enabled`) masih `false`.
+6. **Fine-tuned pada horizon sensitivitas memakai ulang hyperparameter H = 10**,
+   tanpa tuning grid ulang per horizon, demi kelayakan komputasi. Ini
+   penyimpangan dari protokol pemilihan hyperparameter yang dicatat terbuka di
+   `sensitivity_summary.md` dan `sensitivity_horizon.json`.
+
+7. **Skenario oracle bersifat ex-post dan tidak realistis.** Ia dijalankan lewat
+   `python -m src.sensitivity` (bukan lewat `model.oracle_ablation.enabled`,
+   yang tetap `false`) dan seluruh keluarannya berlabel "EX-POST / TIDAK
+   REALISTIS". Angkanya tidak boleh dinarasikan sebagai performa yang dapat
+   dicapai model.
 
 ---
 
@@ -188,7 +237,7 @@ Diverifikasi pada `autogluon.timeseries==1.6.1`, `chronos==2.3.1`, `torch==2.13.
 | Hal | Fakta |
 |---|---|
 | `fine_tune_mode` | Hanya menerima `"lora"` atau `"full"`. Nilai `"linear_probe"` **tidak didukung** dan menggagalkan `fit()`. |
-| Kovariat (D2) | `known_covariates_names=[]`; `gold_close` dan `dxy_close` otomatis menjadi *past covariates*. Nilai masa depannya tidak pernah diteruskan ke `predict()`. |
+| Kovariat (past-only) | `known_covariates_names=[]`; `gold_close` dan `dxy_close` otomatis menjadi *past covariates*. Nilai masa depannya tidak pernah diteruskan ke `predict()`. |
 | Indeks waktu | Kalender bursa tidak reguler (`freq=None`); tanggal asli dipetakan 1:1 ke indeks sintetis berfrekuensi tetap. Seluruh keluaran ke disk tetap memakai tanggal perdagangan asli. |
 | Perangkat | CUDA tidak tersedia di mesin ini; seluruh eksekusi lokal berjalan di CPU. |
 
@@ -203,5 +252,7 @@ Diverifikasi pada `autogluon.timeseries==1.6.1`, `chronos==2.3.1`, `torch==2.13.
 | `results/metrics/finetune_tuning.json` | Tabel lengkap tuning hyperparameter (termasuk kandidat yang kalah) |
 | `results/forecasts/{skema}_H{H}.parquet` | Ramalan mentah tiap skema — evaluasi dapat diulang tanpa menjalankan model |
 | `results/figures/01..05_*.png` | Lima gambar laporan, 300 dpi, berlabel bahasa Indonesia |
-| `results/environment.json` | Versi python dan seluruh library |
+| `results/metrics/sensitivity_summary.md` | Ringkasan tiga analisis sensitivitas |
+| `results/metrics/sensitivity_*.json` | Angka mentah tiap analisis sensitivitas |
+| `results/environment.json`, `results/environment_colab.json` | Versi python dan seluruh library (mesin lokal dan Colab) |
 | `logs/*.log` | Log tiap modul dan tiap tahap pipeline |

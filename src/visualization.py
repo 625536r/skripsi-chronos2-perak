@@ -186,7 +186,7 @@ def plot_series_overview(
     hubungan Perak-Emas (searah) dan Perak-DXY (berlawanan) langsung terlihat.
 
     Dua garis vertikal menandai batas latih/validasi dan validasi/uji
-    (keputusan D3), sehingga pembaca dapat menilai sendiri apakah periode uji
+    (kronologis, tanpa acak), sehingga pembaca dapat menilai sendiri apakah periode uji
     kebetulan jatuh pada rezim pasar yang tidak biasa.
 
     Args:
@@ -230,7 +230,7 @@ def plot_series_overview(
             zorder=3,
         )
 
-    # --- Garis batas split (keputusan D3) ---
+    # --- Garis batas split ---
     boundaries = (
         ("Batas latih / validasi", frames["val"].index[0]),
         ("Batas validasi / uji", frames["test"].index[0]),
@@ -269,7 +269,7 @@ def plot_series_overview(
         0.5,
         -0.02,
         f"Latih {len(frames['train'])} hari  |  Validasi {len(frames['val'])} hari  |  "
-        f"Uji {len(frames['test'])} hari  —  pembagian kronologis tanpa pengacakan (D3)",
+        f"Uji {len(frames['test'])} hari  —  pembagian kronologis tanpa pengacakan",
         fontsize=8.5,
         color=_INK_MUTED,
         ha="center",
