@@ -2,7 +2,7 @@
 
 Seluruh gambar disimpan ke ``results/figures/`` dengan resolusi
 ``visualization.figure_dpi`` (300 dpi) dan berlabel bahasa Indonesia, siap
-disisipkan ke BAB IV tanpa penyuntingan ulang.
+disisipkan ke laporan tanpa penyuntingan ulang.
 
 Modul ini **tidak menghitung metrik apa pun sendiri**. Seluruh angka yang
 digambar berasal dari :mod:`src.evaluation` atau dari berkas ramalan mentah

@@ -6,7 +6,7 @@ Tahapan:
 2. Preprocessing & split -- penyelarasan tanggal, pembagian kronologis
 3. Mutual information    -- MI level dan MI log-return dari data latih
 4. Peramalan             -- zero-shot, fine-tuned, dan baseline pada jendela sama
-5. Evaluasi              -- metrik lengkap, uji Diebold-Mariano, tabel BAB IV
+5. Evaluasi              -- metrik lengkap, uji Diebold-Mariano, tabel hasil
 6. Visualisasi           -- seluruh gambar laporan ke results/figures/
 
 Berkas ini hanya **mengatur urutan**. Seluruh logika berada di ``src/`` supaya
@@ -50,7 +50,7 @@ from src.forecasting import (
 from src.utils import load_config, log_environment, resolve_path, save_json, setup_logger
 from src.visualization import generate_all_figures
 
-# Nama tampil skema pada tabel BAB IV
+# Nama tampil skema pada tabel hasil
 SCHEME_DISPLAY: dict[str, str] = {
     SCHEME_NAIVE: "Naive Persistence",
     SCHEME_ZEROSHOT: "Chronos-2 Zero-Shot",
@@ -259,7 +259,7 @@ def stage_forecasting(
 
 
 # =============================================================================
-# Tahap 5 — evaluasi dan tabel BAB IV
+# Tahap 5 — evaluasi dan tabel hasil
 # =============================================================================
 
 
@@ -410,7 +410,7 @@ def build_comparison_table(
     protocol: dict[str, Any],
     config: dict[str, Any],
 ) -> str:
-    """Menyusun tabel perbandingan markdown yang siap disalin ke BAB IV.
+    """Menyusun tabel perbandingan markdown yang siap disalin ke laporan.
 
     Baris = skema, kolom = seluruh metrik yang disyaratkan penelitian, disusul
     tabel kedua berisi hasil uji Diebold-Mariano. Angka sengaja tidak diberi
@@ -431,7 +431,7 @@ def build_comparison_table(
     high_key = coverage_keys[1] if len(coverage_keys) > 1 else "0.95"
 
     lines: list[str] = [
-        "# Tabel Perbandingan Skema — BAB IV",
+        "# Tabel Perbandingan Skema",
         "",
         f"Protokol: rolling origin (expanding window), H = {protocol['horizon']} hari "
         f"perdagangan, stride = {protocol['stride']}, "
@@ -442,7 +442,7 @@ def build_comparison_table(
         "sama**. Kovariat Emas dan Dollar Index diperlakukan sebagai *past-only*: "
         "nilai masa depannya tidak pernah diberikan ke model.",
         "",
-        "## Tabel 4.x — Perbandingan akurasi dan kalibrasi",
+        "## Tabel 1 — Perbandingan akurasi dan kalibrasi",
         "",
         "| Skema | MAE | RMSE | MAPE (%) | MASE | CRPS | nCRPS | Cov80 | Cov95 | Width80 | CrossRate |",
         "|---|---|---|---|---|---|---|---|---|---|---|",
@@ -486,7 +486,7 @@ def build_comparison_table(
         "karena cakupan tinggi yang dicapai lewat interval kelewat lebar bukan kalibrasi "
         "yang baik. CrossRate = proporsi pelanggaran urutan kuantil.",
         "",
-        "## Tabel 4.y — Uji Diebold-Mariano (rugi = galat absolut, HAC Newey-West)",
+        "## Tabel 2 — Uji Diebold-Mariano (rugi = galat absolut, HAC Newey-West)",
         "",
         "| Perbandingan | Selisih rugi rata-rata | Statistik DM | p-value | Lag HAC | Signifikan (α = {alpha:g}) | Lebih baik |".format(
             alpha=config["evaluation"]["diebold_mariano"]["alpha"]
@@ -537,7 +537,7 @@ def build_comparison_table(
         "pertama memiliki rugi lebih kecil. Karena jendela rolling origin saling "
         f"tumpang tindih, ragam diestimasi dengan HAC Newey-West berlag H − 1 = "
         f"{protocol['horizon'] - 1}. **p-value di atas α berarti perbedaan angka pada "
-        "tabel 4.x tidak terbukti secara statistik dan tidak boleh dinarasikan sebagai "
+        "Tabel 1 tidak terbukti secara statistik dan tidak boleh dinarasikan sebagai "
         "keunggulan.**",
         "",
     ]
@@ -548,7 +548,7 @@ def build_comparison_table(
 def stage_evaluation(
     config: dict[str, Any], logger: logging.Logger, horizon: int
 ) -> dict[str, Any]:
-    """Tahap 5 — metrik lengkap, uji DM, ``final_results.json``, tabel BAB IV.
+    """Tahap 5 — metrik lengkap, uji DM, ``final_results.json``, tabel hasil.
 
     Args:
         config: Konfigurasi project.
@@ -778,7 +778,7 @@ def _run_report_only(
     Returns:
         Dictionary laporan pipeline.
     """
-    started = _log_stage(logger, 5, "Evaluasi & tabel BAB IV")
+    started = _log_stage(logger, 5, "Evaluasi & tabel hasil")
     evaluation_result = stage_evaluation(config, logger, horizon)
     report["stage_5_evaluation"] = {
         "final_results": str(
@@ -787,7 +787,7 @@ def _run_report_only(
         "comparison_table": str(evaluation_result["table_path"]),
     }
     durations["stage_5_evaluation"] = _log_stage_done(
-        logger, 5, "Evaluasi & tabel BAB IV", started
+        logger, 5, "Evaluasi & tabel hasil", started
     )
 
     started = _log_stage(logger, 6, "Visualisasi")
@@ -805,7 +805,7 @@ def _run_report_only(
     logger.info("")
     logger.info("#" * 78)
     logger.info(
-        "LAPORAN DISUSUN ULANG dalam %.1f detik. Tabel BAB IV: %s",
+        "LAPORAN DISUSUN ULANG dalam %.1f detik. Tabel hasil: %s",
         report["total_seconds"],
         evaluation_result["table_path"],
     )
@@ -835,9 +835,24 @@ def main(argv: list[str] | None = None) -> dict[str, Any]:
         ALL_SCHEMES if "all" in args.scheme else tuple(dict.fromkeys(args.scheme))
     )
 
+    # Header hanya menampilkan opsi yang benar-benar berpengaruh pada mode yang
+    # dipilih. Pada mode report-only tahap 1-4 tidak dijalankan, sehingga
+    # --skip-download dan daftar skema tidak relevan: menampilkannya akan
+    # membuat pembaca log menyangka data diunduh atau model dijalankan ulang.
+    if args.report_only:
+        header = (
+            f"H = {horizon} | mode = report-only "
+            f"(tahap 1-4 dilewati, skema dibaca dari berkas ramalan yang ada)"
+        )
+    else:
+        header = (
+            f"H = {horizon} | mode = penuh | skema = {list(schemes)} "
+            f"| skip-download = {args.skip_download}"
+        )
+
     logger.info("#" * 78)
     logger.info("PIPELINE PERAMALAN HARGA PERAK DENGAN CHRONOS-2")
-    logger.info("H = %d | skema = %s | skip-download = %s", horizon, list(schemes), args.skip_download)
+    logger.info(header)
     logger.info("#" * 78)
 
     log_environment(config=config, logger=logger)
@@ -882,7 +897,7 @@ def main(argv: list[str] | None = None) -> dict[str, Any]:
         logger, 4, "Peramalan Chronos-2", started
     )
 
-    started = _log_stage(logger, 5, "Evaluasi & tabel BAB IV")
+    started = _log_stage(logger, 5, "Evaluasi & tabel hasil")
     evaluation_result = stage_evaluation(config, logger, horizon)
     report["stage_5_evaluation"] = {
         "final_results": str(
@@ -891,7 +906,7 @@ def main(argv: list[str] | None = None) -> dict[str, Any]:
         "comparison_table": str(evaluation_result["table_path"]),
     }
     durations["stage_5_evaluation"] = _log_stage_done(
-        logger, 5, "Evaluasi & tabel BAB IV", started
+        logger, 5, "Evaluasi & tabel hasil", started
     )
 
     started = _log_stage(logger, 6, "Visualisasi")
@@ -918,7 +933,7 @@ def main(argv: list[str] | None = None) -> dict[str, Any]:
     logger.info("PIPELINE SELESAI dalam %.1f detik (%.1f menit)", total_seconds, total_seconds / 60)
     for stage_name, seconds in durations.items():
         logger.info("  %-28s %8.1f detik", stage_name, seconds)
-    logger.info("Tabel BAB IV: %s", evaluation_result["table_path"])
+    logger.info("Tabel hasil: %s", evaluation_result["table_path"])
     logger.info("#" * 78)
 
     report["evaluation"] = evaluation_result

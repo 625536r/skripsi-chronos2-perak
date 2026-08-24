@@ -20,14 +20,14 @@ Tiga analisis:
    masa depan kovariat tidak diketahui). Hasilnya HANYA batas atas teoretis dan diberi label
    **"EX-POST / TIDAK REALISTIS"** di setiap output.
 
-Biaya komputasi fine-tuning (tuning grid 18 kandidat) jauh lebih mahal di CPU
-daripada GPU (terverifikasi: ~11x lebih lambat pada mesin ini dibanding Colab GPU
-yang dipakai hasil utama H=10). Karena itu :func:`run_horizon_sensitivity`
-menyediakan opsi ``reuse_finetune_params`` untuk memakai ulang hyperparameter
-terbaik hasil tuning H=10 tanpa tuning ulang per horizon -- penyimpangan dari
-protokol pemilihan hyperparameter pada horizon utama yang WAJIB dicatat sebagai
-catatan metodologis
-bila dipakai (lihat argumen fungsi).
+Tuning grid fine-tuning berbiaya besar dan berlipat per horizon: satu grid penuh
+berisi 18 kandidat (terukur ~21 menit di GPU lokal dan ~27 menit di Colab GPU untuk
+H=10; berjam-jam di CPU), sehingga men-tuning ulang tiap horizon sensitivitas
+berarti mengulang seluruh pencarian itu sebanyak jumlah horizon. Karena itu
+:func:`run_horizon_sensitivity` menyediakan opsi ``reuse_finetune_params`` untuk
+memakai ulang hyperparameter terbaik hasil tuning H=10 tanpa tuning ulang per
+horizon -- penyimpangan dari protokol pemilihan hyperparameter pada horizon utama
+yang WAJIB dicatat sebagai catatan metodologis bila dipakai (lihat argumen fungsi).
 
 Cara menjalankan mandiri:
     python -m src.sensitivity                                  # ketiga analisis
@@ -278,7 +278,8 @@ def run_horizon_sensitivity(
     H=10), sehingga tidak bisa dibandingkan jendela-demi-jendela lintas horizon
     -- yang dibandingkan adalah metrik teragregasi. Naive dan zero-shot selalu
     dijalankan (murah, tanpa pelatihan). Fine-tuned bersifat opsional lewat
-    ``include_finetune`` karena tuning grid penuh sangat mahal di CPU.
+    ``include_finetune`` karena tuning grid penuh harus diulang untuk tiap
+    horizon.
 
     Args:
         horizons: Daftar horizon yang diuji. Bila ``None``, diambil dari
@@ -345,8 +346,9 @@ def run_horizon_sensitivity(
         logger.warning(
             "Fine-tuning pada H=%s memakai ULANG hyperparameter terbaik hasil tuning "
             "H=%d (%s) TANPA tuning grid ulang per horizon -- penyimpangan eksplisit "
-            "dari protokol pemilihan hyperparameter demi kelayakan komputasi di CPU "
-            "(lihat docstring modul).",
+            "dari protokol pemilihan hyperparameter demi kelayakan komputasi, karena "
+            "tuning ulang berarti mengulang seluruh pencarian 18 kandidat untuk tiap "
+            "horizon (lihat docstring modul).",
             horizons,
             reference_horizon,
             reused_best_params,
@@ -528,8 +530,8 @@ def run_covariate_ablation(
 
     Ablasi ini hanya diimplementasikan untuk skema **zero-shot** (tanpa
     pelatihan): mengulanginya untuk fine-tuned berarti tuning grid penuh
-    dikalikan jumlah kondisi, yang tidak layak secara komputasi di CPU (lihat
-    docstring modul). Bila skema terbaik hasil utama ternyata fine-tuned,
+    dikalikan jumlah kondisi, yang tidak layak secara komputasi pada perangkat
+    mana pun yang dipakai penelitian ini (lihat docstring modul). Bila skema terbaik hasil utama ternyata fine-tuned,
     fungsi ini berhenti dengan pesan yang jelas alih-alih diam-diam memakai
     skema yang salah.
 
@@ -869,7 +871,7 @@ def build_summary_markdown(
     """
     alpha = config["evaluation"]["diebold_mariano"]["alpha"]
     lines: list[str] = [
-        "# Analisis Sensitivitas — BAB IV",
+        "# Analisis Sensitivitas",
         "",
         "Disimpan **terpisah** dari hasil utama "
         "(`results/metrics/final_results.json`, H = 10) agar tidak tercampur. "
@@ -895,7 +897,8 @@ def build_summary_markdown(
         if not protocol["include_finetune"]:
             lines.append(
                 "> Skema **Fine-Tuned tidak disertakan** pada horizon sensitivitas ini "
-                "(`include_finetune=False`) karena biaya tuning grid penuh di CPU."
+                "(`include_finetune=False`) karena biaya tuning grid penuh harus "
+                "diulang untuk tiap horizon."
             )
             lines.append("")
         elif protocol["reuse_finetune_params"]:
@@ -903,8 +906,9 @@ def build_summary_markdown(
                 "> Skema Fine-Tuned pada H selain H utama memakai **ulang** "
                 "hyperparameter terbaik hasil tuning H utama, **TANPA tuning grid "
                 "ulang per horizon** (penyimpangan eksplisit dari protokol pemilihan "
-                "hyperparameter, demi "
-                "kelayakan komputasi di CPU -- lihat catatan pada `sensitivity_horizon.json`)."
+                "hyperparameter, demi kelayakan komputasi: tuning ulang berarti "
+                "mengulang seluruh pencarian 18 kandidat untuk tiap horizon "
+                "-- lihat catatan pada `sensitivity_horizon.json`)."
             )
             lines.append("")
 

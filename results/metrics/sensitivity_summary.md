@@ -1,4 +1,4 @@
-# Analisis Sensitivitas — BAB IV
+# Analisis Sensitivitas
 
 Disimpan **terpisah** dari hasil utama (`results/metrics/final_results.json`, H = 10) agar tidak tercampur. Sumber angka: `sensitivity_horizon.json`, `sensitivity_covariate_ablation.json`, `sensitivity_oracle.json`, dan gambar `results/figures/sensitivity_summary.png`.
 
@@ -6,27 +6,27 @@ Disimpan **terpisah** dari hasil utama (`results/metrics/final_results.json`, H 
 
 Protokol rolling origin diulang pada H = [5, 20], dibandingkan dengan H utama = 10. Tiap horizon memakai daftar origin sendiri (jumlah jendela berbeda), sehingga yang dibandingkan adalah metrik teragregasi, bukan jendela per jendela.
 
-> Skema Fine-Tuned pada H selain H utama memakai **ulang** hyperparameter terbaik hasil tuning H utama, **TANPA tuning grid ulang per horizon** (penyimpangan eksplisit dari protokol pemilihan hyperparameter, demi kelayakan komputasi di CPU -- lihat catatan pada `sensitivity_horizon.json`).
+> Skema Fine-Tuned pada H selain H utama memakai **ulang** hyperparameter terbaik hasil tuning H utama, **TANPA tuning grid ulang per horizon** (penyimpangan eksplisit dari protokol pemilihan hyperparameter, demi kelayakan komputasi: tuning ulang berarti mengulang seluruh pencarian 18 kandidat untuk tiap horizon -- lihat catatan pada `sensitivity_horizon.json`).
 
 | H | Skema | n jendela | MAE | RMSE | MASE | CRPS | nCRPS | Cov80 | Cov95 |
 |---|---|---|---|---|---|---|---|---|---|
 | 5 | Naive Persistence | 186 | 4.1635 | 6.5087 | 1.0000 | 2.7490 | 0.038153 | 0.7957 | 0.9161 |
 | 5 | Chronos-2 Zero-Shot | 186 | 4.4850 | 7.1476 | 1.0772 | 2.8586 | 0.039674 | 0.7215 | 0.9484 |
-| 5 | Chronos-2 Fine-Tuned | 186 | 4.4447 | 7.0681 | 1.0675 | 2.8645 | 0.039756 | 0.7032 | 0.9409 |
+| 5 | Chronos-2 Fine-Tuned | 186 | 4.4762 | 7.1046 | 1.0751 | 2.8798 | 0.039968 | 0.7054 | 0.9409 |
 | 10 **(H utama)** | Naive Persistence | 181 | 5.6810 | 8.2954 | 1.0000 | 3.6997 | 0.051063 | 0.7680 | 0.9149 |
 | 10 **(H utama)** | Chronos-2 Zero-Shot | 181 | 6.0303 | 9.1035 | 1.0615 | 3.8774 | 0.053516 | 0.6801 | 0.9094 |
-| 10 **(H utama)** | Chronos-2 Fine-Tuned | 181 | 6.0315 | 9.0039 | 1.0617 | 3.9114 | 0.053985 | 0.6707 | 0.8939 |
+| 10 **(H utama)** | Chronos-2 Fine-Tuned | 181 | 6.0581 | 8.9864 | 1.0664 | 3.9578 | 0.054626 | 0.6630 | 0.8751 |
 | 20 | Naive Persistence | 171 | 7.8951 | 10.8918 | 1.0000 | 5.2532 | 0.071580 | 0.7319 | 0.8839 |
-| 20 | Chronos-2 Zero-Shot | 171 | 8.2991 | 11.7941 | 1.0512 | 5.5026 | 0.074980 | 0.6582 | 0.8547 |
-| 20 | Chronos-2 Fine-Tuned | 171 | 8.2923 | 11.5519 | 1.0503 | 5.5706 | 0.075907 | 0.6412 | 0.8254 |
+| 20 | Chronos-2 Zero-Shot | 171 | 8.2980 | 11.7910 | 1.0510 | 5.5018 | 0.074969 | 0.6582 | 0.8547 |
+| 20 | Chronos-2 Fine-Tuned | 171 | 8.2820 | 11.5829 | 1.0490 | 5.5588 | 0.075746 | 0.6357 | 0.8281 |
 
 **Uji Diebold-Mariano per horizon** (rugi = galat absolut, HAC Newey-West):
 
 | H | Perbandingan | p-value | Signifikan (α=0.05) |
 |---|---|---|---|
-| 5 | Chronos-2 Zero-Shot vs Chronos-2 Fine-Tuned | 0.4347 | tidak |
-| 10 | Chronos-2 Zero-Shot vs Chronos-2 Fine-Tuned | 0.9902 | tidak |
-| 20 | Chronos-2 Zero-Shot vs Chronos-2 Fine-Tuned | 0.9789 | tidak |
+| 5 | Chronos-2 Zero-Shot vs Chronos-2 Fine-Tuned | 0.8345 | tidak |
+| 10 | Chronos-2 Zero-Shot vs Chronos-2 Fine-Tuned | 0.8401 | tidak |
+| 20 | Chronos-2 Zero-Shot vs Chronos-2 Fine-Tuned | 0.9406 | tidak |
 
 ## 2. Ablasi kovariat (skema terbaik)
 

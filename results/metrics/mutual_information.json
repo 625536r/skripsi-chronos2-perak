@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T01:08:56",
+  "generated_at": "2026-08-21T09:24:33",
   "decision": "MI dihitung hanya dari data latih (mencegah kebocoran data)",
   "settings": {
     "n_neighbors": 3,

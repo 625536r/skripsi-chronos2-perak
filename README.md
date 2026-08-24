@@ -34,7 +34,7 @@ python run_pipeline.py --report-only               # susun ulang tabel + gambar 
 ```
 
 Tahapan: (1) pengumpulan data → (2) preprocessing & split → (3) mutual information
-→ (4) peramalan → (5) evaluasi & tabel BAB IV → (6) visualisasi.
+→ (4) peramalan → (5) evaluasi & tabel hasil → (6) visualisasi.
 Tanpa fine-tuning, seluruh pipeline selesai dalam **±80 detik di CPU**.
 
 ### Modul mandiri
@@ -69,7 +69,7 @@ Alur kerja dua mesin:
    ```bash
    python run_pipeline.py --report-only
    ```
-   Tabel BAB IV, `final_results.json`, dan seluruh gambar akan tersusun ulang
+   Tabel hasil, `final_results.json`, dan seluruh gambar akan tersusun ulang
    lengkap dengan baris Fine-Tuned dan uji Diebold-Mariano utama — tanpa
    menjalankan model apa pun lagi.
 
@@ -247,7 +247,7 @@ Diverifikasi pada `autogluon.timeseries==1.6.1`, `chronos==2.3.1`, `torch==2.13.
 
 | Berkas | Isi |
 |---|---|
-| `results/metrics/comparison_table.md` | Tabel siap salin ke BAB IV (akurasi, kalibrasi, uji DM) |
+| `results/metrics/comparison_table.md` | Tabel siap salin ke laporan (akurasi, kalibrasi, uji DM) |
 | `results/metrics/final_results.json` | Seluruh metrik: keseluruhan, per horizon, uji DM, protokol |
 | `results/metrics/finetune_tuning.json` | Tabel lengkap tuning hyperparameter (termasuk kandidat yang kalah) |
 | `results/forecasts/{skema}_H{H}.parquet` | Ramalan mentah tiap skema — evaluasi dapat diulang tanpa menjalankan model |

@@ -1,8 +1,8 @@
 # Dependensi project skripsi: Peramalan Probabilistik Harga Perak dengan Chronos-2
 #
 # Versi dikunci ke kombinasi yang sudah diverifikasi berjalan pada
-# Python 3.13.14 (Windows 11, AMD64) per 2026-08-17, sesuai aturan kerja #3
-# (reproducible: semua versi library dicatat).
+# Python 3.13.14 (Windows 11, AMD64) per 2026-08-17. Seluruh versi dikunci agar
+# hasil penelitian dapat direproduksi.
 #
 # Cara membuat lingkungan kerja:
 #   py -3.13 -m venv .venv
@@ -18,6 +18,17 @@
 # autogluon.timeseries; dikunci di sini agar versinya tercatat.
 autogluon.timeseries==1.6.1
 chronos-forecasting==2.3.1
+
+# PENTING - varian build torch menentukan dipakainya GPU atau tidak.
+# Baris di bawah memasang varian CPU (bawaan PyPI). Untuk menjalankan di GPU,
+# pasang varian CUDA SETELAH requirements ini terpasang:
+#
+#   python -m pip install "torch==2.13.0+cu126" --index-url https://download.pytorch.org/whl/cu126
+#
+# Pilih cu126 agar cocok dengan driver NVIDIA 560.94 (mendukung CUDA hingga 12.6);
+# varian cu130 menuntut driver yang lebih baru dan akan gagal saat inisialisasi.
+# Diverifikasi 2026-08-20: hasil GPU dan CPU sama sampai enam angka di belakang
+# koma, jadi pilihan varian tidak mengubah angka penelitian - hanya kecepatannya.
 torch==2.13.0
 
 # --- Pengambilan data ---
