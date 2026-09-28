@@ -1,0 +1,959 @@
+{
+  "generated_at": "2026-09-15T22:57:06",
+  "decision": "Seluruh analisis hubungan dihitung hanya dari data latih.",
+  "data": {
+    "source": "data/processed/train.csv",
+    "n_rows": 879,
+    "date_start": "2021-08-16",
+    "date_end": "2025-02-12",
+    "target": "silver_close",
+    "covariates": [
+      "gold_close",
+      "dxy_close"
+    ]
+  },
+  "d_max": 1,
+  "stationarity": {
+    "silver_close": {
+      "name": "silver_close",
+      "alpha": 0.05,
+      "regression": "c",
+      "level": {
+        "adf": {
+          "statistic": -0.6919275686006421,
+          "p_value": 0.8488294138760679,
+          "used_lag": 14,
+          "n_obs": 864,
+          "critical_values": {
+            "1%": -3.437941243806186,
+            "5%": -2.8648909885419247,
+            "10%": -2.5685543184692214
+          },
+          "stationary": false
+        },
+        "kpss": {
+          "statistic": 2.7823324417234305,
+          "p_value": 0.01,
+          "n_lags": 18,
+          "critical_values": {
+            "10%": 0.347,
+            "5%": 0.463,
+            "2.5%": 0.574,
+            "1%": 0.739
+          },
+          "stationary": false
+        },
+        "verdict": "non_stasioner"
+      },
+      "log_return": {
+        "adf": {
+          "statistic": -29.731330026944573,
+          "p_value": 0.0,
+          "used_lag": 0,
+          "n_obs": 877,
+          "critical_values": {
+            "1%": -3.4378283848659277,
+            "5%": -2.864841231335243,
+            "10%": -2.5685278140988053
+          },
+          "stationary": true
+        },
+        "kpss": {
+          "statistic": 0.10102661463880566,
+          "p_value": 0.1,
+          "n_lags": 4,
+          "critical_values": {
+            "10%": 0.347,
+            "5%": 0.463,
+            "2.5%": 0.574,
+            "1%": 0.739
+          },
+          "stationary": true
+        },
+        "verdict": "stasioner"
+      },
+      "order_of_integration": {
+        "d": 1,
+        "conclusive": true,
+        "note": "Level non-stasioner dan log-return stasioner (ADF dan KPSS sepakat pada log-return); d = 1."
+      }
+    },
+    "gold_close": {
+      "name": "gold_close",
+      "alpha": 0.05,
+      "regression": "c",
+      "level": {
+        "adf": {
+          "statistic": 1.0771259654233816,
+          "p_value": 0.9950165954837412,
+          "used_lag": 4,
+          "n_obs": 874,
+          "critical_values": {
+            "1%": -3.437854130362047,
+            "5%": -2.8648525821630173,
+            "10%": -2.5685338603647714
+          },
+          "stationary": false
+        },
+        "kpss": {
+          "statistic": 3.6644694327897143,
+          "p_value": 0.01,
+          "n_lags": 18,
+          "critical_values": {
+            "10%": 0.347,
+            "5%": 0.463,
+            "2.5%": 0.574,
+            "1%": 0.739
+          },
+          "stationary": false
+        },
+        "verdict": "non_stasioner"
+      },
+      "log_return": {
+        "adf": {
+          "statistic": -11.688343407316404,
+          "p_value": 1.6759563156967498e-21,
+          "used_lag": 4,
+          "n_obs": 873,
+          "critical_values": {
+            "1%": -3.4378627516320006,
+            "5%": -2.8648563831383322,
+            "10%": -2.568535885040459
+          },
+          "stationary": true
+        },
+        "kpss": {
+          "statistic": 0.2892452895473059,
+          "p_value": 0.1,
+          "n_lags": 7,
+          "critical_values": {
+            "10%": 0.347,
+            "5%": 0.463,
+            "2.5%": 0.574,
+            "1%": 0.739
+          },
+          "stationary": true
+        },
+        "verdict": "stasioner"
+      },
+      "order_of_integration": {
+        "d": 1,
+        "conclusive": true,
+        "note": "Level non-stasioner dan log-return stasioner (ADF dan KPSS sepakat pada log-return); d = 1."
+      }
+    },
+    "dxy_close": {
+      "name": "dxy_close",
+      "alpha": 0.05,
+      "regression": "c",
+      "level": {
+        "adf": {
+          "statistic": -2.157117783168902,
+          "p_value": 0.222175528270607,
+          "used_lag": 6,
+          "n_obs": 872,
+          "critical_values": {
+            "1%": -3.4378713927343156,
+            "5%": -2.8648601928465505,
+            "10%": -2.568537914369582
+          },
+          "stationary": false
+        },
+        "kpss": {
+          "statistic": 1.4920353195765825,
+          "p_value": 0.01,
+          "n_lags": 18,
+          "critical_values": {
+            "10%": 0.347,
+            "5%": 0.463,
+            "2.5%": 0.574,
+            "1%": 0.739
+          },
+          "stationary": false
+        },
+        "verdict": "non_stasioner"
+      },
+      "log_return": {
+        "adf": {
+          "statistic": -23.26835489193766,
+          "p_value": 0.0,
+          "used_lag": 1,
+          "n_obs": 876,
+          "critical_values": {
+            "1%": -3.437836947046742,
+            "5%": -2.864845006291261,
+            "10%": -2.5685298249098225
+          },
+          "stationary": true
+        },
+        "kpss": {
+          "statistic": 0.14996518489903538,
+          "p_value": 0.1,
+          "n_lags": 2,
+          "critical_values": {
+            "10%": 0.347,
+            "5%": 0.463,
+            "2.5%": 0.574,
+            "1%": 0.739
+          },
+          "stationary": true
+        },
+        "verdict": "stasioner"
+      },
+      "order_of_integration": {
+        "d": 1,
+        "conclusive": true,
+        "note": "Level non-stasioner dan log-return stasioner (ADF dan KPSS sepakat pada log-return); d = 1."
+      }
+    }
+  },
+  "acf_pacf_figure": "results/figures/relationship/acf_pacf.png",
+  "cross_correlation": {
+    "gold_close": [
+      {
+        "lag": -10,
+        "ccf": -0.06082998567789657,
+        "n_obs": 868,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": -9,
+        "ccf": -0.0014491312323920858,
+        "n_obs": 869,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": -8,
+        "ccf": -0.01111746787400081,
+        "n_obs": 870,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": -7,
+        "ccf": -0.006623727377340845,
+        "n_obs": 871,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": -6,
+        "ccf": -0.04077421262149839,
+        "n_obs": 872,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": -5,
+        "ccf": 0.031377210867072416,
+        "n_obs": 873,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": -4,
+        "ccf": 0.1008426163055458,
+        "n_obs": 874,
+        "signif_bound": 0.0674967307062827,
+        "significant": true
+      },
+      {
+        "lag": -3,
+        "ccf": 0.027197225632024532,
+        "n_obs": 875,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": -2,
+        "ccf": -0.008370184228501585,
+        "n_obs": 876,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": -1,
+        "ccf": -0.027905593309152182,
+        "n_obs": 877,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 0,
+        "ccf": 0.7784854172566218,
+        "n_obs": 878,
+        "signif_bound": 0.0674967307062827,
+        "significant": true
+      },
+      {
+        "lag": 1,
+        "ccf": -0.0176795337558386,
+        "n_obs": 877,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 2,
+        "ccf": -0.03704293441397731,
+        "n_obs": 876,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 3,
+        "ccf": 0.019007772991861092,
+        "n_obs": 875,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 4,
+        "ccf": 0.024894416103150893,
+        "n_obs": 874,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 5,
+        "ccf": 0.039270410381719245,
+        "n_obs": 873,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 6,
+        "ccf": -0.029978994050381843,
+        "n_obs": 872,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 7,
+        "ccf": 0.008402353350191015,
+        "n_obs": 871,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 8,
+        "ccf": -0.0340377573590168,
+        "n_obs": 870,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 9,
+        "ccf": 0.009125705327440765,
+        "n_obs": 869,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 10,
+        "ccf": -0.05674611851134293,
+        "n_obs": 868,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      }
+    ],
+    "dxy_close": [
+      {
+        "lag": -10,
+        "ccf": 0.0461933617791115,
+        "n_obs": 868,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": -9,
+        "ccf": 0.017363156803144285,
+        "n_obs": 869,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": -8,
+        "ccf": -0.01883023404863676,
+        "n_obs": 870,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": -7,
+        "ccf": -0.0043218381691888475,
+        "n_obs": 871,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": -6,
+        "ccf": 0.040027253001316127,
+        "n_obs": 872,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": -5,
+        "ccf": 0.023046892006495845,
+        "n_obs": 873,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": -4,
+        "ccf": -0.0812241442198929,
+        "n_obs": 874,
+        "signif_bound": 0.0674967307062827,
+        "significant": true
+      },
+      {
+        "lag": -3,
+        "ccf": 0.015487667538282951,
+        "n_obs": 875,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": -2,
+        "ccf": 0.057333987755674304,
+        "n_obs": 876,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": -1,
+        "ccf": -0.025706574450250434,
+        "n_obs": 877,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 0,
+        "ccf": -0.4062769100786121,
+        "n_obs": 878,
+        "signif_bound": 0.0674967307062827,
+        "significant": true
+      },
+      {
+        "lag": 1,
+        "ccf": -0.028674112130560245,
+        "n_obs": 877,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 2,
+        "ccf": -0.010839398620770668,
+        "n_obs": 876,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 3,
+        "ccf": 0.015812752873311582,
+        "n_obs": 875,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 4,
+        "ccf": -0.025603210578462623,
+        "n_obs": 874,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 5,
+        "ccf": -0.03857112156232762,
+        "n_obs": 873,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 6,
+        "ccf": 0.0410886402425876,
+        "n_obs": 872,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 7,
+        "ccf": -0.019012664282055607,
+        "n_obs": 871,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 8,
+        "ccf": -0.03242861749008591,
+        "n_obs": 870,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 9,
+        "ccf": -0.040076596971008106,
+        "n_obs": 869,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      },
+      {
+        "lag": 10,
+        "ccf": 0.052815829419173566,
+        "n_obs": 868,
+        "signif_bound": 0.0674967307062827,
+        "significant": false
+      }
+    ]
+  },
+  "cointegration": {
+    "alpha": 0.05,
+    "engle_granger": {
+      "silver_close~gold_close": {
+        "y0": "silver_close",
+        "y1": "gold_close",
+        "statistic": -3.282620479643635,
+        "p_value": 0.05716295989506056,
+        "critical_values": {
+          "1%": -3.9089571818328053,
+          "5%": -3.3430979624950057,
+          "10%": -3.049284052334722
+        },
+        "cointegrated": false
+      },
+      "gold_close~silver_close": {
+        "y0": "gold_close",
+        "y1": "silver_close",
+        "statistic": -2.676636007932684,
+        "p_value": 0.20809403771834262,
+        "critical_values": {
+          "1%": -3.9089571818328053,
+          "5%": -3.3430979624950057,
+          "10%": -3.049284052334722
+        },
+        "cointegrated": false
+      },
+      "silver_close~dxy_close": {
+        "y0": "silver_close",
+        "y1": "dxy_close",
+        "statistic": -0.6736979044747745,
+        "p_value": 0.9494025482520738,
+        "critical_values": {
+          "1%": -3.9089571818328053,
+          "5%": -3.3430979624950057,
+          "10%": -3.049284052334722
+        },
+        "cointegrated": false
+      },
+      "dxy_close~silver_close": {
+        "y0": "dxy_close",
+        "y1": "silver_close",
+        "statistic": -2.126662876925914,
+        "p_value": 0.4624399702516665,
+        "critical_values": {
+          "1%": -3.9089571818328053,
+          "5%": -3.3430979624950057,
+          "10%": -3.049284052334722
+        },
+        "cointegrated": false
+      },
+      "gold_close~dxy_close": {
+        "y0": "gold_close",
+        "y1": "dxy_close",
+        "statistic": 0.33876755665501385,
+        "p_value": 0.9913086054431872,
+        "critical_values": {
+          "1%": -3.9089571818328053,
+          "5%": -3.3430979624950057,
+          "10%": -3.049284052334722
+        },
+        "cointegrated": false
+      },
+      "dxy_close~gold_close": {
+        "y0": "dxy_close",
+        "y1": "gold_close",
+        "statistic": -2.2960706967821776,
+        "p_value": 0.37551510448288444,
+        "critical_values": {
+          "1%": -3.9089571818328053,
+          "5%": -3.3430979624950057,
+          "10%": -3.049284052334722
+        },
+        "cointegrated": false
+      }
+    },
+    "johansen": {
+      "series": [
+        "silver_close",
+        "gold_close",
+        "dxy_close"
+      ],
+      "det_order": 0,
+      "aux_lag_var": 1,
+      "k_ar_diff": 0,
+      "eigenvalues": [
+        0.02263836133556149,
+        0.013011679653797006,
+        0.0009972993067166968
+      ],
+      "trace_test": [
+        {
+          "r_less_equal": 0,
+          "statistic": 32.48021688875799,
+          "crit_90": 27.0669,
+          "crit_95": 29.7961,
+          "crit_99": 35.4628,
+          "reject_h0": true
+        },
+        {
+          "r_less_equal": 1,
+          "statistic": 12.375295902482451,
+          "crit_90": 13.4294,
+          "crit_95": 15.4943,
+          "crit_99": 19.9349,
+          "reject_h0": false
+        },
+        {
+          "r_less_equal": 2,
+          "statistic": 0.8760657138096455,
+          "crit_90": 2.7055,
+          "crit_95": 3.8415,
+          "crit_99": 6.6349,
+          "reject_h0": false
+        }
+      ],
+      "max_eig_test": [
+        {
+          "r_less_equal": 0,
+          "statistic": 20.10492098627554,
+          "crit_90": 18.8928,
+          "crit_95": 21.1314,
+          "crit_99": 25.865,
+          "reject_h0": false
+        },
+        {
+          "r_less_equal": 1,
+          "statistic": 11.499230188672806,
+          "crit_90": 12.2971,
+          "crit_95": 14.2639,
+          "crit_99": 18.52,
+          "reject_h0": false
+        },
+        {
+          "r_less_equal": 2,
+          "statistic": 0.8760657138096455,
+          "crit_90": 2.7055,
+          "crit_95": 3.8415,
+          "crit_99": 6.6349,
+          "reject_h0": false
+        }
+      ],
+      "rank_trace": 1,
+      "rank_max_eig": 0
+    }
+  },
+  "lag_selection": {
+    "maxlags": 20,
+    "selected_orders": {
+      "aic": 1,
+      "bic": 1,
+      "hqic": 1,
+      "fpe": 1
+    },
+    "criteria_table": [
+      {
+        "lag": 0,
+        "aic": 14.434928455329192,
+        "bic": 14.451537659946133,
+        "hqic": 14.441287455061323,
+        "fpe": 1857846.2756786756
+      },
+      {
+        "lag": 1,
+        "aic": 1.8063883376923335,
+        "bic": 1.8728251561600995,
+        "hqic": 1.8318243366208595,
+        "fpe": 6.0884195938139545
+      },
+      {
+        "lag": 2,
+        "aic": 1.8205277831357165,
+        "bic": 1.9367922154543071,
+        "hqic": 1.865040781260637,
+        "fpe": 6.175123395993853
+      },
+      {
+        "lag": 3,
+        "aic": 1.814493004716546,
+        "bic": 1.9805850508859613,
+        "hqic": 1.8780830020378612,
+        "fpe": 6.137982839079151
+      },
+      {
+        "lag": 4,
+        "aic": 1.826835838933296,
+        "bic": 2.0427554989535355,
+        "hqic": 1.9095028354510055,
+        "fpe": 6.214235895787566
+      },
+      {
+        "lag": 5,
+        "aic": 1.8266495366067983,
+        "bic": 2.0923968104778625,
+        "hqic": 1.9283935323209027,
+        "fpe": 6.213115517010321
+      },
+      {
+        "lag": 6,
+        "aic": 1.8395050516535278,
+        "bic": 2.1550799393754168,
+        "hqic": 1.9603260465640266,
+        "fpe": 6.293558819028748
+      },
+      {
+        "lag": 7,
+        "aic": 1.8502110957379296,
+        "bic": 2.215613597310643,
+        "hqic": 1.990109089844823,
+        "fpe": 6.361376007701915
+      },
+      {
+        "lag": 8,
+        "aic": 1.8607131372069192,
+        "bic": 2.2759432526304573,
+        "hqic": 2.0196881305102075,
+        "fpe": 6.428636513324171
+      },
+      {
+        "lag": 9,
+        "aic": 1.8631394306278273,
+        "bic": 2.32819715990219,
+        "hqic": 2.04119142312751,
+        "fpe": 6.444381987284966
+      },
+      {
+        "lag": 10,
+        "aic": 1.8808647293036647,
+        "bic": 2.395750072428852,
+        "hqic": 2.077993720999742,
+        "fpe": 6.559791405452145
+      },
+      {
+        "lag": 11,
+        "aic": 1.8911876906888998,
+        "bic": 2.4559006476649117,
+        "hqic": 2.107393681581372,
+        "fpe": 6.628057839855343
+      },
+      {
+        "lag": 12,
+        "aic": 1.9003955003943414,
+        "bic": 2.5149360712211775,
+        "hqic": 2.135678490483208,
+        "fpe": 6.68960953913996
+      },
+      {
+        "lag": 13,
+        "aic": 1.9124141395742704,
+        "bic": 2.576782324251931,
+        "hqic": 2.1667741288595312,
+        "fpe": 6.770780352257995
+      },
+      {
+        "lag": 14,
+        "aic": 1.9192516690256092,
+        "bic": 2.6334474675540944,
+        "hqic": 2.1926886575072646,
+        "fpe": 6.817568756725272
+      },
+      {
+        "lag": 15,
+        "aic": 1.927550486182065,
+        "bic": 2.6915738985613746,
+        "hqic": 2.220064473860115,
+        "fpe": 6.874769714796591
+      },
+      {
+        "lag": 16,
+        "aic": 1.9406762168973342,
+        "bic": 2.7545272431274688,
+        "hqic": 2.252267203771779,
+        "fpe": 6.966048746228065
+      },
+      {
+        "lag": 17,
+        "aic": 1.9375895622259867,
+        "bic": 2.8012682023069457,
+        "hqic": 2.268257548296826,
+        "fpe": 6.9450849696288826
+      },
+      {
+        "lag": 18,
+        "aic": 1.9520781387812087,
+        "bic": 2.8655843927129925,
+        "hqic": 2.3018231240484424,
+        "fpe": 7.047017014825252
+      },
+      {
+        "lag": 19,
+        "aic": 1.9649395092665183,
+        "bic": 2.9282733770491265,
+        "hqic": 2.3337614937301465,
+        "fpe": 7.138886770313741
+      },
+      {
+        "lag": 20,
+        "aic": 1.972579294653059,
+        "bic": 2.985740776286492,
+        "hqic": 2.3604782783130815,
+        "fpe": 7.194362109262393
+      }
+    ],
+    "p_main": 1,
+    "p_main_criterion": "bic",
+    "p_robustness": 1,
+    "p_robustness_criterion": "aic",
+    "large_discrepancy": false
+  },
+  "granger_toda_yamamoto": {
+    "total_lags": 4,
+    "hac_maxlags": 4,
+    "robust": "HAC",
+    "pairs": {
+      "silver_close->gold_close": {
+        "cause": "silver_close",
+        "effect": "gold_close",
+        "p": 3,
+        "d_max": 1,
+        "total_lags": 4,
+        "statistic": 4.439945700819444,
+        "df": 3,
+        "p_value": 0.21770995355931333,
+        "alpha": 0.05,
+        "significant": false,
+        "interpretation": "SILVER Granger-cause GOLD pada lag 1-3 (statistik Wald=4.440, df=3, p=0.2177): tidak ditemukan presedensi prediktif signifikan pada alfa 0.05."
+      },
+      "silver_close->dxy_close": {
+        "cause": "silver_close",
+        "effect": "dxy_close",
+        "p": 3,
+        "d_max": 1,
+        "total_lags": 4,
+        "statistic": 0.5253327694263893,
+        "df": 3,
+        "p_value": 0.9132916880038683,
+        "alpha": 0.05,
+        "significant": false,
+        "interpretation": "SILVER Granger-cause DXY pada lag 1-3 (statistik Wald=0.525, df=3, p=0.9133): tidak ditemukan presedensi prediktif signifikan pada alfa 0.05."
+      },
+      "gold_close->silver_close": {
+        "cause": "gold_close",
+        "effect": "silver_close",
+        "p": 3,
+        "d_max": 1,
+        "total_lags": 4,
+        "statistic": 3.924438230722707,
+        "df": 3,
+        "p_value": 0.26973988495861945,
+        "alpha": 0.05,
+        "significant": false,
+        "interpretation": "GOLD Granger-cause SILVER pada lag 1-3 (statistik Wald=3.924, df=3, p=0.2697): tidak ditemukan presedensi prediktif signifikan pada alfa 0.05."
+      },
+      "gold_close->dxy_close": {
+        "cause": "gold_close",
+        "effect": "dxy_close",
+        "p": 3,
+        "d_max": 1,
+        "total_lags": 4,
+        "statistic": 0.38342023510203843,
+        "df": 3,
+        "p_value": 0.9436457839590168,
+        "alpha": 0.05,
+        "significant": false,
+        "interpretation": "GOLD Granger-cause DXY pada lag 1-3 (statistik Wald=0.383, df=3, p=0.9436): tidak ditemukan presedensi prediktif signifikan pada alfa 0.05."
+      },
+      "dxy_close->silver_close": {
+        "cause": "dxy_close",
+        "effect": "silver_close",
+        "p": 3,
+        "d_max": 1,
+        "total_lags": 4,
+        "statistic": 1.9615178912041558,
+        "df": 3,
+        "p_value": 0.5804321033897493,
+        "alpha": 0.05,
+        "significant": false,
+        "interpretation": "DXY Granger-cause SILVER pada lag 1-3 (statistik Wald=1.962, df=3, p=0.5804): tidak ditemukan presedensi prediktif signifikan pada alfa 0.05."
+      },
+      "dxy_close->gold_close": {
+        "cause": "dxy_close",
+        "effect": "gold_close",
+        "p": 3,
+        "d_max": 1,
+        "total_lags": 4,
+        "statistic": 1.6961275980880033,
+        "df": 3,
+        "p_value": 0.6377950622196551,
+        "alpha": 0.05,
+        "significant": false,
+        "interpretation": "DXY Granger-cause GOLD pada lag 1-3 (statistik Wald=1.696, df=3, p=0.6378): tidak ditemukan presedensi prediktif signifikan pada alfa 0.05."
+      }
+    }
+  },
+  "var_residual_diagnostics": {
+    "k_ar": 3,
+    "alpha": 0.05,
+    "per_variable": {
+      "silver_close": {
+        "ljung_box": {
+          "lags": 10,
+          "statistic": 17.0841930946096,
+          "p_value": 0.07252163738763807,
+          "pass": true
+        },
+        "arch_lm": {
+          "lags": 10,
+          "statistic": 54.76646885872192,
+          "p_value": 3.491628317960302e-08,
+          "pass": false
+        }
+      },
+      "gold_close": {
+        "ljung_box": {
+          "lags": 10,
+          "statistic": 10.74885687837709,
+          "p_value": 0.3774162586666626,
+          "pass": true
+        },
+        "arch_lm": {
+          "lags": 10,
+          "statistic": 53.61541321488545,
+          "p_value": 5.721817293392625e-08,
+          "pass": false
+        }
+      },
+      "dxy_close": {
+        "ljung_box": {
+          "lags": 10,
+          "statistic": 11.887602815107135,
+          "p_value": 0.2926492801592369,
+          "pass": true
+        },
+        "arch_lm": {
+          "lags": 10,
+          "statistic": 103.08645526962844,
+          "p_value": 1.3118483691551604e-17,
+          "pass": false
+        }
+      }
+    },
+    "all_pass": false,
+    "warnings": [],
+    "p_main": 1,
+    "p_final": 3,
+    "escalated": true
+  },
+  "mutual_information_available": true
+}

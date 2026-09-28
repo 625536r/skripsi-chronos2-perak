@@ -876,7 +876,7 @@ def build_summary_markdown(
         "Disimpan **terpisah** dari hasil utama "
         "(`results/metrics/final_results.json`, H = 10) agar tidak tercampur. "
         "Sumber angka: `sensitivity_horizon.json`, `sensitivity_covariate_ablation.json`, "
-        "`sensitivity_oracle.json`, dan gambar `results/figures/sensitivity_summary.png`.",
+        "`sensitivity_oracle.json`, dan gambar `results/figures/evaluasi/sensitivity_summary.png`.",
         "",
     ]
 
@@ -1105,7 +1105,7 @@ def build_summary_markdown(
     lines += [
         "---",
         "",
-        "Gambar ringkasan ketiga analisis: `results/figures/sensitivity_summary.png`.",
+        "Gambar ringkasan ketiga analisis: `results/figures/evaluasi/sensitivity_summary.png`.",
         "",
     ]
 
@@ -1334,7 +1334,7 @@ def main(argv: list[str] | None = None) -> dict[str, Any]:
 
     figure_path = plot_sensitivity_summary(
         horizon_result, ablation_result, oracle_result,
-        resolve_path(config["paths"]["figures_dir"]) / "sensitivity_summary.png",
+        resolve_path(config["paths"]["figures_dir"]) / "evaluasi" / "sensitivity_summary.png",
         config["visualization"]["figure_dpi"], config,
     )
     logger.info("Figure ringkasan tersimpan di %s", figure_path)

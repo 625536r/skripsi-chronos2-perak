@@ -106,6 +106,31 @@ mutual_information:
   figure_dpi: 200
 
 # -----------------------------------------------------------------------------
+# ANALISIS HUBUNGAN — tujuan penelitian pertama, hanya dihitung pada data latih
+# -----------------------------------------------------------------------------
+relationship_analysis:
+  alpha: 0.05
+  # Regresi deterministik pada ADF/KPSS: "c" = hanya konstanta (tanpa tren linear)
+  stationarity_regression: "c"
+  acf_pacf:
+    mode: "logreturn"
+    lags: 40
+  cross_correlation:
+    max_lag: 10
+  cointegration:
+    # Order deterministik Johansen: 0 = konstanta di luar ruang kointegrasi
+    johansen_det_order: 0
+    # Lag bantu (VAR pada level, dipilih via AIC) untuk menurunkan k_ar_diff
+    # Johansen; independen dari lag utama yang dipilih pada langkah select_var_lag.
+    aux_maxlags: 10
+  var_lag_selection:
+    maxlags: 20
+  diagnostics:
+    ljungbox_lags: 10
+    arch_lags: 10
+  figure_dpi: 200
+
+# -----------------------------------------------------------------------------
 # MODEL — Chronos-2 lewat AutoGluon-TimeSeries
 # -----------------------------------------------------------------------------
 model:

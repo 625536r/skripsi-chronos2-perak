@@ -896,31 +896,31 @@ def generate_all_figures(
     tasks = [
         (
             "series_overview",
-            "01_ikhtisar_deret.png",
+            "evaluasi/01_ikhtisar_deret.png",
             lambda path: plot_series_overview(frames, path, dpi, config=config),
             frames is not None,
         ),
         (
             "forecast_example",
-            "02_contoh_ramalan.png",
+            "evaluasi/02_contoh_ramalan.png",
             lambda path: plot_forecast_example(forecasts, path, dpi, config=config),
             bool(forecasts),
         ),
         (
             "metrics_by_horizon",
-            "03_metrik_per_horizon.png",
+            "evaluasi/03_metrik_per_horizon.png",
             lambda path: plot_metrics_by_horizon(metrics, path, dpi, config=config),
             bool(metrics),
         ),
         (
             "coverage_calibration",
-            "04_kalibrasi_cakupan.png",
+            "evaluasi/04_kalibrasi_cakupan.png",
             lambda path: plot_coverage_calibration(forecasts, path, dpi, config=config),
             bool(forecasts),
         ),
         (
             "error_distribution",
-            "05_sebaran_galat.png",
+            "evaluasi/05_sebaran_galat.png",
             lambda path: plot_error_distribution(forecasts, path, dpi, config=config),
             bool(forecasts),
         ),

@@ -25,8 +25,8 @@ Cara menjalankan mandiri:
 
 Keluaran:
     results/metrics/mutual_information.json
-    results/figures/mi_barplot.png
-    results/figures/mi_lag_plot.png
+    results/figures/mutual_information/mi_barplot.png
+    results/figures/mutual_information/mi_lag_plot.png
     Tabel ringkas format markdown dicetak ke stdout.
 """
 
@@ -1202,10 +1202,10 @@ def main() -> dict[str, Any]:
 
     figures_dir = config["paths"]["figures_dir"]
     barplot_path = plot_mi_barplot(
-        results, Path(figures_dir) / "mi_barplot.png", dpi=settings["figure_dpi"]
+        results, Path(figures_dir) / "mutual_information" / "mi_barplot.png", dpi=settings["figure_dpi"]
     )
     lag_plot_path = plot_mi_lag(
-        lagged, Path(figures_dir) / "mi_lag_plot.png", dpi=settings["figure_dpi"]
+        lagged, Path(figures_dir) / "mutual_information" / "mi_lag_plot.png", dpi=settings["figure_dpi"]
     )
     logger.info("Gambar tersimpan: %s", barplot_path)
     logger.info("Gambar tersimpan: %s", lag_plot_path)

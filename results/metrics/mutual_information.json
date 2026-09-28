@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-21T09:24:33",
+  "generated_at": "2026-09-21T22:43:41",
   "decision": "MI dihitung hanya dari data latih (mencegah kebocoran data)",
   "settings": {
     "n_neighbors": 3,
@@ -304,8 +304,8 @@
     }
   },
   "figures": {
-    "mi_barplot": "results/figures/mi_barplot.png",
-    "mi_lag_plot": "results/figures/mi_lag_plot.png"
+    "mi_barplot": "results/figures/mutual_information/mi_barplot.png",
+    "mi_lag_plot": "results/figures/mutual_information/mi_lag_plot.png"
   },
   "notes": [
     "MI dilaporkan sebagai rata-rata +/- simpangan baku dari n_repeats pengulangan karena estimator k-NN bersifat stokastik.",
